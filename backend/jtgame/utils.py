@@ -47,6 +47,8 @@ def parse_iso_datetime(date_string: str) -> datetime:
     try:
         if date_string.endswith('Z'):
             utc_dt = datetime.fromisoformat(date_string.replace("Z", "+00:00")).replace(second=0, microsecond=0)
+        elif '+' in date_string or '-' in date_string:
+            utc_dt = datetime.fromisoformat(date_string).replace(second=0, microsecond=0)
         else:
             utc_dt = datetime.fromisoformat(date_string + "+00:00").replace(second=0, microsecond=0)
         local_tz = pytz.timezone('Asia/Shanghai')
