@@ -1,12 +1,12 @@
 import hashlib
 
 from django.contrib.auth.hashers import make_password, check_password
+from django.db import connection
+from django.db.models import Q
 from django_restql.fields import DynamicSerializerMethodField
 from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
-from django.db import connection
-from django.db.models import Q
 from application import dispatch
 from dvadmin.system.models import Users, Role, Dept
 from dvadmin.system.views.role import RoleSerializer
@@ -157,7 +157,7 @@ class UserInfoUpdateSerializer(CustomModelSerializer):
 
     class Meta:
         model = Users
-        fields = ['email', 'mobile', 'avatar', 'name', 'gender']
+        fields = ['email', 'mobile', 'avatar', 'name', 'gender', 'jobid']
         extra_kwargs = {
             "post": {"required": False, "read_only": True},
             "mobile": {"required": False},
@@ -184,6 +184,7 @@ class ExportUserProfileSerializer(CustomModelSerializer):
         model = Users
         fields = (
             "username",
+            "jobid",
             "name",
             "email",
             "mobile",
@@ -191,7 +192,7 @@ class ExportUserProfileSerializer(CustomModelSerializer):
             "is_active",
             "last_login",
             "dept_name",
-            "dept_owner",
+            "dept_owner"
         )
 
 
@@ -232,12 +233,13 @@ class UserViewSet(CustomModelViewSet):
     serializer_class = UserSerializer
     create_serializer_class = UserCreateSerializer
     update_serializer_class = UserUpdateSerializer
-    filter_fields = ["name", "username", "gender", "is_active", "dept", "user_type"]
+    filter_fields = ["name", "username", "jobid", "gender", "is_active", "dept", "user_type"]
     search_fields = ["username", "name", "dept__name", "role__name"]
     # 导出
     export_field_label = {
         "username": "用户账号",
         "name": "用户名称",
+        "jobid": "工号",
         "email": "用户邮箱",
         "mobile": "手机号码",
         "gender": "用户性别",
@@ -252,6 +254,7 @@ class UserViewSet(CustomModelViewSet):
     import_field_dict = {
         "username": "登录账号",
         "name": "用户名称",
+        "jobid": "工号",
         "email": "用户邮箱",
         "mobile": "手机号码",
         "gender": {
@@ -277,6 +280,7 @@ class UserViewSet(CustomModelViewSet):
         result = {
             "id": user.id,
             "username": user.username,
+            "jobid": user.jobid,
             "name": user.name,
             "mobile": user.mobile,
             "user_type": user.user_type,
@@ -319,7 +323,6 @@ class UserViewSet(CustomModelViewSet):
         """密码修改"""
         data = request.data
         old_pwd = data.get("oldPassword")
-        print(old_pwd)
         new_pwd = data.get("newPassword")
         new_pwd2 = data.get("newPassword2")
         if old_pwd is None or new_pwd is None or new_pwd2 is None:
@@ -382,6 +385,7 @@ class UserViewSet(CustomModelViewSet):
             show_all = 0
         if int(show_all):
             all_did = [dept_id]
+
             def inner(did):
                 sub = Dept.objects.filter(parent_id=did)
                 if not sub.exists():
@@ -389,12 +393,13 @@ class UserViewSet(CustomModelViewSet):
                 for i in sub:
                     all_did.append(i.pk)
                     inner(i)
+
             if dept_id != '':
                 inner(dept_id)
                 searchs = [
-                    Q(**{f+'__icontains':i})
+                    Q(**{f + '__icontains': i})
                     for f in self.search_fields
-                ] if (i:=request.query_params.get('search')) else []
+                ] if (i := request.query_params.get('search')) else []
                 q_obj = []
                 if searchs:
                     q = searchs[0]
