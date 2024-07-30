@@ -14,7 +14,6 @@ import {dictionary} from '/@/utils/dictionary';
 import {auth} from '/@/utils/authFunction'
 import {commonCrudConfig} from "/@/utils/commonCrud";
 import {errorMessage, infoMessage, successMessage} from "/@/utils/message";
-import {computed} from "vue";
 // 注意：以下FastCrud配置应替换为实际的JavaScript/TypeScript代码片段
 export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps): CreateCrudOptionsRet {
     const pageRequest = async (query: UserPageQuery) => {
@@ -118,9 +117,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         type: 'text',
                         iconRight: 'Download',
                         // show: auth("AuthorizationLetter:Download"),
-                        show:  computed(() => {
-                            return false;
-                        }),
+                        show: false,
                         click: async (obj) => {
                             const response = await api.DownloadAuthorizationLetter(obj.row.id);
                             try {

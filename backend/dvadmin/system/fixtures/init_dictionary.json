@@ -9,6 +9,7 @@
         "status": true,
         "sort": 1,
         "remark": null,
+        "dept_belong_id": null,
         "children": [
             {
                 "label": "启用",
@@ -20,6 +21,7 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -32,6 +34,7 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -46,6 +49,7 @@
         "status": true,
         "sort": 2,
         "remark": null,
+        "dept_belong_id": null,
         "children": [
             {
                 "label": "新增",
@@ -57,6 +61,7 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -69,6 +74,7 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -81,6 +87,7 @@
                 "status": true,
                 "sort": 3,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -93,6 +100,7 @@
                 "status": true,
                 "sort": 4,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -105,6 +113,7 @@
                 "status": true,
                 "sort": 5,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -117,6 +126,7 @@
                 "status": true,
                 "sort": 6,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -129,6 +139,7 @@
                 "status": true,
                 "sort": 7,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -141,6 +152,33 @@
                 "status": true,
                 "sort": 8,
                 "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "审核",
+                "value": "Approval",
+                "parent": 4,
+                "type": 0,
+                "color": "warning",
+                "is_value": false,
+                "status": true,
+                "sort": 9,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "续费",
+                "value": "Renew",
+                "parent": 4,
+                "type": 0,
+                "color": "warning",
+                "is_value": false,
+                "status": true,
+                "sort": 10,
+                "remark": null,
+                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -155,6 +193,7 @@
         "status": true,
         "sort": 3,
         "remark": null,
+        "dept_belong_id": null,
         "children": [
             {
                 "label": "启用",
@@ -166,6 +205,7 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -178,6 +218,7 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -192,6 +233,7 @@
         "status": true,
         "sort": 4,
         "remark": null,
+        "dept_belong_id": null,
         "children": [
             {
                 "label": "是",
@@ -203,6 +245,7 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -215,6 +258,7 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -229,6 +273,7 @@
         "status": true,
         "sort": 5,
         "remark": null,
+        "dept_belong_id": null,
         "children": [
             {
                 "label": "是",
@@ -240,6 +285,7 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -252,6 +298,7 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -266,6 +313,7 @@
         "status": true,
         "sort": 6,
         "remark": null,
+        "dept_belong_id": null,
         "children": [
             {
                 "label": "后台用户",
@@ -277,6 +325,7 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -289,6 +338,7 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -303,6 +353,7 @@
         "status": true,
         "sort": 7,
         "remark": null,
+        "dept_belong_id": null,
         "children": [
             {
                 "label": "text",
@@ -314,6 +365,7 @@
                 "status": true,
                 "sort": 0,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -326,6 +378,7 @@
                 "status": true,
                 "sort": 0,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -338,6 +391,7 @@
                 "status": true,
                 "sort": 0,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -350,6 +404,7 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -362,6 +417,7 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -374,6 +430,7 @@
                 "status": true,
                 "sort": 3,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -386,6 +443,7 @@
                 "status": true,
                 "sort": 4,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -398,6 +456,7 @@
                 "status": true,
                 "sort": 5,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -410,6 +469,7 @@
                 "status": true,
                 "sort": 6,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -422,6 +482,7 @@
                 "status": true,
                 "sort": 6,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -434,6 +495,7 @@
                 "status": true,
                 "sort": 7,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -446,6 +508,7 @@
                 "status": true,
                 "sort": 8,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -458,6 +521,7 @@
                 "status": true,
                 "sort": 9,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -470,6 +534,7 @@
                 "status": true,
                 "sort": 11,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -482,6 +547,7 @@
                 "status": true,
                 "sort": 13,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -494,6 +560,7 @@
                 "status": true,
                 "sort": 14,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -508,6 +575,7 @@
         "status": true,
         "sort": 8,
         "remark": null,
+        "dept_belong_id": null,
         "children": [
             {
                 "label": "未知",
@@ -519,6 +587,7 @@
                 "status": true,
                 "sort": 0,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -531,6 +600,7 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -543,6 +613,520 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            }
+        ]
+    },
+    {
+        "label": "审批状态",
+        "value": "approval_status",
+        "parent": null,
+        "type": 0,
+        "color": null,
+        "is_value": false,
+        "status": true,
+        "sort": 9,
+        "remark": null,
+        "dept_belong_id": null,
+        "children": [
+            {
+                "label": "待审批",
+                "value": "0",
+                "parent": 47,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "已审批",
+                "value": "1",
+                "parent": 47,
+                "type": 1,
+                "color": "success",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "已驳回",
+                "value": "2",
+                "parent": 47,
+                "type": 1,
+                "color": "danger",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            }
+        ]
+    },
+    {
+        "label": "请假类型",
+        "value": "leave_type",
+        "parent": null,
+        "type": 0,
+        "color": null,
+        "is_value": false,
+        "status": true,
+        "sort": 10,
+        "remark": null,
+        "dept_belong_id": null,
+        "children": [
+            {
+                "label": "事假",
+                "value": "0",
+                "parent": 51,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "病假",
+                "value": "1",
+                "parent": 51,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 2,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "年假",
+                "value": "2",
+                "parent": 51,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 3,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "调休",
+                "value": "3",
+                "parent": 51,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 4,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "婚假",
+                "value": "4",
+                "parent": 51,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 5,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "产假",
+                "value": "5",
+                "parent": 51,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 6,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "陪产假",
+                "value": "6",
+                "parent": 51,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 7,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "丧假",
+                "value": "7",
+                "parent": 51,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 8,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "其它",
+                "value": "8",
+                "parent": 51,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 9,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            }
+        ]
+    },
+    {
+        "label": "工作时间",
+        "value": "work_time",
+        "parent": null,
+        "type": 0,
+        "color": null,
+        "is_value": false,
+        "status": true,
+        "sort": 11,
+        "remark": null,
+        "dept_belong_id": null,
+        "children": [
+            {
+                "label": "work_start_morning",
+                "value": "9:30",
+                "parent": 61,
+                "type": 4,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "work_end_morning",
+                "value": "12:00",
+                "parent": 61,
+                "type": 4,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "work_start_afternoon",
+                "value": "13:00",
+                "parent": 61,
+                "type": 4,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "work_end_afternoon",
+                "value": "18:30",
+                "parent": 61,
+                "type": 4,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            }
+        ]
+    },
+    {
+        "label": "游戏类型",
+        "value": "game_types",
+        "parent": null,
+        "type": 0,
+        "color": null,
+        "is_value": false,
+        "status": true,
+        "sort": 12,
+        "remark": null,
+        "dept_belong_id": null,
+        "children": [
+            {
+                "label": "常规",
+                "value": "1",
+                "parent": 66,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "BT版",
+                "value": "2",
+                "parent": 66,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "外置0.1折",
+                "value": "3",
+                "parent": 66,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "内置0.1折",
+                "value": "4",
+                "parent": 66,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "外置0.05折",
+                "value": "5",
+                "parent": 66,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "内置0.05折",
+                "value": "6",
+                "parent": 66,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "未知",
+                "value": "0",
+                "parent": 66,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            }
+        ]
+    },
+    {
+        "label": "游戏状态",
+        "value": "game_status",
+        "parent": null,
+        "type": 0,
+        "color": null,
+        "is_value": false,
+        "status": true,
+        "sort": 13,
+        "remark": null,
+        "dept_belong_id": null,
+        "children": [
+            {
+                "label": "未上线",
+                "value": "1",
+                "parent": 67,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "已上线",
+                "value": "2",
+                "parent": 67,
+                "type": 1,
+                "color": "success",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "已下架",
+                "value": "3",
+                "parent": 67,
+                "type": 1,
+                "color": "danger",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "已关服",
+                "value": "4",
+                "parent": 67,
+                "type": 1,
+                "color": "warning",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "未知",
+                "value": "0",
+                "parent": 67,
+                "type": 1,
+                "color": "info",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            }
+        ]
+    },
+    {
+        "label": "游戏发行",
+        "value": "game_issue",
+        "parent": null,
+        "type": 0,
+        "color": null,
+        "is_value": false,
+        "status": true,
+        "sort": 14,
+        "remark": null,
+        "dept_belong_id": null,
+        "children": [
+            {
+                "label": "大混服",
+                "value": "1",
+                "parent": 78,
+                "type": 1,
+                "color": "success",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "小混服",
+                "value": "2",
+                "parent": 78,
+                "type": 1,
+                "color": "success",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "专服",
+                "value": "3",
+                "parent": 78,
+                "type": 1,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "未知",
+                "value": "0",
+                "parent": 78,
+                "type": 1,
+                "color": "info",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "大大混服",
+                "value": "4",
+                "parent": 78,
+                "type": 1,
+                "color": "success",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "dept_belong_id": null,
                 "children": []
             }
         ]

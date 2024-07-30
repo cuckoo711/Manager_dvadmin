@@ -1,5 +1,4 @@
 import XEUtils from "xe-utils"
-import {dynamicRoutes, staticRoutes} from "/@/router/route";
 
 /**
  * @description: 处理后端菜单数据格式
@@ -44,9 +43,9 @@ export const handleMenu = (menuData: Array<any>) => {
     }
 
     // 框架内路由
-    const defaultRoutes:Array<any> = []
+    const defaultRoutes: Array<any> = []
     // 框架外路由
-    const iframeRoutes:Array<any> = []
+    const iframeRoutes: Array<any> = []
 
     menuData.forEach((val) => {
         // if (val.is_iframe) {
@@ -75,5 +74,5 @@ export const handleMenu = (menuData: Array<any>) => {
         },
         ...data
     ]
-    return {frameIn:dynamicRoutes,frameOut:iframeRoutes}
+    return {frameIn: dynamicRoutes, frameOut: iframeRoutes}
 }

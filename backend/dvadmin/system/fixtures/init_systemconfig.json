@@ -11,12 +11,13 @@
         "rule": null,
         "placeholder": null,
         "setting": null,
+        "dept_belong_id": null,
         "children": [
             {
-                "parent": 10,
+                "parent": 1,
                 "title": "网页标题",
                 "key": "web_title",
-                "value": "DVAdmin",
+                "value": "靖堂网络",
                 "sort": 1,
                 "status": true,
                 "data_options": null,
@@ -24,13 +25,14 @@
                 "rule": [],
                 "placeholder": "请输入网站标题",
                 "setting": null,
+                "dept_belong_id": null,
                 "children": []
             },
-        {
-                "parent": 10,
+            {
+                "parent": 1,
                 "title": "网站小图标",
                 "key": "web_favicon",
-                "value": "",
+                "value": "https://gameManageApi.jingtanggame.com/media/files\\9\\d\\9dab34a0563add888db70438265fd614.png",
                 "sort": 1,
                 "status": true,
                 "data_options": null,
@@ -38,13 +40,14 @@
                 "rule": [],
                 "placeholder": "请输入网站小图标",
                 "setting": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
-                "parent": 10,
+                "parent": 1,
                 "title": "开启验证码",
                 "key": "captcha_state",
-                "value": true,
+                "value": false,
                 "sort": 1,
                 "status": true,
                 "data_options": null,
@@ -57,10 +60,11 @@
                 ],
                 "placeholder": "请选择",
                 "setting": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
-                "parent": 10,
+                "parent": 1,
                 "title": "创建用户默认密码",
                 "key": "default_password",
                 "value": "admin123456",
@@ -76,6 +80,7 @@
                 ],
                 "placeholder": "请输入默认密码",
                 "setting": null,
+                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -92,12 +97,13 @@
         "rule": null,
         "placeholder": null,
         "setting": null,
+        "dept_belong_id": null,
         "children": [
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "网站标题",
                 "key": "site_title",
-                "value": "Dvadmin",
+                "value": "靖堂网络",
                 "sort": 1,
                 "status": true,
                 "data_options": null,
@@ -105,13 +111,14 @@
                 "rule": [],
                 "placeholder": "请输入网站标题",
                 "setting": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "网站名称",
                 "key": "site_name",
-                "value": "企业级后台管理系统",
+                "value": "靖堂网络科技有限公司",
                 "sort": 1,
                 "status": true,
                 "data_options": null,
@@ -124,13 +131,21 @@
                 ],
                 "placeholder": "请输入网站名称",
                 "setting": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "登录网站logo",
                 "key": "site_logo",
-                "value": null,
+                "value": [
+                    {
+                        "uid": 1714146815777,
+                        "url": "https://gameManageApi.jingtanggame.com/media/files\\9\\d\\9dab34a0563add888db70438265fd614.png",
+                        "name": "rounded_logo.png",
+                        "status": "success"
+                    }
+                ],
                 "sort": 2,
                 "status": true,
                 "data_options": null,
@@ -138,13 +153,19 @@
                 "rule": [],
                 "placeholder": "请上传网站logo",
                 "setting": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "登录页背景图",
                 "key": "login_background",
-                "value": null,
+                "value": [
+                    {
+                        "url": "https://gameManageApi.jingtanggame.com/media/files\\3\\1\\310ed3b261f985c129f5deedbf8f5673.jpg",
+                        "name": "e1d2dda10ece26ea011f3b6c1c90b3e2.jpg"
+                    }
+                ],
                 "sort": 3,
                 "status": true,
                 "data_options": null,
@@ -152,13 +173,14 @@
                 "rule": [],
                 "placeholder": "请上传登录背景页",
                 "setting": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "版权信息",
                 "key": "copyright",
-                "value": "2021-2024 django-vue-admin.com 版权所有",
+                "value": "2024 cuckoo不咕鸟",
                 "sort": 4,
                 "status": true,
                 "data_options": null,
@@ -171,13 +193,14 @@
                 ],
                 "placeholder": "请输入版权信息",
                 "setting": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "备案信息",
                 "key": "keep_record",
-                "value": "晋ICP备18005113号-3",
+                "value": " ",
                 "sort": 5,
                 "status": true,
                 "data_options": null,
@@ -190,13 +213,14 @@
                 ],
                 "placeholder": "请输入备案信息",
                 "setting": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "帮助链接",
                 "key": "help_url",
-                "value": "https://django-vue-admin.com",
+                "value": " ",
                 "sort": 6,
                 "status": true,
                 "data_options": null,
@@ -204,10 +228,11 @@
                 "rule": "",
                 "placeholder": "请输入帮助信息",
                 "setting": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "隐私链接",
                 "key": "privacy_url",
                 "value": "/api/system/clause/privacy.html",
@@ -218,10 +243,11 @@
                 "rule": [],
                 "placeholder": "请填写隐私链接",
                 "setting": null,
+                "dept_belong_id": null,
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "条款链接",
                 "key": "clause_url",
                 "value": "/api/system/clause/terms_service.html",
@@ -232,6 +258,7 @@
                 "rule": [],
                 "placeholder": "请输入条款链接",
                 "setting": null,
+                "dept_belong_id": null,
                 "children": []
             }
         ]

@@ -45,10 +45,8 @@ class Leave(CoreModel):
 
     def save(self, *args, **kwargs):
         if self.start_time and self.end_time:
-            print(self.start_time, self.end_time)
             self.start_time = parse_iso_datetime(str(self.start_time))
             self.end_time = parse_iso_datetime(str(self.end_time))
-            print(self.start_time, self.end_time)
             if self.start_time > self.end_time:
                 raise models.ProtectedError('请假结束时间不能小于请假开始时间', self.end_time)
             if self.start_time and timezone.is_naive(self.start_time):

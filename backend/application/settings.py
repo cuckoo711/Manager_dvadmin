@@ -14,6 +14,11 @@ import os
 import sys
 from datetime import timedelta
 from pathlib import Path
+from django.utils import timezone
+
+
+import django
+from django.db import connection
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -116,6 +121,9 @@ DATABASES = {
         "PASSWORD": DATABASE_PASSWORD,
         "HOST": DATABASE_HOST,
         "PORT": DATABASE_PORT,
+        "OPTIONS": {
+            "init_command": "SET time_zone='+08:00';"
+        }
     }
 }
 AUTH_USER_MODEL = "system.Users"
@@ -151,6 +159,7 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -367,7 +376,7 @@ CAPTCHA_FOREGROUND_COLOR = "#64DAAA"  # 前景色
 CAPTCHA_BACKGROUND_COLOR = "#F5F7F4"  # 背景色
 CAPTCHA_NOISE_FUNCTIONS = (
     "captcha.helpers.noise_arcs",  # 线
-    # "captcha.helpers.noise_dots",  # 点
+    "captcha.helpers.noise_dots",  # 点
 )
 # CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge' #字母验证码
 CAPTCHA_CHALLENGE_FUNCT = "captcha.helpers.math_challenge"  # 加减乘除验证码
@@ -423,3 +432,8 @@ from dvadmin3_celery.settings import *            # celery 异步任务
 # from dvadmin_uniapp.settings import *
 # ...
 # ********** 一键导入插件配置结束 **********
+
+django.setup()
+
+with connection.cursor() as cursor:
+    cursor.execute("SET time_zone = '+08:00';")

@@ -12,6 +12,7 @@ from collections import defaultdict
 from decimal import Decimal
 
 import requests
+from django.db import connection
 from volcenginesdkcore import Configuration
 from volcenginesdkcore.rest import ApiException
 from volcenginesdkecs import ECSApi, DescribeInstancesRequest, RenewInstanceRequest
@@ -22,26 +23,29 @@ from jtgame.game_manage.models import Games
 
 
 class ConsoleData:
+    instances = []
+
     def make_daily_report(self, update=False):
-        servers = []
+        self.instances = []
+        logs = []
         console_list = self.get_console_accounts()
         for console in console_list:
             self.set_configuration(console)
             ecs = self.get_ecs(console.account)
-            servers.extend(ecs)
+            self.instances.extend(ecs)
         if update:
-            self.update_to_models(servers)
-        return servers
+            logs = self.update_to_models()
+        return {'instances': len(self.instances), 'update': update, 'logs': logs}
 
-    @staticmethod
-    def update_to_models(instances):
+    def update_to_models(self):
         logs = []
         try:
-            logs.append(f"获取实例信息: {len(instances)} 条")
+            logs.append(f"获取实例信息: {len(self.instances)} 条")
             logs.append(f"原有实例信息: {Consoles.objects.count()} 条")
             Consoles.objects.all().delete()
-            Consoles.objects.raw('ALTER TABLE jtgame_consoles AUTO_INCREMENT=1')
-            for instance in instances:
+            with connection.cursor() as cursor:
+                cursor.execute('ALTER TABLE jtadmin_daily_report_consoles AUTO_INCREMENT = 1')
+            for instance in self.instances:
                 Consoles.objects.create(
                     account=instance['所属账号'],
                     instance_id=instance['实例ID'],
@@ -55,7 +59,7 @@ class ConsoleData:
                     instance_charge_type=instance['实例计费类型'],
                     expired_at=instance['到期时间']
                 )
-                logs.append(f"创建实例: {instance['实例名称']}")
+                # logs.append(f"创建实例: {instance['实例名称']}")
             logs.append(f"更新实例信息: {Consoles.objects.count()} 条")
         except Exception as e:
             logs.append(f"更新实例信息失败: {str(e)}")

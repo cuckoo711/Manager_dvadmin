@@ -90,6 +90,8 @@ class Consoles(CoreModel):
         ordering = ['expired_at']
 
     def save(self, *args, **kwargs):
+        if isinstance(self.expired_at, str):
+            self.expired_at = datetime.strptime(self.expired_at, '%Y-%m-%d %H:%M:%S')
         if self.expired_at and timezone.is_naive(self.expired_at):
             self.expired_at = timezone.make_aware(self.expired_at)
         super().save(*args, **kwargs)

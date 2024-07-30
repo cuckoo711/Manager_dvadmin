@@ -5,6 +5,7 @@ from time import sleep
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 
 from dvadmin.utils.backends import logger
 from dvadmin.utils.serializers import CustomModelSerializer
@@ -48,7 +49,7 @@ class DailyReportViewSet(CustomModelViewSet):
     queryset = ReportData.objects.all()
     serializer_class = DailyReportSerializer
 
-    @action(detail=False, methods=['get', 'post'])
+    @action(detail=False, methods=['get', 'post'], url_path='get_report')
     def get_report(self, request, *args, **kwargs):
         if request.method == 'POST':
             try:
@@ -109,23 +110,6 @@ class ConsolesViewSet(CustomModelViewSet):
             return JsonResponse(response)
         except Exception as e:
             return JsonResponse({'status': False, 'message': '续费失败', 'data': str(e)})
-
-
-# @csrf_exempt
-# def get_report(request):
-#     if request.method == 'POST':
-#         try:
-#             post_data = json.loads(request.body)
-#             if not post_data or 'date' not in post_data:
-#                 return JsonResponse({"error": "Invalid data"}, status=400)
-#             result = ReportData.objects.filter(date=post_data.get('date')).first()
-#             return JsonResponse(result.data if result else {}, status=200)
-#         except Exception as e:
-#             return JsonResponse({"error": f"Server error: {e}"}, status=500)
-#     else:
-#         date = datetime.now().strftime('%Y-%m-%d')
-#         result = ReportData.objects.filter(date=date).first()
-#         return JsonResponse(result.data if result else {}, status=200)
 
 
 # @csrf_exempt

@@ -4,13 +4,55 @@
         "key": "admin",
         "sort": 1,
         "status": true,
-        "remark": null
+        "dept_belong_id": null
     },
     {
         "name": "用户",
         "key": "public",
         "sort": 2,
         "status": true,
-        "remark": null
+        "dept_belong_id": null
+    },
+    {
+        "name": "游戏管理仅查看",
+        "key": "game_view",
+        "sort": 3,
+        "status": true,
+        "dept_belong_id": null
+    },
+    {
+        "name": "游戏管理仅操作",
+        "key": "game_manager",
+        "sort": 3,
+        "status": true,
+        "dept_belong_id": null
+    },
+    {
+        "name": "考勤仅用户",
+        "key": "attendance_user",
+        "sort": 4,
+        "status": true,
+        "dept_belong_id": null
+    },
+    {
+        "name": "考勤管理员",
+        "key": "attendance_admin",
+        "sort": 4,
+        "status": true,
+        "dept_belong_id": null
+    },
+    {
+        "name": "授权信息仅查看",
+        "key": "authorization_view",
+        "sort": 5,
+        "status": true,
+        "dept_belong_id": null
+    },
+    {
+        "name": "授权信息仅操作",
+        "key": "authorization_manager",
+        "sort": 5,
+        "status": true,
+        "dept_belong_id": null
     }
 ]

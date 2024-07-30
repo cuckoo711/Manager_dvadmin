@@ -16,7 +16,9 @@ from jtgame.daily_report.utils import ConsoleData, QuickTotal
 
 @app.task
 def task__make_daily_report(shifting_days=0):
-    instances = ConsoleData().make_daily_report()
+    console_data = ConsoleData()
+    console_data.make_daily_report()
+    instances = console_data.instances
     income = QuickTotal(shifting_days).make_daily_report()
 
     data = {
@@ -45,7 +47,7 @@ def task__make_daily_report(shifting_days=0):
 @app.task
 def task__update_consoles():
     try:
-        ConsoleData().make_daily_report(update=True)
-        return {"success": True, "status": "update", "error": ""}
+        result = ConsoleData().make_daily_report(update=True)
+        return {"success": True, "status": "update", "error": "", "data": json.dumps(result, ensure_ascii=False)}
     except Exception as e:
         return {"success": False, "status": "error", "error": str(e)}

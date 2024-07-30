@@ -12,7 +12,7 @@ class Channel(CoreModel):
     CHANNEL_STATUS = ((0, '禁用'), (1, '启用'))
 
     # 渠道名称
-    name = models.CharField(max_length=100, verbose_name='渠道名称')
+    name = models.CharField(max_length=100, verbose_name='渠道名称', unique=True)
     # 渠道别名(列表)
     alias = models.JSONField(verbose_name='渠道别名', null=True, blank=True)
     # 渠道公司名
@@ -65,7 +65,7 @@ class Channel(CoreModel):
 class Research(CoreModel):
     RESEARCH_STATUS = ((0, '禁用'), (1, '启用'))
     # 研发名称
-    name = models.CharField(max_length=100, verbose_name='研发名称')
+    name = models.CharField(max_length=100, verbose_name='研发名称', unique=True)
     # 研发别名
     alias = models.JSONField(verbose_name='研发别名', null=True, blank=True)
     # 研发公司名
@@ -147,6 +147,7 @@ class Games(CoreModel):
         verbose_name = '游戏管理'
         verbose_name_plural = verbose_name
         ordering = ("-release_date",)
+        unique_together = ('name', 'quick_name')
 
     def __str__(self):
         return self.name
@@ -172,6 +173,7 @@ class RevenueSplit(CoreModel):
         verbose_name = '游戏渠道分成'
         verbose_name_plural = verbose_name
         ordering = ("game", "channel")
+        unique_together = ('game', 'channel')
 
 
 # 游戏研发分成
@@ -192,3 +194,4 @@ class ResearchSplit(CoreModel):
         verbose_name = '游戏研发分成'
         verbose_name_plural = verbose_name
         ordering = ("game", "research")
+        unique_together = ('game', 'research')

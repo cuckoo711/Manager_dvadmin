@@ -19,6 +19,8 @@ router.register(r'consoles', ConsolesViewSet)
 
 urlpatterns = router.urls
 urlpatterns += [
-    path('reportdata/get_report/', DailyReportViewSet.as_view({'get': 'get_report'})),
+    path('reportdata/get_report/', DailyReportViewSet.as_view(
+        {'get': 'get_report', 'post': 'get_report'}
+    ), name='get_report'),
     # path('manual_update/', manual_update, name='manual_update'),
 ]

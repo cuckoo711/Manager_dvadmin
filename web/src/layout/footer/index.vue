@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-footer pb5 pt2">
 		<div class="layout-footer-warp">
-			<div>❤️ Powered by Cuckoo Copyright © 上海靖堂网络科技有限公司 ❤️</div>
+			<div>❤️ Powered by Cuckoo Copyright © 布谷不咕鸟 ❤️</div>
 		</div>
 	</div>
 </template>
