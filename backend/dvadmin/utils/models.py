@@ -9,6 +9,8 @@
 from datetime import datetime
 from importlib import import_module
 
+from django.utils import timezone
+
 from application import settings
 from django.apps import apps
 from django.conf import settings
@@ -192,6 +194,13 @@ class CoreModel(models.Model):
                 setattr(self, key, value)
         self.save()
         return self
+
+    def save(self, *args, **kwargs):
+        if self.update_datetime and timezone.is_naive(self.update_datetime):
+            self.update_datetime = timezone.make_aware(self.update_datetime)
+        if self.create_datetime and timezone.is_naive(self.create_datetime):
+            self.create_datetime = timezone.make_aware(self.create_datetime)
+        super().save(*args, **kwargs)
 
 
 def get_all_models_objects(model_name=None):
