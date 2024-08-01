@@ -56,7 +56,7 @@ class Channel(CoreModel):
         else:
             return False
         for alias in aliases:
-            if alias.upper() in search_term.upper():
+            if alias.upper() in search_term.upper() or search_term.upper() in alias.upper():
                 return True
         return False
 
@@ -107,7 +107,7 @@ class Research(CoreModel):
         else:
             return False
         for alias in aliases:
-            if alias.upper() in search_term.upper():
+            if alias.upper() in search_term.upper() or search_term.upper() in alias.upper():
                 return True
         return False
 

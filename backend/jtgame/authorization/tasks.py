@@ -7,10 +7,12 @@ FILE NAME: tasks.py
 Editor: 30386
 """
 import json
+from datetime import timedelta
 
 import requests
 
 from application.celery import app
+from dvadmin.system.views.message_center import MessageCenterCreateSerializer
 from jtgame.authorization.models import AuthorizationConfig, AuthorizationInfo, AuthorizationLetter
 
 
@@ -46,6 +48,20 @@ def generate_authorization_letter(obj_id):
         if not webhook_key:
             raise Exception('未找到发送通知的webhook_key配置')
         webhook_key = webhook_key.value
+        authorization_end_date = authorization_obj.authorization_end_date
+        if authorization_end_date < obj.release_date + timedelta(days=90):
+            msg = f'授权书有效期不足90天, 请及时更新授权书, 授权书有效期至{authorization_end_date}'
+            message_data = {
+                'title': f'{authorization_obj.name}授权书有效期不足90天',
+                'content': msg,
+                'target_type': 1,
+                'target_role': [8],
+            }
+            serializer = MessageCenterCreateSerializer(data=message_data)
+            if serializer.is_valid():
+                serializer.save()
+        elif authorization_end_date > obj.release_date + timedelta(days=365):
+            authorization_end_date = obj.release_date + timedelta(days=365)
 
         data = {
             'webhook_key': str(webhook_key),
@@ -59,7 +75,7 @@ def generate_authorization_letter(obj_id):
                 '⺌': str(authorization_obj.isbn),
                 '艹': str(authorization_obj.publication_approval_number),
                 '冖': str(obj.release_date),
-                '宀': str(authorization_obj.authorization_end_date),
+                '宀': str(authorization_end_date),
                 '亠': str(obj.release_date),
                 '⻗': str(obj.release_date),
                 '⺋': str(bh_name),
@@ -67,6 +83,16 @@ def generate_authorization_letter(obj_id):
                 '⺈': str(authorization_obj.icp_license)
             }
         }
+        message_data = {
+            'title': f'{obj.name}授权书生成',
+            'content': f'授权书正在生成中, 请稍后查看',
+            'target_type': 0,
+            'target_user': [obj.creator.id],
+        }
+        serializer = MessageCenterCreateSerializer(data=message_data)
+        if serializer.is_valid():
+            serializer.save()
+
         result = requests.post('http://localhost:5020/build', json=data).json()
         if result.get('error'):
             obj.tips = result.get('error')

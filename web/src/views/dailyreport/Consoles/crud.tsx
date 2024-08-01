@@ -40,6 +40,52 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 editRequest,
                 delRequest,
             },
+            actionbar: {
+                buttons: {
+                    add: {show: false},
+                    refresh: {
+                        show: true,
+                        text: '手动刷新',
+                        type: 'warning',
+                        click: async () => {
+                            // 弹出确认框
+                            ElMessageBox.confirm(
+                                '是否确认手动刷新？',
+                                '确认手动刷新',
+                                {
+                                    confirmButtonText: '确认',
+                                    cancelButtonText: '取消',
+                                    type: 'warning',
+                                }
+                            ).then(async () => {
+                                // 在请求开始时弹出提示框
+                                const loadingMessage = ElMessage({
+                                    message: '正在刷新，请稍候...',
+                                    type: 'info',
+                                    showClose: false,
+                                    duration: 0, // 持续显示，直到手动关闭
+                                });
+                                try {
+                                    const result = await api.ManualRefresh();
+                                    console.log(result);
+                                    if (result.status) {
+                                        successMessage(`${result.message}`);
+                                        crudExpose?.doRefresh();
+                                    } else {
+                                        errorMessage(`${result.message}`);
+                                    }
+                                } catch (e) {
+                                    errorMessage(`手动刷新失败: ${e}`);
+                                }
+                                loadingMessage.close();
+                            }).catch(() => {
+                                // 用户取消了操作
+                                errorMessage('手动刷新操作已取消');
+                            });
+                        }
+                    }
+                }
+            },
             rowHandle: {
                 fixed: 'right',
                 align: 'center',
@@ -61,7 +107,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         iconRight: '',
                         type: 'text',
                         show: auth('consoles:Renew'),
-                        click: async (obj) => {
+                        click: async (obj: any) => {
                             // 弹出确认框
                             ElMessageBox.confirm(
                                 '是否确认续费？',
@@ -74,7 +120,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                             ).then(async () => {
                                 // 在请求开始时弹出提示框
                                 const loadingMessage = ElMessage({
-                                    message: '正在续费，请稍候...（至少3s）',
+                                    message: '正在续费，请稍候...（至少5s）',
                                     type: 'info',
                                     showClose: false,
                                     duration: 0, // 持续显示，直到手动关闭
@@ -83,7 +129,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                                     const result = await api.RenewObj(obj.row);
                                     console.log(result);
                                     if (result.status) {
-                                        successMessage(`${result.message}: ${JSON.stringify(result.data)}`);
+                                        successMessage(`${result.message}: ${JSON.stringify(result.data)} 如果未显示更新请手动更新列表`);
                                         crudExpose?.doRefresh();
                                     } else {
                                         errorMessage(`${result.message}: ${result.data}`);
@@ -171,6 +217,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 }, eip_address: {
                     title: "主Ipv4地址",
                     type: "text",
+                    search: {show: true},
                     column: {
                         width: 150,
                     }

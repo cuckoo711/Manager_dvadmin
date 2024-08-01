@@ -19,6 +19,3 @@ router.register(r'revenue_split_manage', RevenueSplitViewSet)
 router.register(r'research_split_manage', ResearchSplitViewSet)
 
 urlpatterns = router.urls
-urlpatterns += [
-    path('game_manage/upload_dddd/', GameViewSet.as_view({'post': 'upload_dddd'})),
-]

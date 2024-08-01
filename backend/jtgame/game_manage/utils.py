@@ -122,7 +122,7 @@ def process_channel_data(data, game, messages):
         return
 
     if not channel_name:
-        msg = f'渠道名称为空: {game.name}'
+        msg = f'渠道名称列未找到: {game.name}'
         if msg not in messages['error']:
             messages['error'].append(msg)
             # logger.error(msg)

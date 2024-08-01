@@ -3,14 +3,14 @@ from datetime import datetime
 from time import sleep
 
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import action
 
 from dvadmin.utils.backends import logger
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 from jtgame.daily_report.models import ConsoleAccount, QuickAccount, ReportData, Consoles
-from jtgame.daily_report.utils import RenewConsole, ConsoleData
+from jtgame.daily_report.tasks import task__update_consoles
+from jtgame.daily_report.utils import RenewConsole
 
 
 # Create your views here.
@@ -80,6 +80,16 @@ class ConsolesViewSet(CustomModelViewSet):
         obj = self.queryset.filter(**filter_kwargs).first()
         return obj
 
+    @action(detail=False, methods=['get'])
+    def manual_refresh(self, request):
+        try:
+            # task__make_daily_report.delay()
+            # DailyReport().make_daily_report(update=True)
+            task__update_consoles.delay()
+            return JsonResponse({"message": "更新操作已提交", "status": True})
+        except Exception as e:
+            return JsonResponse({"message": f"服务器错误: {e}", "status": False})
+
     @action(detail=True, methods=['put'])
     def renew(self, request, pk=None):
         try:
@@ -102,14 +112,13 @@ class ConsolesViewSet(CustomModelViewSet):
             logger.info('准备更新服务器信息, 等待5秒...')
             sleep(3)
             # DailyReport().make_daily_report(update=True)
-            print(ConsoleData().make_daily_report(update=True))
+            task__update_consoles.delay()
             logger.info('更新服务器信息完成')
             instance.renewal_status = False
             instance.save()
             return JsonResponse(response)
         except Exception as e:
             return JsonResponse({'status': False, 'message': '续费失败', 'data': str(e)})
-
 
 # @csrf_exempt
 # def get_report(request):

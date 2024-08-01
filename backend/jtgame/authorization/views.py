@@ -147,10 +147,14 @@ class AuthorLetterViewSet(CustomModelViewSet):
             for root, dirs, files in os.walk(output_dir, topdown=False):
                 for _dir in dirs:
                     dir_path = os.path.abspath(os.path.join(root, _dir))
+                    if not os.path.exists(dir_path):
+                        continue
                     if not os.listdir(dir_path):
                         if safe_rmdir(dir_path):
                             dir_clear_count += 1
                     dir_count += 1
+                if not os.path.exists(root):
+                    continue
                 if not os.listdir(root):
                     if safe_rmdir(root):
                         dir_clear_count += 1

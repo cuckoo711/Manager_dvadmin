@@ -312,3 +312,11 @@ class QuickDetail:
     def _add_message(message, level: str, text: str) -> None:
         if text not in message[level]:
             message[level].append(text)
+
+
+class IncomeExport:
+    def __init__(self, date: str):
+        self.date = date
+
+    def export(self):
+        pass

@@ -103,8 +103,9 @@ class ConsoleData:
                 '规格': instance_dict['instance_type_id'],
                 'CPU': str(instance_dict['cpus']) + '核',
                 '内存': str(int(instance_dict['memory_size']) / 1024) + 'GB',
-                '主IPv4地址': instance_dict['eip_address']['ip_address'],
-                '次IPv4地址': instance_dict['network_interfaces'][0]['primary_ip_address'],
+                '主IPv4地址': instance_dict['eip_address']['ip_address'] if instance_dict.get('eip_address') else '/',
+                '次IPv4地址': instance_dict['network_interfaces'][0]['primary_ip_address'] if instance_dict.get(
+                    'network_interfaces') else '/',
                 '实例计费类型': {'PostPaid': '按量计费', 'PrePaid': '包年包月'}.get(
                     instance_dict['instance_charge_type']
                 ),
@@ -313,7 +314,6 @@ def RenewConsole(account: ConsoleAccount, instance_id: str):
     )
 
     try:
-        # 复制代码运行示例，请自行打印API返回值。
         result = api_instance.renew_instance(renew_instance_request)
         return {'status': True, 'message': '续费成功', 'data': result.to_dict()}
     except ApiException as e:

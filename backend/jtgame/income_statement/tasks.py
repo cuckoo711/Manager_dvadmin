@@ -16,13 +16,18 @@ from jtgame.income_statement.utils import QuickDetail
 
 @app.task
 def task__make_daily_detail_report(shifting_days=0):
+    today = datetime.date.today() - datetime.timedelta(days=shifting_days)
+    today_str = today.strftime('%Y-%m-%d')
+    report = IncomeData.objects.filter(date=today).first()
+    if report:
+        report.data = {}
+        report.error = {}
+        report.save()
+
     data, message = QuickDetail().make_daily_report()
     data = json.loads(json.dumps(data, ensure_ascii=False))
     message = json.loads(json.dumps(message, ensure_ascii=False))
-    today = datetime.date.today() - datetime.timedelta(days=shifting_days)
-    today_str = today.strftime('%Y-%m-%d')
     try:
-        report = IncomeData.objects.filter(date=today).first()
         if report:
             report.data = data
             report.error = message

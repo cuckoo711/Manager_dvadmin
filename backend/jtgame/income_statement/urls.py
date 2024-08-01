@@ -15,7 +15,3 @@ router = DefaultRouter()
 router.register(r'incomedata', IncomeDataViewSet)
 
 urlpatterns = router.urls
-urlpatterns += [
-    path('incomedata/get_income/', IncomeDataViewSet.as_view({'get': 'get_income'})),
-    # path('get_income/', get_income, name='get_income'),
-]

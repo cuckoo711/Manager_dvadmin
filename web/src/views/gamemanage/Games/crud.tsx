@@ -157,9 +157,6 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 }, stop_add_date: {
                     title: "停新增日期",
                     type: "date",
-                    search: {
-                        show: true,
-                    },
                     column: {
                         align: 'center',
                         sortable: true,
@@ -176,9 +173,6 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 }, stop_operation_date: {
                     title: "停运营日期",
                     type: "date",
-                    search: {
-                        show: true,
-                    },
                     column: {
                         align: 'center',
                         sortable: true,
@@ -195,10 +189,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 },
                 parent: {
                     title: "发行主体",
-                    type: "select",
-                    search: {
-                        show: true,
-                    },
+                    type: "input",
                     column: {
                         align: 'center',
                         width: 100,
@@ -217,9 +208,6 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 }, discount: {
                     title: "折算比例",
                     type: "number",
-                    search: {
-                        show: true,
-                    },
                     column: {
                         align: 'center',
                         width: 100,
@@ -227,9 +215,6 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 }, type: {
                     title: "游戏类型",
                     type: "input",
-                    search: {
-                        show: true,
-                    },
                     column: {
                         align: 'center',
                         width: 100,
@@ -237,9 +222,6 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 }, issue: {
                     title: "发行类型",
                     type: "input",
-                    search: {
-                        show: true,
-                    },
                     column: {
                         align: 'center',
                         width: 100,
@@ -247,9 +229,6 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 }, reconciliation_ratio: {
                     title: "对账比例",
                     type: "number",
-                    search: {
-                        show: true,
-                    },
                     column: {
                         align: 'center',
                         width: 100,
