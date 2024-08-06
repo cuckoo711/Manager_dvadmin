@@ -108,17 +108,26 @@ def handle_game(sheet, messages):
 
 
 def process_channel_data(data, game, messages):
-    load_in = False
+    load_in = [False, False]
     channel_name = ''
 
     for key, value in data.items():
         if '渠道名称' in key:
             channel_name = value.strip()
         elif '参数' in key:
-            if value.strip():
-                load_in = True
+            if len(value.strip()) > 20:
+                load_in[0] = True
+        elif '提测进度' in key:
+            if value.strip != '已提':
+                load_in[1] = True
 
-    if not load_in:
+    if not all(load_in):
+        lt1 = '缺少参数' if not load_in[0] else '已有参数'
+        lt2 = '未提测' if not load_in[1] else '已提测'
+        msg = f'游戏渠道数据不完整: {game.name} - {channel_name}: {lt1} - {lt2}'
+        if msg not in messages['error']:
+            messages['error'].append(msg)
+            # logger.error(msg)
         return
 
     if not channel_name:

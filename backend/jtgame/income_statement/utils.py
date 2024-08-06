@@ -6,12 +6,14 @@ Project Name: Manager_dvadmin
 FILE NAME: utils.py
 Editor: 30386
 """
+import io
 import re
 from collections import defaultdict
 from copy import deepcopy
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal
 
+import pandas as pd
 import requests
 from django.db.models import QuerySet
 
@@ -218,7 +220,7 @@ class QuickDetail:
                         if key == 'game':
                             channel_data[key] = ""
                     else:
-                        channel_data[key] = f"信息缺失"
+                        channel_data[key] = f"信息缺失" if key != 'discount' else 0
                 for key in ['recharge', 'our_income', 'after_folding', 'research_income', 'our_folding_income',
                             'research_folding_income']:
                     if key in channel_data:
@@ -315,8 +317,131 @@ class QuickDetail:
 
 
 class IncomeExport:
-    def __init__(self, date: str):
-        self.date = date
+    # noinspection PyTypeChecker
+    def __init__(self, datas: list[dict[str, str | Decimal]], date: str = None):
+        if not date:
+            date = (datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0) -
+                    timedelta(days=1)).strftime('%Y年%m月')
 
-    def export(self):
-        pass
+        self.date = date
+        self.data = self.wash_data(datas)
+
+        self.__file_stream = io.BytesIO()  # 使用 BytesIO 作为文件流
+        self.__wb = pd.ExcelWriter(self.__file_stream, engine='xlsxwriter', mode='w')
+        self.__ws = self.__wb.book.add_worksheet('Sheet1')
+        self.__initialize_sheet()
+
+    def __initialize_sheet(self):
+
+        self.__ws.write_row(0, 0, ['时间', '游戏名称', '发行主体',
+                                   '渠道名称', '渠道公司',
+                                   '研发名称', '研发公司',
+                                   '折扣比例',
+                                   '（靖堂）流水', '（靖堂）折后流水',
+                                   '渠道费比例', '我方分成比例',
+                                   '研发通道费', '研发分成',
+                                   '（靖堂）预估收入', '（靖堂）折后预估收入',
+                                   '（研发）预估收入', '（研发）折后预估收入',
+                                   '渠道备注', '研发备注'])
+
+        # 第一行冻结, 第一、二列冻结
+        self.__ws.freeze_panes(1, 2)
+        # 第一行筛选
+        self.__ws.autofilter(0, 0, 0, 19)
+        # 设置列宽
+        self.__ws.set_column(0, 0, 15)
+        self.__ws.set_column(1, 1, 30)
+        self.__ws.set_column(2, 3, 15)
+        self.__ws.set_column(4, 4, 30)
+        self.__ws.set_column(5, 5, 15)
+        self.__ws.set_column(6, 6, 30)
+        self.__ws.set_column(7, 17, 15)
+        self.__ws.set_column(18, 19, 30)
+
+        # 设置默认行高
+        self.__ws.set_default_row(15)
+
+    def wash_data(self, datas: list) -> list[list[str]]:
+        out_datas = []
+        for data in datas:
+            game_name = data['game']
+            for child in data['children']:
+                child_temp = [
+                    self.date,
+                    game_name,
+                    child.get('main_body', '未录入'),
+                    child.get('channel', '未录入'),
+                    child.get('channel_company', '未录入'),
+                    child.get('research_name', '未录入'),
+                    child.get('research_company', '未录入'),
+                    Decimal(child.get('discount', 0) if child.get('discount') != '信息缺失' else 0),
+                    Decimal(child.get('recharge', 0) if child.get('recharge') != '信息缺失' else 0),
+                    Decimal(child.get('after_folding', 0) if child.get('after_folding') != '信息缺失' else 0),
+                    Decimal(child.get('channel_fee', 0) if child.get('channel_fee') != '信息缺失' else 0),
+                    Decimal(child.get('our_ratio', 0) if child.get('our_ratio') != '信息缺失' else 0),
+                    Decimal(child.get('slotting_ratio', 0) if child.get('slotting_ratio') != '信息缺失' else 0),
+                    Decimal(child.get('research_ratio', 0) if child.get('research_ratio') != '信息缺失' else 0),
+                    Decimal(child.get('our_income', 0) if child.get('our_income') != '信息缺失' else 0),
+                    Decimal(child.get('our_folding_income', 0) if child.get('our_folding_income') != '信息缺失' else 0),
+                    Decimal(child.get('research_income', 0) if child.get('research_income') != '信息缺失' else 0),
+                    Decimal(child.get('research_folding_income', 0) if child.get('research_folding_income') != '信息缺失' else 0),
+                    # Decimal(child.get('our_income')),
+                    # Decimal(child.get('our_folding_income')),
+                    # Decimal(child.get('research_income')),
+                    # Decimal(child.get('research_folding_income')),
+                    child.get('channel_tips', '未录入'),
+                    child.get('research_tips', '未录入')
+                ]
+                out_datas.append(deepcopy(child_temp))
+
+        return out_datas
+
+    def write(self):
+        for i, row in enumerate(self.data, start=1):
+            index = i + 1
+            self.__ws.write_row(i, 0, row)
+
+            self.__ws.write_formula(i, 9, f'=I{index}/H{index}',
+                                    self.__wb.book.add_format({'num_format': '#,##0.00;-#,##0.00'}))
+            self.__ws.write_formula(i, 14, f'=I{index}*(1-K{index})*L{index}',
+                                    self.__wb.book.add_format({'num_format': '#,##0.00;-#,##0.00'}))
+            self.__ws.write_formula(i, 15, f'=J{index}*(1-K{index})*L{index}',
+                                    self.__wb.book.add_format({'num_format': '#,##0.00;-#,##0.00'}))
+            self.__ws.write_formula(i, 16, f'=I{index}*(1-M{index})*N{index}',
+                                    self.__wb.book.add_format({'num_format': '#,##0.00;-#,##0.00'}))
+            self.__ws.write_formula(i, 17, f'=J{index}*(1-M{index})*N{index}',
+                                    self.__wb.book.add_format({'num_format': '#,##0.00;-#,##0.00'}))
+
+            if row[8] is not None:
+                self.__ws.write_number(i, 8, row[8],
+                                       self.__wb.book.add_format({'num_format': '#,##0.00;-#,##0.00'}))
+            if row[10] is not None:
+                self.__ws.write_number(i, 10, row[10], self.__wb.book.add_format({'num_format': '0%'}))
+            if row[11] is not None:
+                self.__ws.write_number(i, 11, row[11], self.__wb.book.add_format({'num_format': '0%'}))
+            if row[12] is not None:
+                self.__ws.write_number(i, 12, row[12], self.__wb.book.add_format({'num_format': '0%'}))
+            if row[13] is not None:
+                self.__ws.write_number(i, 13, row[13], self.__wb.book.add_format({'num_format': '0%'}))
+
+        sum_row = len(self.data) + 2
+        self.__ws.write_row(sum_row, 0,
+                            ['合计', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''])
+        # 统计流水
+        self.__ws.write_formula(sum_row, 8, '=SUM(I2:I{})'.format(sum_row - 1),
+                                self.__wb.book.add_format({'num_format': '#,##0.00;-#,##0.00'}))
+        self.__ws.write_formula(sum_row, 9, '=SUM(J2:J{})'.format(sum_row - 1),
+                                self.__wb.book.add_format({'num_format': '#,##0.00;-#,##0.00'}))
+        self.__ws.write_formula(sum_row, 14, '=SUM(O2:O{})'.format(sum_row - 1),
+                                self.__wb.book.add_format({'num_format': '#,##0.00;-#,##0.00'}))
+        self.__ws.write_formula(sum_row, 15, '=SUM(P2:P{})'.format(sum_row - 1),
+                                self.__wb.book.add_format({'num_format': '#,##0.00;-#,##0.00'}))
+        self.__ws.write_formula(sum_row, 16, '=SUM(Q2:Q{})'.format(sum_row - 1),
+                                self.__wb.book.add_format({'num_format': '#,##0.00;-#,##0.00'}))
+        self.__ws.write_formula(sum_row, 17, '=SUM(R2:R{})'.format(sum_row - 1),
+                                self.__wb.book.add_format({'num_format': '#,##0.00;-#,##0.00'}))
+
+    def save(self):
+        self.__wb.close()
+        self.__file_stream.seek(0)  # 将指针移到文件流的开始
+        return self.__file_stream

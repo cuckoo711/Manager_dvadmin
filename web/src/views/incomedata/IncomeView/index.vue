@@ -9,6 +9,7 @@
               <el-date-picker v-model="user_selection_time" type="date" placeholder="选择日期" size="default"/>
               <el-button type="primary" @click="servers_by_date_search">搜索</el-button>
               <el-button type="primary" @click="servers_by_date_reset">重置</el-button>
+              <el-button type="success" @click="exportData">导出本页</el-button>
             </div>
           </div>
           <br/>
@@ -22,7 +23,7 @@
                   lazy
                   :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               >
-                <el-table-column type="index" fixed width="50" label="No."/>
+                <el-table-column type="index" fixed width="60" label="No."/>
                 <el-table-column prop="game" label="游戏名称" min-width="250" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="channel" label="渠道" min-width="100" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="research_name" label="研发" min-width="100"
@@ -50,7 +51,7 @@
                   lazy
                   :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               >
-                <el-table-column type="index" fixed width="50" label="No."/>
+                <el-table-column type="index" fixed width="60" label="No."/>
                 <el-table-column prop="game" label="游戏名称" min-width="250" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="channel" label="渠道" min-width="100" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="research_name" label="研发" min-width="100"
@@ -76,7 +77,33 @@
                   lazy
                   :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               >
-                <el-table-column type="index" fixed width="50" label="No."/>
+                <el-table-column type="index" fixed width="60" label="No."/>
+                <el-table-column prop="game" label="游戏名称" min-width="250" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="channel" label="渠道" min-width="100" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="research_name" label="研发" min-width="100"
+                                 show-overflow-tooltip></el-table-column>
+                <el-table-column prop="recharge" label="总流水" min-width="150" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="discount" label="折扣" min-width="150" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="after_folding" label="折后总收入" min-width="150"
+                                 show-overflow-tooltip></el-table-column>
+                <el-table-column prop="our_folding_income" label="我方折后收入" min-width="150"
+                                 show-overflow-tooltip></el-table-column>
+                <el-table-column prop="research_folding_income" label="研发折后收入" min-width="150"
+                                 show-overflow-tooltip></el-table-column>
+                <el-table-column prop="channel_tips" label="渠道备注" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="research_tips" label="研发备注" show-overflow-tooltip></el-table-column>
+              </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="本月收入明细">
+              <el-table
+                  :data="tableData?.this_month_income"
+                  style="width: 100%"
+                  :height="tableHeight"
+                  row-key="id"
+                  lazy
+                  :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+              >
+                <el-table-column type="index" fixed width="60" label="No."/>
                 <el-table-column prop="game" label="游戏名称" min-width="250" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="channel" label="渠道" min-width="100" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="research_name" label="研发" min-width="100"
@@ -102,37 +129,13 @@
                   lazy
                   :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               >
-                <el-table-column type="index" fixed width="50" label="No."/>
+                <el-table-column type="index" fixed width="60" label="No."/>
                 <el-table-column prop="game" label="游戏名称" min-width="250" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="channel" label="渠道" min-width="100" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="research_name" label="研发" min-width="100"
                                  show-overflow-tooltip></el-table-column>
-                <el-table-column prop="recharge" label="总流水" min-width="150" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="discount" label="折扣" min-width="150" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="after_folding" label="折后总收入" min-width="150"
+                <el-table-column prop="recharge" label="总流水" min-width="150"
                                  show-overflow-tooltip></el-table-column>
-                <el-table-column prop="our_folding_income" label="我方折后收入" min-width="150"
-                                 show-overflow-tooltip></el-table-column>
-                <el-table-column prop="research_folding_income" label="研发折后收入" min-width="150"
-                                 show-overflow-tooltip></el-table-column>
-                <el-table-column prop="channel_tips" label="渠道备注" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="research_tips" label="研发备注" show-overflow-tooltip></el-table-column>
-              </el-table>
-            </el-tab-pane>
-            <el-tab-pane label="本月收入明细">
-              <el-table
-                  :data="tableData?.this_month_income"
-                  style="width: 100%"
-                  row-key="id"
-                  lazy
-                  :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-              >
-                <el-table-column type="index" fixed width="50" label="No."/>
-                <el-table-column prop="game" label="游戏名称" min-width="250" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="channel" label="渠道" min-width="100" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="research_name" label="研发" min-width="100"
-                                 show-overflow-tooltip></el-table-column>
-                <el-table-column prop="recharge" label="总流水" min-width="150" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="discount" label="折扣" min-width="150" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="after_folding" label="折后总收入" min-width="150"
                                  show-overflow-tooltip></el-table-column>
@@ -153,7 +156,8 @@
 
 <script lang="ts" setup>
 import {computed, nextTick, onMounted, onUnmounted, ref} from "vue";
-import {getIncome} from './crud'
+import {getIncome, exportIncome, GetIncomeExport} from './crud'
+import {errorMessage, successMessage} from "/@/utils/message";
 
 //接口地址
 
@@ -292,6 +296,42 @@ const servers_by_date_reset = async () => {
     console.error("请求数据失败:", error);
   }
 };
+
+const exportData = async () => {
+  let date: string = formatDate(user_selection_time.value);
+  if (!date) {
+    date = formatDate(currentDateTime.value);
+  }
+  // tab的索引
+  let page_type = document.querySelector('.el-tabs__item.is-active')?.getAttribute('aria-controls');
+  if (page_type) {
+    page_type = page_type.toString().replace('pane-', '');
+    const response = await exportIncome(
+        date, page_type
+    );
+    if (response.status) {
+      const filename = response.filename;
+      const fileresponse = await GetIncomeExport(response.data);
+      if (fileresponse) {
+        const blob = new Blob([fileresponse.data], {type: fileresponse.headers["content-type"]});
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        successMessage("导出成功");
+      } else {
+        errorMessage("导出失败");
+      }
+    } else {
+      errorMessage("导出失败");
+    }
+  }
+  console.log(`导出的日期：${date}，导出的tab页：${page_type}`);
+}
 
 const tableHeight = ref("500px"); // 表格初始高度，可以根据需要调整
 

@@ -50,6 +50,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
 
     return {
         crudOptions: {
+            pagination:{pageSize : 999},
             request: {
                 pageRequest,
                 addRequest,

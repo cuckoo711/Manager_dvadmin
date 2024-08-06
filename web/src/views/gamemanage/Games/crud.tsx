@@ -31,6 +31,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
 
     return {
         crudOptions: {
+            pagination:{pageSize : 999},
             request: {
                 pageRequest,
                 addRequest,
@@ -208,6 +209,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 }, discount: {
                     title: "折算比例",
                     type: "number",
+                    search: { show: true },
                     column: {
                         align: 'center',
                         width: 100,
@@ -237,17 +239,21 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     title: "游戏状态",
                     type: 'dict-select',
                     search: {
-                        show: true,
+                        show: false,
                     },
                     column: {
                         align: 'center',
                         width: 100,
+                        show: false,
                     },
                     dict: dict({
                         data: dictionary('game_status'),
                         label: "label",
                         value: "value"
                     }),
+                    form: {
+                        show: false,
+                    }
                 }, desc: {
                     title: "描述",
                     type: "textarea",
