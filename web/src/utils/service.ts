@@ -172,6 +172,7 @@ function createRequestFunction(service: any) {
 		const configDefault = {
 			headers: {
 				'Content-Type': get(config, 'headers.Content-Type', 'application/json'),
+				'Accept-Encoding': 'gzip',
 			},
 			timeout: 300000,
 			baseURL: getBaseURL(),

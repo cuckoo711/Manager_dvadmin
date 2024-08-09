@@ -2,47 +2,89 @@
   <div>
     <el-container>
       <el-main>
-        <el-upload
-            class="upload"
-            drag
-            accept=".xls,.xlsx,.csv"
-            :http-request="handleFileRead"
-            :before-remove="beforeRemove"
-            :on-remove="handleRemove"
-            :show-file-list="true"
-            :limit="1"
-        >
-          <el-icon class="el-icon--upload">
-            <upload-filled/>
-          </el-icon>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip" slot="tip">每次只能上传一个文件, 上传前请确保文件名以四位年份信息开头</div>
-          <div class="el-upload__tip" slot="tip">需要先设置时间范围，再上传文件</div>
-          <template #tip>
-            <div class="el-upload__tip">仅支持 .xls, .xlsx, .csv 文件</div>
-          </template>
-        </el-upload>
-        <el-date-picker
-            v-model="dateRange"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :default-time="defaultTimeRange"
-            class="date-picker"
-        />
-        <el-button
-            type="primary"
-            @click="uploadToServer"
-            class="upload-button"
-        >
-          上传
-        </el-button>
+        <div>
+          <el-tooltip placement="bottom">
+            <template #content>
+              每次只能上传一个文件, 上传前请确保文件名以四位年份信息开头<br/>
+              需要先设置时间范围，再选择文件<br/>
+              仅支持 .xls, .xlsx, .csv 文件
+            </template>
+
+            <el-upload
+                ref="upload"
+                drag
+                accept=".xls,.xlsx,.csv"
+                :http-request="handleFileRead"
+                :before-remove="beforeRemove"
+                :on-remove="handleRemove"
+                :on-exceed="handleExceed"
+                :show-file-list="true"
+                :limit="1"
+            >
+              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            </el-upload>
+          </el-tooltip>
+        </div>
+        <div>
+          <div>
+            <el-date-picker
+                v-model="dateRange"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                :default-time="defaultTimeRange"
+                class="date-picker"
+            />
+            <el-button
+                type="primary"
+                @click="uploadToServer"
+                class="upload-button"
+            > 上传
+            </el-button>
+          </div>
+          <div>
+            <el-checkbox-group v-model="coverList">
+              <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="覆盖信息: 上线日期、主体"
+                  placement="bottom-start"
+              >
+                <el-checkbox-button label="覆盖游戏基础信息" value="GameBase"/>
+              </el-tooltip>
+              <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="覆盖信息: quick名称、混服形式、提测版本、折扣比例、对账比例"
+                  placement="bottom-start"
+              >
+                <el-checkbox-button label="覆盖游戏详细信息" value="GameDetail"/>
+              </el-tooltip>
+              <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="覆盖信息: 我方分成比例、渠道分成比例、渠道费比例、渠道备注"
+                  placement="bottom"
+              >
+                <el-checkbox-button label="覆盖游戏->渠道分成信息" value="Revenue"/>
+              </el-tooltip>
+              <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="覆盖信息: 研发分成比例、通道费比例、研发备注"
+                  placement="bottom-end"
+              >
+                <el-checkbox-button label="覆盖游戏->研发分成信息" value="Research"/>
+              </el-tooltip>
+            </el-checkbox-group>
+          </div>
+        </div>
         <div v-if="sheetData.length" ref="tabsWrapper">
           <el-tabs
               v-model="activeTab"
               ref="tabs"
-              :scrollable="true"
+              :stretch="true"
           >
             <el-tab-pane
                 v-for="(sheet, sheetIndex) in filteredSheetData"
@@ -102,8 +144,11 @@ import {
   ElTabPane,
   ElButton,
   ElDatePicker,
-  ElMessage, UploadProps, ElMessageBox
+  ElMessage, ElMessageBox, genFileId
 } from 'element-plus';
+import type {UploadInstance, UploadProps, UploadRawFile} from 'element-plus'
+
+
 import {UploadFilled} from "@element-plus/icons-vue";
 
 export default defineComponent({
@@ -120,12 +165,13 @@ export default defineComponent({
     ElDatePicker
   },
   setup() {
+    const upload = ref<UploadInstance>()
     const sheetData = ref<any[]>([]);
     const activeTab = ref('0');
     const fileData = ref<any>(null);
-    const schedulingData = ref<any>(null);
     const tabsWrapper = ref<HTMLElement | null>(null);
     const unloadedSheetData = ref<string[]>([]);
+
 
     // 日期区间
     const dateRange = ref<[Date, Date]>([
@@ -172,11 +218,16 @@ export default defineComponent({
           }
       );
     };
-
+    const handleExceed: UploadProps['onExceed'] = (files) => {
+      upload.value!.clearFiles()
+      const file = files[0] as UploadRawFile
+      file.uid = genFileId()
+      upload.value!.handleStart(file)
+      handleFileRead({file: file})
+    }
     const handleRemove: UploadProps['onRemove'] = (uploadFile) => {
       sheetData.value = [];
       fileData.value = null;
-      schedulingData.value = null;
       unloadedSheetData.value = [];
       tabsWrapper.value?.scrollTo(0, 0);
       activeTab.value = '0';
@@ -187,6 +238,7 @@ export default defineComponent({
     }
 
     const handleFileRead = async ({file}: { file: File }) => {
+
       const fileName = file.name;
       const matchResult = fileName.match(/\d{4}/);
       let Year: number = new Date().getFullYear();
@@ -194,15 +246,18 @@ export default defineComponent({
         ElMessage({
           message: `匹配到的年份: ${matchResult[0]}`,
           type: 'success',
-          duration: 5000
+          duration: 5000,
+          showClose: true,
         });
         Year = Number(matchResult[0]);
       } else {
         ElMessage({
           message: '未匹配到年份, 将使用当前年份, 请检查文件名是否包含年份信息',
           type: 'warning',
-          duration: 5000
+          duration: 5000,
+          showClose: true,
         });
+        return;
       }
       const reader = new FileReader();
       reader.onload = async (e) => {
@@ -236,12 +291,12 @@ export default defineComponent({
           ElMessage({
             message: '未找到有效的表格',
             type: 'error',
-            duration: 5000
+            duration: 5000,
+            showClose: true,
           });
           return;
         }
 
-        let schedulingDataIn = {};
         const sheets = validSheetNames.map(sheetName => {
           const originalSheetName = sheetName;
           const cleanSheetName = sheetName.replace(' ', '');
@@ -285,7 +340,8 @@ export default defineComponent({
               ElMessage({
                 message: '未找到上线排期列',
                 type: 'error',
-                duration: 5000
+                duration: 5000,
+                showClose: true,
               });
               return null;
             }
@@ -296,19 +352,6 @@ export default defineComponent({
                 i--;
               }
             }
-
-            const encodedData = filteredData.map(row =>
-                row.map(cell => typeof cell === 'string' ?
-                    new TextDecoder('utf-8').decode(new TextEncoder().encode(cell)) : cell)  // 编码数据
-            );
-
-
-            schedulingDataIn = {
-              sheetName: sheetName,
-              sheetHeaders: encodedData[0].map(header => ({prop: header, label: header})),
-              sheetData: encodedData.slice(1),
-              scheduling: scheduling
-            };
           } else {
             if (cleanSheetName.includes('（') && cleanSheetName.includes('）')) {
               const matchResult = cleanSheetName.match(/([\u4e00-\u9fa5a-zA-Z0-9]+（[\u4e00-\u9fa5a-zA-Z0-9.]+）)(\d+\.\d+)([\u4e00-\u9fa5a-zA-Z0-9.]*)/);
@@ -425,6 +468,7 @@ export default defineComponent({
             message: `未加载的表格:<br><br>${unloadedSheets.map(sheet => `----${sheet}`).join('<br>')}`,
             type: 'warning',
             duration: 10000,
+            showClose: true,
             dangerouslyUseHTMLString: true
           });
         }
@@ -440,8 +484,6 @@ export default defineComponent({
 
         sheetData.value = sheets;
         fileData.value = sheets;
-
-        schedulingData.value = schedulingDataIn;
       };
       reader.readAsArrayBuffer(file);
     };
@@ -459,16 +501,16 @@ export default defineComponent({
           (uploadButton as HTMLButtonElement).disabled = true;
         }
         try {
-          const response = await UploadDDDD({sheets: filteredSheetData.value, schedulingData: schedulingData.value});
+          const response = await UploadDDDD({
+            sheets: filteredSheetData.value,
+            coverList: coverList.value
+          });
           ElMessage({
             message: '上传成功',
             type: 'success',
-            duration: 5000
+            duration: 5000,
+            showClose: true,
           });
-          sheetData.value = [];
-          fileData.value = null;
-          schedulingData.value = null;
-          unloadedSheetData.value = [];
           tabsWrapper.value?.scrollTo(0, 0);
           activeTab.value = '0';
           const uploadInput = document.querySelector('.el-upload__input');
@@ -487,7 +529,8 @@ export default defineComponent({
           ElMessage({
             message: '上传失败，请重试',
             type: 'error',
-            duration: 5000
+            duration: 5000,
+            showClose: true,
           });
         }
         if (uploadButton) {
@@ -498,22 +541,28 @@ export default defineComponent({
         ElMessage({
           message: '请先上传文件',
           type: 'warning',
-          duration: 5000
+          duration: 5000,
+          showClose: true,
         });
       }
     };
 
+    const coverList = ref<string[]>([]);
+
     return {
       sheetData,
       activeTab,
+      upload,
       handleFileRead,
       beforeRemove,
       uploadToServer,
+      handleExceed,
       handleRemove,
       tabsWrapper,
       dateRange,
       defaultTimeRange,
-      filteredSheetData
+      filteredSheetData,
+      coverList
     };
   },
 });

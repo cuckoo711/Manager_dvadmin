@@ -28,8 +28,6 @@
                 <el-table-column prop="channel" label="渠道" min-width="100" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="research_name" label="研发" min-width="100"
                                  show-overflow-tooltip></el-table-column>
-                <!--                <el-table-column prop="recharge" label="总流水" min-width="150" sortable-->
-                <!--                                 show-overflow-tooltip></el-table-column>-->
                 <el-table-column prop="recharge" label="总流水" min-width="150" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="discount" label="折扣" min-width="150" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="after_folding" label="折后总收入" min-width="150"

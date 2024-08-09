@@ -72,8 +72,9 @@ INSTALLED_APPS = [
     "jtgame.daily_report",
     "jtgame.income_statement",
     "jtgame.tencent_docx",
-    
-    "plugins.dvadmin3_fastcrud"
+    "jtgame.noticebuilder",
+
+    "plugins.dvadmin3_fastcrud",
 ]
 
 MIDDLEWARE = [
@@ -392,11 +393,12 @@ API_MODEL_MAP = {
     "/token/": "登录模块",
     "/api/login/": "登录模块",
 }
-DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50M
-FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50M
+DATA_UPLOAD_MAX_MEMORY_SIZE = 524288000  # 500M
+FILE_UPLOAD_MAX_MEMORY_SIZE = 524288000  # 500M
 
 DJANGO_CELERY_BEAT_TZ_AWARE = False
 CELERY_TIMEZONE: str = "Asia/Shanghai"  # celery 时区问题
+
 # 静态页面压缩
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
@@ -431,8 +433,3 @@ from dvadmin3_celery.settings import *            # celery 异步任务
 # from dvadmin_uniapp.settings import *
 # ...
 # ********** 一键导入插件配置结束 **********
-
-django.setup()
-
-with connection.cursor() as cursor:
-    cursor.execute("SET time_zone = '+08:00';")

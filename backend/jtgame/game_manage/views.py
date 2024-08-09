@@ -57,15 +57,23 @@ class GameViewSet(CustomModelViewSet):
     def upload_dddd(self, request, *args, **kwargs):
         data = parse_request_data(request)
         sheets = data.get('sheets', [])
-        messages = {'info': [], 'update': [], 'error': []}
+        coverList = data.get('coverList', [])
+        messages = {'info': [
+            '覆盖列表: ' + ', '.join(coverList) if coverList else '无覆盖列表',
+            'sheet页数量: ' + str(len(sheets))
+        ], 'update': [], 'error': []}
 
-        for sheet in sheets:
-            if handle_game(sheet, messages):
-                sheets.remove(sheet)
-
-        for sheet in sheets:
-            if handle_scheduling(sheet, messages):
-                sheets.remove(sheet)
+        remove_sheets = []
+        for index, sheet in enumerate(sheets):
+            # logger.info(f'处理sheet页: {sheet.get("sheet_name")}')
+            if handle_game(sheet, messages, coverList):
+                remove_sheets.append(index)
+        sheets = [sheet for index, sheet in enumerate(sheets) if index not in remove_sheets]
+        remove_sheets.clear()
+        for index, sheet in enumerate(sheets):
+            if handle_scheduling(sheet, messages, coverList):
+                remove_sheets.append(index)
+        sheets = [sheet for index, sheet in enumerate(sheets) if index not in remove_sheets]
 
         logger.info(f'上传共{len(sheets)}个sheet页')
         if not sheets:
