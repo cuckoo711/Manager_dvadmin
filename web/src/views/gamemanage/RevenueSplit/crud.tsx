@@ -10,6 +10,8 @@ import {
 } from '@fast-crud/fast-crud';
 import {auth} from '/@/utils/authFunction';
 import {commonCrudConfig} from "/@/utils/commonCrud";
+import {ElMessage} from "element-plus";
+import {exportData} from "./api";
 
 export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps): CreateCrudOptionsRet {
     const pageRequest = async (query: UserPageQuery) => await api.GetList(query);
@@ -19,11 +21,13 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
     };
     const delRequest = async ({row}: DelReq) => await api.DelObj(row.id);
     const addRequest = async ({form}: AddReq) => await api.AddObj(form);
+    const exportRequest = async (query: UserPageQuery) => {
+		return api.exportData(query);
+	};
 
 
     return {
         crudOptions: {
-            pagination:{pageSize : 999},
             request: {
                 pageRequest,
                 addRequest,
@@ -34,7 +38,20 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 buttons: {
                     add: {
                         show: auth('revenue_split_manage:Create')
-                    }
+                    },
+                    export:{ //这个export便是导出的按钮
+						text:"导出",//按钮文字
+						title:"导出",//鼠标停留显示的信息
+						click(){
+                            ElMessage({
+                                message: '开始导出所有数据，耗时较长请耐心等待，请勿重复点击...',
+                                type: 'success'
+
+                            })
+                            return exportRequest(crudExpose!.getSearchFormData())
+						},
+
+					}
                 }
             },
             rowHandle: {

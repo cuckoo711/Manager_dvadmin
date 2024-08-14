@@ -1,6 +1,6 @@
 // // RevenueSplit API - Auto-generated on 2024-05-20 13:56:03
 
-import {request} from '/@/utils/service';
+import {downloadFile, request} from '/@/utils/service';
 import {UserPageQuery, AddReq, DelReq, EditReq, InfoReq} from '@fast-crud/fast-crud';
 
 export const apiPrefix = 'api/revenue_split_manage/';
@@ -42,4 +42,12 @@ export function DelObj(id: DelReq) {
         method: 'delete',
         data: {id},
     });
+}
+
+export function exportData(params: any) {
+	return downloadFile({
+		url: apiPrefix + 'export_data/',
+		params: params,
+		method: 'get',
+	});
 }

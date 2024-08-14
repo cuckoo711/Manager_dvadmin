@@ -16,6 +16,7 @@ import {dictionary} from '/@/utils/dictionary';
 import {successMessage} from '/@/utils/message';
 import {auth} from '/@/utils/authFunction'
 import {commonCrudConfig} from "/@/utils/commonCrud";
+import {ElMessage} from "element-plus";
 // 注意：以下FastCrud配置应替换为实际的JavaScript/TypeScript代码片段
 export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps): CreateCrudOptionsRet {
     const pageRequest = async (query: UserPageQuery) => {
@@ -33,10 +34,12 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
     const addRequest = async ({form}: AddReq) => {
         return await api.AddObj(form);
     };
+    const exportRequest = async (query: UserPageQuery) => {
+		return api.exportData(query);
+	};
 
     return {
         crudOptions: {
-            pagination:{pageSize : 999},
             request: {
                 pageRequest,
                 addRequest,
@@ -47,7 +50,20 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 buttons: {
                     add: {
                         show: auth('research_split_manage:Create')
-                    }
+                    },
+                    export:{ //这个export便是导出的按钮
+						text:"导出",//按钮文字
+						title:"导出",//鼠标停留显示的信息
+						click(){
+                            ElMessage({
+                                message: '开始导出所有数据，耗时较长请耐心等待，请勿重复点击...',
+                                type: 'success'
+
+                            })
+                            return exportRequest(crudExpose!.getSearchFormData())
+						},
+
+					}
                 }
             },
             rowHandle: {

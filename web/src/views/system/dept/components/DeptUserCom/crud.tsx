@@ -38,7 +38,7 @@ export const createCrudOptions = function ({ crudExpose, context }: CreateCrudOp
 	};
 
 	const exportRequest = async (query: UserPageQuery) => {
-		return await api.exportData(query);
+		return api.exportData(query);
 	};
 
 	return {

@@ -5,7 +5,7 @@
         <div>
           <el-tooltip placement="bottom">
             <template #content>
-              每次只能上传一个文件, 上传前请确保文件名以四位年份信息开头<br/>
+              每次只能选择一个文件, 请确保文件名以四位年份信息开头<br/>
               需要先设置时间范围，再选择文件<br/>
               仅支持 .xls, .xlsx, .csv 文件
             </template>
@@ -21,7 +21,7 @@
                 :show-file-list="true"
                 :limit="1"
             >
-              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+              <div class="el-upload__text">将文件拖到此处，或<em>点击选择</em></div>
             </el-upload>
           </el-tooltip>
         </div>
@@ -223,6 +223,11 @@ export default defineComponent({
       const file = files[0] as UploadRawFile
       file.uid = genFileId()
       upload.value!.handleStart(file)
+      sheetData.value = [];
+      fileData.value = null;
+      unloadedSheetData.value = [];
+      tabsWrapper.value?.scrollTo(0, 0);
+      activeTab.value = '0';
       handleFileRead({file: file})
     }
     const handleRemove: UploadProps['onRemove'] = (uploadFile) => {

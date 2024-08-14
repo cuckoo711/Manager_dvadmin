@@ -57,19 +57,6 @@ class CustomModelSerializer(DynamicFieldsMixin, ModelSerializer):
         format="%Y-%m-%d %H:%M:%S", required=False
     )
 
-    game_name = serializers.SlugRelatedField(
-        slug_field='name', source='game', read_only=True, label='游戏名称'
-    )
-    game_release_date = serializers.SlugRelatedField(
-        slug_field='release_date', source='game', read_only=True, label='游戏发行时间'
-    )
-    channel_name = serializers.SlugRelatedField(
-        slug_field='name', source='channel', read_only=True, label='渠道名称'
-    )
-    research_name = serializers.SlugRelatedField(
-        slug_field='name', source='research', read_only=True, label='研发名称'
-    )
-
     def __init__(self, instance=None, data=empty, request=None, **kwargs):
         super().__init__(instance, data, **kwargs)
         self.request: Request = request or self.context.get("request", None)

@@ -2,7 +2,7 @@ from django.db import models
 
 from dvadmin.system.models import Dept
 from dvadmin.utils.models import CoreModel, table_prefix
-from jtgame.utils import parse_iso_datetime
+from jtgame.game_manage.models import Games
 
 
 # Create your models here.
@@ -71,3 +71,42 @@ class AuthorizationLetter(CoreModel):
     def clean(self):
         self.name = self.name.strip().replace(' ', '')
         return super().clean()
+
+
+class Notice(CoreModel):
+    NOTICE_TYPE = (
+        (0, '下架'),
+        (1, '关服'),
+    )
+    STATUS_CHOICES = (
+        (0, '未生成'),
+        (1, '已生成'),
+        (2, '正在生成'),
+        (3, '生成失败'),
+    )
+    title = models.CharField(max_length=50, verbose_name='标题', null=True, blank=True)
+    build_date = models.DateField(verbose_name='公告日期')
+    games = models.ManyToManyField(to='game_manage.Games', verbose_name='游戏', related_name='notice_games', blank=True,
+                                   db_constraint=False)
+    build_type = models.IntegerField(choices=NOTICE_TYPE, verbose_name='公告类型')
+    notice_filepath = models.CharField(max_length=255, verbose_name='公告文件路径', null=True, blank=True)
+    tips = models.TextField(verbose_name='备注', null=True, blank=True)
+    status = models.IntegerField(choices=STATUS_CHOICES, default=0, verbose_name='生成状态')
+
+    class Meta:
+        db_table = table_prefix + 'notice'
+        verbose_name = '公告文件'
+        verbose_name_plural = verbose_name
+        ordering = ['-create_datetime']
+
+    def clean(self):
+        if isinstance(self.build_date, str):
+            self.build_date = self.build_date.strip()
+            self.title = self.build_date + self.NOTICE_TYPE[self.build_type][1] + '公告'
+        else:
+            self.title = self.build_date.strftime('%Y-%m-%d') + self.NOTICE_TYPE[self.build_type][1] + '公告'
+        return super().clean()
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super().save(*args, **kwargs)

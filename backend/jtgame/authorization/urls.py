@@ -8,13 +8,13 @@ Editor: cuckoo
 """
 from rest_framework.routers import DefaultRouter
 
-from .views import AuthorInfoViewSet, AuthorConfigViewSet, AuthorLetterViewSet
-
+from .views import AuthorInfoViewSet, AuthorConfigViewSet, AuthorLetterViewSet, NoticeViewSet
 
 router = DefaultRouter()
 router.register(r'authorization/info', AuthorInfoViewSet)
 router.register(r'authorization/config', AuthorConfigViewSet)
 router.register(r'authorization/letter', AuthorLetterViewSet)
+router.register(r'authorization/notice', NoticeViewSet)
 
 
 urlpatterns = router.urls

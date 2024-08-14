@@ -13,7 +13,8 @@ import requests
 
 from application.celery import app
 from dvadmin.system.views.message_center import MessageCenterCreateSerializer
-from jtgame.authorization.models import AuthorizationConfig, AuthorizationInfo, AuthorizationLetter
+from dvadmin.utils.backends import logger
+from jtgame.authorization.models import AuthorizationConfig, AuthorizationInfo, AuthorizationLetter, Notice
 
 
 @app.task
@@ -35,16 +36,16 @@ def generate_authorization_letter(obj_id):
 
         config_objs = AuthorizationConfig.objects.all()
         if not config_objs:
-            raise Exception('未找到授权书配置信息')
+            raise Exception('未找到配置信息')
 
-        dir_path = config_objs.filter(key='dir_path').first()
+        dir_path = config_objs.filter(key='authorization_dir_path').first()
         if not dir_path:
             raise Exception('未找到授权书模板的路径配置')
         dir_path = json.loads(dir_path.value).get(authorization_obj.entity, None)
         if not dir_path:
             raise Exception('未找到对应主体的模板的存放路径')
 
-        webhook_key = config_objs.filter(key='webhook_key').first()
+        webhook_key = config_objs.filter(key='authorization_webhook_key').first()
         if not webhook_key:
             raise Exception('未找到发送通知的webhook_key配置')
         webhook_key = webhook_key.value
@@ -107,6 +108,55 @@ def generate_authorization_letter(obj_id):
             obj.tips = '生成成功'
             obj.status = 1
         obj.save()
+    except Exception as e:
+        obj.tips = str(e)
+        obj.status = 3
+        obj.save()
+        raise e
+
+
+@app.task
+def generate_notice(obj_id):
+    obj = Notice.objects.get(pk=obj_id)
+    obj: Notice
+
+    try:
+        config_objs = AuthorizationConfig.objects.all()
+        if not config_objs:
+            raise Exception('未找到配置信息')
+
+        dir_path = config_objs.filter(key='notice_dir_path').first()
+        if not dir_path:
+            raise Exception('未找到通知模板的路径配置')
+        webhook_key = config_objs.filter(key='notice_webhook_key').first()
+        if not webhook_key:
+            raise Exception('未找到发送通知的webhook_key配置')
+        at_users = config_objs.filter(key='notice_at_users').first()
+        if not at_users:
+            raise Exception('未找到通知@的用户配置')
+
+        games = obj.games.all()
+        game_names = [game.name for game in games]
+        data = {
+            'game_names': game_names,
+            'base_date': obj.build_date.strftime('%Y-%m-%d'),
+            'template_path': dir_path.value,
+            'build_type': obj.build_type,
+            'webhook_key': webhook_key.value,
+            'at_users': json.loads(at_users.value)
+        }
+        logger.info(f'data: {data}')
+        result = requests.post('http://localhost:5021/build', json=data).json()
+        logger.info(f'result: {result}')
+        if result.get('error'):
+            obj.tips = result.get('error')
+            obj.status = 3
+        else:
+            obj.tips = '生成成功'
+            obj.status = 1
+            obj.notice_filepath = result.get('zip_file')
+        obj.save()
+        return result
     except Exception as e:
         obj.tips = str(e)
         obj.status = 3

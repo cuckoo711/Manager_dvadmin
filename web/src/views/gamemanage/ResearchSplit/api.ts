@@ -1,6 +1,6 @@
 // // ResearchSplit API - Auto-generated on 2024-05-20 13:56:12
 
-import { request } from '/@/utils/service';
+import {downloadFile, request} from '/@/utils/service';
 import { UserPageQuery, AddReq, DelReq, EditReq, InfoReq } from '@fast-crud/fast-crud';
 
 export const apiPrefix = 'api/research_split_manage/';
@@ -39,5 +39,13 @@ export function DelObj(id: DelReq) {
 		url: apiPrefix + id + '/',
 		method: 'delete',
 		data: { id },
+	});
+}
+
+export function exportData(params: any) {
+	return downloadFile({
+		url: apiPrefix + 'export_data/',
+		params: params,
+		method: 'get',
 	});
 }

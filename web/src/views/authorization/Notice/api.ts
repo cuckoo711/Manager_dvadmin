@@ -1,12 +1,16 @@
-// // AuthorizationLetter API - Auto-generated on 2024-07-15 16:30:40
+// // Notice API - Auto-generated on 2024-08-13 14:10:49
 
 import { request } from '/@/utils/service';
 import { UserPageQuery, AddReq, DelReq, EditReq, InfoReq } from '@fast-crud/fast-crud';
 
-
-
-export const apiPrefix = 'api/authorization/letter/';
-
+export const apiPrefix = 'api/authorization/notice/';
+export function GetList(query: UserPageQuery) {
+	return request({
+		url: apiPrefix,
+		method: 'get',
+		params: query,
+	});
+}
 export function GenerateAuthorizationLetter(id: InfoReq) {
 	return request({
 		url: apiPrefix + id + '/generate/',
@@ -29,13 +33,6 @@ export async function ClearAuthorizationLetter() {
 	});
 }
 
-export function GetList(query: UserPageQuery) {
-	return request({
-		url: apiPrefix,
-		method: 'get',
-		params: query,
-	});
-}
 export function GetObj(id: InfoReq) {
 	return request({
 		url: apiPrefix + id,

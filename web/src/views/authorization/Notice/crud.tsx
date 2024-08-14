@@ -1,30 +1,32 @@
-// AuthorizationLetter CRUD TypeScript - Auto-generated on 2024-07-15 16:30:40
+// Notice CRUD TypeScript - Auto-generated on 2024-08-13 14:10:49
 
 import * as api from './api';
 import {
-    AddReq,
-    CreateCrudOptionsProps,
-    CreateCrudOptionsRet,
-    DelReq,
     dict,
+    UserPageQuery,
+    AddReq,
+    DelReq,
     EditReq,
-    UserPageQuery
+    compute,
+    CreateCrudOptionsProps,
+    CreateCrudOptionsRet
 } from '@fast-crud/fast-crud';
+import {request} from '/@/utils/service';
 import {dictionary} from '/@/utils/dictionary';
+import {errorMessage, successMessage} from '/@/utils/message';
 import {auth} from '/@/utils/authFunction'
-import {commonCrudConfig} from "/@/utils/commonCrud";
-import {errorMessage, infoMessage, successMessage} from "/@/utils/message";
+import {commonCrudConfig} from "../../../utils/commonCrud";
 // 注意：以下FastCrud配置应替换为实际的JavaScript/TypeScript代码片段
 export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps): CreateCrudOptionsRet {
     const pageRequest = async (query: UserPageQuery) => {
         const lists = await api.GetList(query);
         lists.data.forEach((item: any) => {
-            if (item.authorization_filepath && item.authorization_filepath.endsWith(".zip")) {
+            if (item.notice_filepath && item.notice_filepath.endsWith(".zip")) {
 
-                const new_filepath = item.authorization_filepath.split('/').pop();
+                const new_filepath = item.notice_filepath.split('/').pop();
 
                 // 创建新的对象格式
-                item.authorization_filepath = {
+                item.notice_filepath = {
                     id: item.id,
                     label: new_filepath,
                 };
@@ -43,8 +45,16 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
         return await api.AddObj(form);
     };
 
+    const generateRequest = async (row: any) => {
+        return await api.GenerateAuthorizationLetter(row.id);
+    }
+
     const downloadRequest = async (row: any) => {
         return await api.DownloadAuthorizationLetter(row.id);
+    }
+
+    const clearRequest = async () => {
+        return await api.ClearAuthorizationLetter();
     }
 
     return {
@@ -58,14 +68,14 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
             actionbar: {
                 buttons: {
                     add: {
-                        show: auth("AuthorizationLetter:Create")
+                        show: auth("Notice:Create")
                     },
                     clear: {
-                        show: auth("AuthorizationLetter:Clear"),
+                        show: auth("Notice:Clear"),
                         text: '清理文件',
                         type: 'info',
                         click: async () => {
-                            const result = await api.ClearAuthorizationLetter();
+                            const result = await clearRequest();
                             if (result.status) {
                                 successMessage(`${result.message}`);
                             } else {
@@ -79,31 +89,29 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
             rowHandle: {
                 //固定右侧
                 fixed: 'right',
-                align: 'center',
-                // width: 240,
                 width: 200,
                 buttons: {
                     view: {
                         show: false,
                     },
                     edit: {
-                        show: auth("AuthorizationLetter:Update"),
-                        type: 'text',
                         iconRight: 'Edit',
+                        type: 'text',
+                        show: auth("Notice:Update")
                     },
                     remove: {
-                        show: auth("AuthorizationLetter:Delete"),
-                        type: 'text',
                         iconRight: 'Delete',
+                        type: 'text',
+                        show: auth("Notice:Delete")
                     },
                     generate: {
                         title: '生成',
                         text: '生成',
                         type: 'text',
                         iconRight: 'Upload',
-                        show: auth("AuthorizationLetter:Generate"),
+                        show: auth("Notice:Generate"),
                         click: async (obj) => {
-                            const result = await api.GenerateAuthorizationLetter(obj.row.id);
+                            const result = await generateRequest(obj.row);
                             if (result.status) {
                                 successMessage(`${result.message}`);
                             } else {
@@ -112,49 +120,6 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                             await crudExpose?.doRefresh();
                         }
                     },
-                    download: {
-                        title: '下载',
-                        text: '下载',
-                        type: 'text',
-                        iconRight: 'Download',
-                        // show: auth("AuthorizationLetter:Download"),
-                        show: false,
-                        click: async (obj) => {
-                            if (auth("AuthorizationLetter:Download")) {
-                                const response = await downloadRequest(obj.row);
-                                try {
-                                    if (response.data) {
-                                        if (response.headers['content-type'] === 'application/json') {
-                                            const reader = new FileReader();
-                                            reader.readAsText(response.data);
-                                            reader.onload = function (e) {
-                                                const res = JSON.parse(reader.result as string);
-                                                errorMessage(`下载失败: ${res.message}`);
-                                            }
-                                        } else {
-                                            const blob = new Blob([response.data], {type: response.headers['content-type']});
-                                            const url = window.URL.createObjectURL(blob);
-                                            const a = document.createElement('a');
-                                            a.style.display = 'none';
-                                            a.href = url;
-                                            a.download = `${obj.row.name}授权书.zip`;  // 动态设置文件名
-                                            document.body.appendChild(a);
-                                            a.click();
-                                            window.URL.revokeObjectURL(url);
-                                            successMessage(`开始下载: ${obj.row.name}授权书.zip`);
-                                        }
-                                    } else {
-                                        errorMessage(`下载失败: ${response.message}`);
-                                    }
-                                } catch (e) {
-                                    errorMessage(`调用失败: ${e}`);
-
-                                }
-                            } else {
-                                infoMessage("没有下载权限");
-                            }
-                        }
-                    }
                 },
             },
             form: {
@@ -175,51 +140,80 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         width: '70px',
                         columnSetDisabled: true, //禁止在列设置中选择
                     },
-                }, name: {
-                    title: "游戏名称",
-                    type: "input",
+                }, title: {
+                    title: "标题",
+                    type: "text",
+                    form: {show: false},
                     column: {
+                        width: 160,
+                    }
+                }, game_names: {
+                    title: "游戏",
+                    type: "text",
+                    column: {
+                        showOverflowTooltip: true,
                         align: 'center',
-                        sortable: true,
-                        width: '250',
                     },
                     form: {
-                        rules: [
-                            {required: true, message: '请输入游戏名称', trigger: 'blur'}
-                        ]
-                    },
+                        show: false
+                    }
+                }, games: {
+                    title: "游戏",
+                    type: "dict-select",
+                    dict: dict({
+                        url: '/api/game_manage/?page=1&limit=99999',
+                        value: 'id',
+                        label: 'name',
+                    }),
                     search: {
                         show: true,
-                        component: {
-                            props: {
-                                clearable: true,
-                            },
-                        },
-                    }
-                }, release_date: {
-                    title: "发行日期",
-                    type: "date",
+                    },
                     column: {
-                        align: 'center',
-                        sortable: true,
-                        format: "YYYY-MM-DD",
-                        "value-format": "YYYY-MM-DD",
+                        // minWidth: 200,
+                        // showOverflowTooltip: true
+                        show: false
                     },
                     form: {
-                        rules: [
-                            {required: true, message: '请选择发行日期', trigger: 'blur'}
-                        ],
+                        rules: [{
+                            required: true,
+                            message: '请选择游戏'
+                        }],
                         component: {
+                            multiple: true,
+                            filterable: true,
+                            placeholder: '请选择游戏',
+                        }
+                    }
+                }, build_date: {
+                    title: "公告日期",
+                    type: "date",
+                    form: {
+                        component: {
+                            pickerType: "date",
                             props: {
-                                clearable: true,
+                                type: "date",
                                 format: "YYYY-MM-DD",
                                 "value-format": "YYYY-MM-DD",
-                            },
-                        },
+                            }
+                        }
                     }
 
-                }, authorization_filepath: {
-                    title: "授权书文件路径",
+                }, build_type: {
+                    title: "公告类型",
+                    type: "dict-select",
+                    column: {
+                        width: 100,
+                    },
+                    dict: dict({
+                        data: [
+                            {'label': '下架', 'value': 0},
+                            {'label': '关服', 'value': 1}
+                        ],
+                        label: "label",
+                        value: "value"
+                    })
+                }, notice_filepath: {
+                    title: "公告文件路径",
                     type: "dict-select",
                     column: {
                         showOverflowTooltip: true,
@@ -227,7 +221,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         component: {
                             color: 'primary',
                             onClick: async (row: any) => {
-                                if (auth("AuthorizationLetter:Download")) {
+                                if (auth("Notice:Download")) {
                                     const response = await downloadRequest(row.item);
                                     try {
                                         if (response.data) {
@@ -266,6 +260,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     form: {
                         show: false
                     },
+
                 }, tips: {
                     title: "备注",
                     type: "input",
@@ -278,29 +273,24 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     }
 
                 }, status: {
-                    title: "授权书文件状态",
+                    title: "文件状态",
                     type: "dict-select",
                     column: {
-                        width: '150',
-                        align: 'center',
-                    },
-                    form: {
-                        show: false
+                        width: 100,
                     },
                     dict: dict({
-                        data: dictionary('authorizationletter_status'),
-                        value: 'value',
-                        label: 'label',
+                        data: [
+                            {'label': '未生成', 'value': 0},
+                            {'label': '已生成', 'value': 1},
+                            {'label': '正在生成', 'value': 2},
+                            {'label': '生成失败', 'value': 3}
+                        ],
+                        label: "label",
+                        value: "value"
                     }),
-                    search: {
-                        show: true,
-                        component: {
-                            props: {
-                                clearable: true,
-                            },
-                        },
+                    form: {
+                        show: false
                     }
-
                 },
                 ...commonCrudConfig(
                     {

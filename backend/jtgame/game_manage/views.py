@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.http import JsonResponse
+from rest_framework import serializers
 from rest_framework.decorators import action
 
 from dvadmin.utils.backends import logger
@@ -36,17 +37,45 @@ class GameSerializer(CustomModelSerializer):
 
 
 class RevenueSplitSerializer(CustomModelSerializer):
+    game_name = serializers.SlugRelatedField(slug_field='name', source='game', read_only=True, label='游戏名称')
+    game_release_date = serializers.SlugRelatedField(slug_field='release_date', source='game', read_only=True, label='发行日期')
+    channel_name = serializers.SlugRelatedField(slug_field='name', source='channel', read_only=True, label='渠道名称')
+
     class Meta:
         model = RevenueSplit
         fields = '__all__'
         read_only_fields = ["id"]
 
 
+class RevenueSplitExoprtSerializer(CustomModelSerializer):
+    game_name = serializers.SlugRelatedField(slug_field='name', source='game', read_only=True, label='游戏名称')
+    game_release_date = serializers.SlugRelatedField(slug_field='release_date', source='game', read_only=True, label='发行日期')
+    channel_name = serializers.SlugRelatedField(slug_field='name', source='channel', read_only=True, label='渠道名称')
+    
+    class Meta:
+        model = RevenueSplit
+        fields = '__all__'
+
+
 class ResearchSplitSerializer(CustomModelSerializer):
+    game_name = serializers.SlugRelatedField(slug_field='name', source='game', read_only=True, label='游戏名称')
+    game_release_date = serializers.SlugRelatedField(slug_field='release_date', source='game', read_only=True, label='发行日期')
+    research_name = serializers.SlugRelatedField(slug_field='name', source='research', read_only=True, label='研发名称')
+
     class Meta:
         model = ResearchSplit
         fields = '__all__'
         read_only_fields = ["id"]
+
+
+class ResearchSplitExoprtSerializer(CustomModelSerializer):
+    game_name = serializers.SlugRelatedField(slug_field='name', source='game', read_only=True, label='游戏名称')
+    game_release_date = serializers.SlugRelatedField(slug_field='release_date', source='game', read_only=True, label='发行日期')
+    research_name = serializers.SlugRelatedField(slug_field='name', source='research', read_only=True, label='研发名称')
+
+    class Meta:
+        model = ResearchSplit
+        fields = '__all__'
 
 
 class GameViewSet(CustomModelViewSet):
@@ -104,7 +133,41 @@ class RevenueSplitViewSet(CustomModelViewSet):
     queryset = RevenueSplit.objects.all()
     serializer_class = RevenueSplitSerializer
 
+    def get_queryset(self):
+        if getattr(self, 'values_queryset', None):
+            return self.values_queryset
+        elif self.action == 'export_data':
+            self.queryset = RevenueSplit.objects.all().select_related(*self.export_foreignKey__value_column)
+        return super().get_queryset()
+
+    export_field_label = {
+        'game_name': '游戏名称',
+        'channel_name': '渠道名称',
+        'our_ratio': '我方分成比例',
+        'channel_ratio': '渠道分成比例',
+        'channel_fee_ratio': '渠道费比例',
+        'channel_tips': '分成备注',
+    }
+    export_foreignKey__value_column = ('game', 'channel')
+    export_serializer_class = RevenueSplitExoprtSerializer
+
 
 class ResearchSplitViewSet(CustomModelViewSet):
     queryset = ResearchSplit.objects.all()
     serializer_class = ResearchSplitSerializer
+
+    def get_queryset(self):
+        if getattr(self, 'values_queryset', None):
+            return self.values_queryset
+        elif self.action == 'export_data':
+            self.queryset = ResearchSplit.objects.all().select_related(*self.export_foreignKey__value_column)
+        return super().get_queryset()
+
+    export_field_label = {
+        'game_name': '游戏名称',
+        'research_name': '研发名称',
+        'research_ratio': '研发分成比例',
+        'research_fee_ratio': '研发费比例',
+        'research_tips': '分成备注',
+    }
+    export_foreignKey__value_column = ('game', 'research')

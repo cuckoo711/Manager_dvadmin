@@ -144,7 +144,7 @@ def process_channel_data(data, game, messages, processed_channels, cover:bool):
             if len(value.strip()) > 20:
                 load_in[0] = True
         elif '提测进度' in key:
-            if value.strip != '已提':
+            if '已提' in value.strip():
                 load_in[1] = True
 
     if not channel_name:
