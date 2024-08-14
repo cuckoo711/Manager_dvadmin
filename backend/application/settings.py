@@ -1,241 +1,439 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
-  <component name="ChangeListManager">
-    <list default="true" id="d0228285-477c-4c4f-89a5-4b30a60890c2" name="更改" comment="累计更改">
-      <change afterPath="$PROJECT_DIR$/web/src/views/authorization/Notice/api.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/views/authorization/Notice/crud.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/views/authorization/Notice/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/application/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/application/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/dvadmin/utils/import_export_mixin.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/dvadmin/utils/import_export_mixin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/dvadmin/utils/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/dvadmin/utils/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/jtgame/authorization/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/jtgame/authorization/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/jtgame/authorization/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/jtgame/authorization/tasks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/jtgame/authorization/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/jtgame/authorization/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/jtgame/authorization/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/jtgame/authorization/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/jtgame/game_manage/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/jtgame/game_manage/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/jtgame/game_manage/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/jtgame/game_manage/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/jtgame/noticebuilder/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/jtgame/noticebuilder/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/jtgame/noticebuilder/apps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/jtgame/noticebuilder/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/jtgame/noticebuilder/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/jtgame/noticebuilder/tests.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/jtgame/noticebuilder/views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/public/version-build" beforeDir="false" afterPath="$PROJECT_DIR$/web/public/version-build" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/views/authorization/AuthorizationLetter/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/views/authorization/AuthorizationLetter/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/views/authorization/AuthorizationLetter/crud.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/views/authorization/AuthorizationLetter/crud.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/views/gamemanage/Channel/crud.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/views/gamemanage/Channel/crud.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/views/gamemanage/Games/crud.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/views/gamemanage/Games/crud.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/views/gamemanage/Research/crud.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/views/gamemanage/Research/crud.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/views/gamemanage/ResearchSplit/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/views/gamemanage/ResearchSplit/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/views/gamemanage/ResearchSplit/crud.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/views/gamemanage/ResearchSplit/crud.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/views/gamemanage/RevenueSplit/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/views/gamemanage/RevenueSplit/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/views/gamemanage/RevenueSplit/crud.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/views/gamemanage/RevenueSplit/crud.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/views/gamemanage/UploadDDDD/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/views/gamemanage/UploadDDDD/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/views/system/dept/components/DeptUserCom/crud.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/views/system/dept/components/DeptUserCom/crud.tsx" afterDir="false" />
-    </list>
-    <option name="SHOW_DIALOG" value="false" />
-    <option name="HIGHLIGHT_CONFLICTS" value="true" />
-    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
-    <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
-    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
-  </component>
-  <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="master" />
-      </map>
-    </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;cuckoo711&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/cuckoo711/Manager_dvadmin.git&quot;,
-    &quot;accountId&quot;: &quot;533b13b7-4f37-469c-85df-16ccc78074a4&quot;
-  },
-  &quot;recentNewPullRequestHead&quot;: {
-    &quot;server&quot;: {
-      &quot;useHttp&quot;: false,
-      &quot;host&quot;: &quot;github.com&quot;,
-      &quot;port&quot;: null,
-      &quot;suffix&quot;: null
+"""
+Django settings for application project.
+
+Generated by 'django-admin startproject' using Django 3.2.3.
+
+For more information on this file, see
+https://docs.djangoproject.com/en/4.1/topics/settings/
+
+For the full list of settings and their values, see
+https://docs.djangoproject.com/en/4.1/ref/settings/
+"""
+
+import os
+import sys
+from datetime import timedelta
+from pathlib import Path
+from django.utils import timezone
+
+
+import django
+from django.db import connection
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# ================================================= #
+# ******************** 动态配置 ******************** #
+# ================================================= #
+
+from conf.env import *
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = "django-insecure--z8%exyzt7e_%i@1+#1mm=%lb5=^fx_57=1@a+_y7bg5-w%)sm"
+
+# 初始化plugins插件路径到环境变量中
+PLUGINS_PATH = os.path.join(BASE_DIR, "plugins")
+sys.path.insert(0, os.path.join(PLUGINS_PATH))
+
+[
+    sys.path.insert(0, os.path.join(PLUGINS_PATH, ele))
+    for ele in os.listdir(PLUGINS_PATH)
+    if os.path.isdir(os.path.join(PLUGINS_PATH, ele)) and not ele.startswith("__")
+]
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = locals().get("DEBUG", True)
+ALLOWED_HOSTS = locals().get("ALLOWED_HOSTS", ["*"])
+
+# 列权限需要排除的App应用
+COLUMN_EXCLUDE_APPS = ['channels', 'captcha'] + locals().get("COLUMN_EXCLUDE_APPS", [])
+
+INSTALLED_APPS = [
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "django_comment_migrate",
+    "rest_framework",
+    "django_filters",
+    "corsheaders",  # 注册跨域app
+    "drf_yasg",
+    "captcha",
+    "channels",
+    "dvadmin.system",
+
+    # 靖堂管理系统
+    "jtgame.game_manage",
+    "jtgame.attendance",
+    "jtgame.authorization",
+    "jtgame.daily_report",
+    "jtgame.income_statement",
+    "jtgame.tencent_docx",
+
+    # 游戏后台整合
+    # "gamebackend.gdbackend",  # 官斗
+
+    "plugins.dvadmin3_fastcrud",
+]
+
+MIDDLEWARE = [
+    "dvadmin.utils.middleware.HealthCheckMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",  # 跨域中间件
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "dvadmin.utils.middleware.ApiLoggingMiddleware",
+]
+
+ROOT_URLCONF = "application.urls"
+
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
     },
-    &quot;owner&quot;: &quot;cuckoo711&quot;,
-    &quot;repository&quot;: &quot;Manager_dvadmin&quot;
-  }
-}</component>
-  <component name="InvalidFacetManager">
-    <ignored-facets>
-      <facet id="Manager_dvadmin/invalid/Django" />
-    </ignored-facets>
-  </component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 5
-}</component>
-  <component name="ProjectId" id="2jx5KPuklPjCBpvVKbGZ6Ksepsr" />
-  <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showLibraryContents" value="true" />
-  </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Django 服务器.Manager_dvadmin.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.pycharm.django.structure.promotion.once.per.project&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;jtgame&quot;,
-    &quot;last_opened_file_path&quot;: &quot;H:/000.CompPythonProgram/Manager_dvadmin/web/src/views/authorization&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
-    &quot;npm.dev.executor&quot;: &quot;Run&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.tailwindcss&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;D:\\Program Files\\JetBrains\\WebStorm 2024.1.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-  },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
-    ]
-  }
-}</component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="H:\000.CompPythonProgram\Manager_dvadmin\web\src\views\authorization" />
-      <recent name="H:\000.CompPythonProgram\Manager_dvadmin" />
-      <recent name="H:\000.CompPythonProgram\Manager_dvadmin\web" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="H:\000.CompPythonProgram\Manager_dvadmin" />
-    </key>
-  </component>
-  <component name="RunManager" selected="npm.dev">
-    <configuration name="Manager_dvadmin" type="Python.DjangoServer" factoryName="Django server">
-      <module name="Manager_dvadmin" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="DJANGO_SETTINGS_MODULE" value="application.settings" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
-      <option name="host" value="localhost" />
-      <option name="additionalOptions" value="" />
-      <option name="browserUrl" value="" />
-      <option name="runTestServer" value="false" />
-      <option name="runNoReload" value="false" />
-      <option name="useCustomRunCommand" value="false" />
-      <option name="customRunCommand" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="dev" type="js.build_tools.npm" nameIsGenerated="true">
-      <package-json value="$PROJECT_DIR$/web/package.json" />
-      <command value="run" />
-      <scripts>
-        <script value="dev" />
-      </scripts>
-      <node-interpreter value="project" />
-      <envs />
-      <method v="2" />
-    </configuration>
-    <list>
-      <item itemvalue="npm.dev" />
-    </list>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.18968.29" />
-        <option value="bundled-python-sdk-f5635417b835-2767605e8bc2-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.18968.29" />
-      </set>
-    </attachedChunks>
-  </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
-  <component name="TaskManager">
-    <task active="true" id="Default" summary="默认任务">
-      <changelist id="d0228285-477c-4c4f-89a5-4b30a60890c2" name="更改" comment="" />
-      <created>1722315824711</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1722315824711</updated>
-      <workItem from="1722315826125" duration="32000" />
-      <workItem from="1722316324589" duration="1947000" />
-      <workItem from="1722318849077" duration="960000" />
-      <workItem from="1722416801114" duration="3000" />
-      <workItem from="1722418298031" duration="5000" />
-      <workItem from="1722474778030" duration="43000" />
-      <workItem from="1722474828920" duration="2958000" />
-      <workItem from="1722562345100" duration="6892000" />
-      <workItem from="1722581093135" duration="14425000" />
-      <workItem from="1722825211672" duration="154000" />
-      <workItem from="1722825414710" duration="468000" />
-      <workItem from="1722834795851" duration="724000" />
-      <workItem from="1722851576549" duration="898000" />
-      <workItem from="1722907174294" duration="6704000" />
-      <workItem from="1723010069674" duration="5703000" />
-      <workItem from="1723093506611" duration="7111000" />
-      <workItem from="1723186822928" duration="260000" />
-      <workItem from="1723187096294" duration="6540000" />
-      <workItem from="1723511802738" duration="2525000" />
-      <workItem from="1723517686039" duration="8210000" />
-      <workItem from="1723537288316" duration="192000" />
-      <workItem from="1723537489618" duration="4761000" />
-    </task>
-    <task id="LOCAL-00001" summary="jtgame">
-      <option name="closed" value="true" />
-      <created>1722316251961</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1722316251961</updated>
-    </task>
-    <task id="LOCAL-00002" summary="jtgame">
-      <option name="closed" value="true" />
-      <created>1722318543241</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1722318543241</updated>
-    </task>
-    <task id="LOCAL-00003" summary="jtgame">
-      <option name="closed" value="true" />
-      <created>1722320418819</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1722320418819</updated>
-    </task>
-    <task id="LOCAL-00004" summary="累计更改">
-      <option name="closed" value="true" />
-      <created>1722495416845</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1722495416845</updated>
-    </task>
-    <option name="localTasksCounter" value="5" />
-    <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <opt
+]
+
+WSGI_APPLICATION = "application.wsgi.application"
+
+# Database
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+DATABASES = {
+    "default": {
+        "ENGINE": DATABASE_ENGINE,
+        "NAME": DATABASE_NAME,
+        "USER": DATABASE_USER,
+        "PASSWORD": DATABASE_PASSWORD,
+        "HOST": DATABASE_HOST,
+        "PORT": DATABASE_PORT,
+        "OPTIONS": {
+            "init_command": "SET time_zone='+08:00';"
+        }
+    }
+}
+AUTH_USER_MODEL = "system.Users"
+USERNAME_FIELD = "username"
+
+# Password validation
+# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
+]
+
+# Internationalization
+# https://docs.djangoproject.com/en/3.2/topics/i18n/
+
+LANGUAGE_CODE = "zh-hans"
+
+TIME_ZONE = "Asia/Shanghai"
+
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = True
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.2/howto/static-files/
+
+STATIC_URL = "/static/"
+# # 设置django的静态文件目录
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+MEDIA_ROOT = "media"  # 项目下的目录
+MEDIA_URL = "/media/"  # 跟STATIC_URL类似，指定用户可以通过这个url找到文件
+
+# 添加以下代码以后就不用写{% load staticfiles %}，可以直接引用
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder"
+)
+# 收集静态文件，必须将 MEDIA_ROOT,STATICFILES_DIRS先注释
+# python manage.py collectstatic
+# STATIC_ROOT=os.path.join(BASE_DIR,'static')
+
+# ================================================= #
+# ******************* 跨域的配置 ******************* #
+# ================================================= #
+
+# 全部允许配置
+CORS_ORIGIN_ALLOW_ALL = True
+# 允许cookie
+CORS_ALLOW_CREDENTIALS = True  # 指明在跨域访问中，后端是否支持对cookie的操作
+
+# ===================================================== #
+# ********************* channels配置 ******************* #
+# ===================================================== #
+ASGI_APPLICATION = 'application.asgi.application'
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels.layers.InMemoryChannelLayer"
+#     }
+# }
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [REDIS_URL],
+        },
+    },
+}
+
+# ================================================= #
+# ********************* 日志配置 ******************* #
+# ================================================= #
+# # log 配置部分BEGIN #
+SERVER_LOGS_FILE = os.path.join(BASE_DIR, "logs", "server.log")
+ERROR_LOGS_FILE = os.path.join(BASE_DIR, "logs", "error.log")
+LOGS_FILE = os.path.join(BASE_DIR, "logs")
+if not os.path.exists(os.path.join(BASE_DIR, "logs")):
+    os.makedirs(os.path.join(BASE_DIR, "logs"))
+
+# 格式:[2020-04-22 23:33:01][micoservice.apps.ready():16] [INFO] 这是一条日志:
+# 格式:[日期][模块.函数名称():行号] [级别] 信息
+STANDARD_LOG_FORMAT = (
+    "[%(asctime)s][%(name)s.%(funcName)s():%(lineno)d] [%(levelname)s] %(message)s"
+)
+CONSOLE_LOG_FORMAT = (
+    "[%(asctime)s][%(name)s.%(funcName)s():%(lineno)d] [%(levelname)s] %(message)s"
+)
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "standard": {"format": STANDARD_LOG_FORMAT},
+        "console": {
+            "format": CONSOLE_LOG_FORMAT,
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+        "file": {
+            "format": CONSOLE_LOG_FORMAT,
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+    },
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": SERVER_LOGS_FILE,
+            "maxBytes": 1024 * 1024 * 100,  # 100 MB
+            "backupCount": 5,  # 最多备份5个
+            "formatter": "standard",
+            "encoding": "utf-8",
+        },
+        "error": {
+            "level": "ERROR",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": ERROR_LOGS_FILE,
+            "maxBytes": 1024 * 1024 * 100,  # 100 MB
+            "backupCount": 3,  # 最多备份3个
+            "formatter": "standard",
+            "encoding": "utf-8",
+        },
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "console",
+        },
+
+    },
+    "loggers": {
+        "": {
+            "handlers": ["console", "error", "file"],
+            "level": "INFO",
+        },
+        "django": {
+            "handlers": ["console", "error", "file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        'django.db.backends': {
+            'handlers': ["console", "error", "file"],
+            'propagate': False,
+            'level': "INFO"
+        },
+        "uvicorn.error": {
+            "level": "INFO",
+            "handlers": ["console", "error", "file"],
+        },
+        "uvicorn.access": {
+            "handlers": ["console", "error", "file"],
+            "level": "INFO"
+        },
+    },
+}
+
+# ================================================= #
+# *************** REST_FRAMEWORK配置 *************** #
+# ================================================= #
+
+# noinspection PyUnresolvedReferences
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.MultiPartParser',
+    ),
+    "DATETIME_FORMAT": "%Y-%m-%d %H:%M:%S",  # 日期时间格式配置
+    "DATE_FORMAT": "%Y-%m-%d",
+    "DEFAULT_FILTER_BACKENDS": (
+        # 'django_filters.rest_framework.DjangoFilterBackend',
+        "dvadmin.utils.filters.CustomDjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+    ),
+    "DEFAULT_PAGINATION_CLASS": "dvadmin.utils.pagination.CustomPagination",  # 自定义分页
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",  # 只有经过身份认证确定用户身份才能访问
+    ],
+    "EXCEPTION_HANDLER": "dvadmin.utils.exception.CustomExceptionHandler",  # 自定义的异常处理
+}
+# ================================================= #
+# ******************** 登录方式配置 ******************** #
+# ================================================= #
+
+AUTHENTICATION_BACKENDS = ["dvadmin.utils.backends.CustomBackend"]
+# ================================================= #
+# ****************** simplejwt配置 ***************** #
+# ================================================= #
+SIMPLE_JWT = {
+    # token有效时长
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1440),
+    # token刷新后的有效时间
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    # 设置前缀
+    "AUTH_HEADER_TYPES": ("CUCKOO",),
+    "ROTATE_REFRESH_TOKENS": True,
+}
+
+# ====================================#
+# ****************swagger************#
+# ====================================#
+SWAGGER_SETTINGS = {
+    # 基础样式
+    "SECURITY_DEFINITIONS": {"basic": {"type": "basic"}},
+    # 如果需要登录才能够查看接口文档, 登录的链接使用restframework自带的.
+    "LOGIN_URL": "apiLogin/",
+    # 'LOGIN_URL': 'rest_framework:login',
+    "LOGOUT_URL": "rest_framework:logout",
+    # 'DOC_EXPANSION': None,
+    # 'SHOW_REQUEST_HEADERS':True,
+    # 'USE_SESSION_AUTH': True,
+    # 'DOC_EXPANSION': 'list',
+    # 接口文档中方法列表以首字母升序排列
+    "APIS_SORTER": "alpha",
+    # 如果支持json提交, 则接口文档中包含json输入框
+    "JSON_EDITOR": True,
+    # 方法列表字母排序
+    "OPERATIONS_SORTER": "alpha",
+    "VALIDATOR_URL": None,
+    "AUTO_SCHEMA_TYPE": 2,  # 分组根据url层级分，0、1 或 2 层
+    "DEFAULT_AUTO_SCHEMA_CLASS": "dvadmin.utils.swagger.CustomSwaggerAutoSchema",
+}
+
+# ================================================= #
+# **************** 验证码配置  ******************* #
+# ================================================= #
+CAPTCHA_IMAGE_SIZE = (160, 46)  # 设置 captcha 图片大小
+CAPTCHA_LENGTH = 4  # 字符个数
+CAPTCHA_TIMEOUT = 1  # 超时(minutes)
+CAPTCHA_OUTPUT_FORMAT = "%(image)s %(text_field)s %(hidden_field)s "
+CAPTCHA_FONT_SIZE = 36  # 字体大小
+CAPTCHA_FOREGROUND_COLOR = "#64DAAA"  # 前景色
+CAPTCHA_BACKGROUND_COLOR = "#F5F7F4"  # 背景色
+CAPTCHA_NOISE_FUNCTIONS = (
+    "captcha.helpers.noise_arcs",  # 线
+    "captcha.helpers.noise_dots",  # 点
+)
+# CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge' #字母验证码
+CAPTCHA_CHALLENGE_FUNCT = "captcha.helpers.math_challenge"  # 加减乘除验证码
+
+# ================================================= #
+# ******************** 其他配置 ******************** #
+# ================================================= #
+
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+API_LOG_ENABLE = True
+# API_LOG_METHODS = 'ALL' # ['POST', 'DELETE']
+API_LOG_METHODS = ["POST", "UPDATE", "DELETE", "PUT"]  # ['POST', 'DELETE']
+API_MODEL_MAP = {
+    "/token/": "登录模块",
+    "/api/login/": "登录模块",
+}
+DATA_UPLOAD_MAX_MEMORY_SIZE = 524288000  # 500M
+FILE_UPLOAD_MAX_MEMORY_SIZE = 524288000  # 500M
+
+DJANGO_CELERY_BEAT_TZ_AWARE = False
+CELERY_TIMEZONE: str = "Asia/Shanghai"  # celery 时区问题
+
+# 静态页面压缩
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
+ALL_MODELS_OBJECTS = []  # 所有app models 对象
+
+# 初始化需要执行的列表，用来初始化后执行
+INITIALIZE_LIST = []
+INITIALIZE_RESET_LIST = []
+# 表前缀
+TABLE_PREFIX = locals().get('TABLE_PREFIX', "")
+# 系统配置
+SYSTEM_CONFIG = {}
+# 字典配置
+DICTIONARY_CONFIG = {}
+
+# ================================================= #
+# ******************** 插件配置 ******************** #
+# ================================================= #
+# 租户共享app
+TENANT_SHARED_APPS = []
+# 插件 urlpatterns
+PLUGINS_URL_PATTERNS = []
+# ********** 一键导入插件配置开始 **********
+# 例如:
+# from dvadmin_upgrade_center.settings import *    # 升级中心
+from dvadmin3_celery.settings import *            # celery 异步任务
+# from dvadmin_cloud_storage.settings import *      # 云存储
+# from dvadmin_third.settings import *            # 第三方用户管理
+# from dvadmin_ak_sk.settings import *            # 秘钥管理管理
+# from dvadmin_tenants.settings import *            # 租户管理
+# from dvadmin_social_auth.settings import *
+# from dvadmin_uniapp.settings import *
+# ...
+# ********** 一键导入插件配置结束 **********

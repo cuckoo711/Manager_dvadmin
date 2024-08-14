@@ -67,6 +67,8 @@ class AuthorizationLetter(CoreModel):
         verbose_name = '授权书文件'
         verbose_name_plural = verbose_name
         ordering = ['-release_date']
+        # 同一个游戏和日期只能生成一次授权书
+        unique_together = ('name', 'release_date')
 
     def clean(self):
         self.name = self.name.strip().replace(' ', '')

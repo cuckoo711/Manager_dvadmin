@@ -59,16 +59,18 @@ class AuthorLetterViewSet(CustomModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        if str(instance.status) == '0':
+        if str(instance.status) == '0' and str(instance.status) != '2':
             return super().destroy(request, *args, **kwargs)
         else:
-            raise Exception('已生成的授权书不允许删除')
+            raise Exception('已生成和正在生成的授权书不允许删除')
 
     @action(detail=True, methods=['get'])
     def generate(self, request, pk=None):
         obj = self.get_object()
         if obj.status == 2:
             return JsonResponse({'status': False, 'message': '任务已提交，请勿重复提交'})
+        if self.queryset.filter(status=2).exists():
+            return JsonResponse({'status': False, 'message': '存在正在生成的授权书，请稍后再试'})
         obj.status = 2
         obj.authorization_filepath = None
         obj.tips = '生成中'
@@ -203,16 +205,18 @@ class NoticeViewSet(CustomModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        if str(instance.status) == '0':
+        if str(instance.status) != '1' and str(instance.status) != '2':
             return super().destroy(request, *args, **kwargs)
         else:
-            raise Exception('已生成的通知文件不允许删除')
+            raise Exception('已生成和正在生成的通知文件不允许删除')
 
     @action(detail=True, methods=['get'])
     def generate(self, request, pk=None):
         obj = self.get_object()
         if obj.status == 2:
             return JsonResponse({'status': False, 'message': '任务已提交，请勿重复提交'})
+        if self.queryset.filter(status=2).exists():
+            return JsonResponse({'status': False, 'message': '存在正在生成的通知文件，请稍后再试'})
         obj.status = 2
         obj.authorization_filepath = None
         obj.tips = '生成中'
