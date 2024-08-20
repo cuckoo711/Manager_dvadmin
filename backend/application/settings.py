@@ -76,7 +76,7 @@ INSTALLED_APPS = [
     "jtgame.tencent_docx",
 
     # 游戏后台整合
-    # "gamebackend.gdbackend",  # 官斗
+    "gamebackend.gdbackend",  # 官斗
 
     "plugins.dvadmin3_fastcrud",
 ]
