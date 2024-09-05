@@ -36,7 +36,8 @@ class GDUser(CoreModel):
 class GDServer(CoreModel):
     game = models.CharField(max_length=50, verbose_name='游戏名')
     game_foreign = models.ForeignKey(Games, related_name="关联游戏", on_delete=models.CASCADE,
-                                     db_constraint=False, verbose_name="关联游戏", help_text="关联游戏", null=True)
+                                     db_constraint=False, verbose_name="关联游戏",
+                                     help_text="关联游戏", null=True)
     server_host = models.CharField(max_length=50, verbose_name='服务器地址')
     server_port = models.CharField(max_length=50, verbose_name='服务器端口')
     web_url = models.CharField(max_length=150, verbose_name='网页地址')

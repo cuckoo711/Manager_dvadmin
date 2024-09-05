@@ -111,6 +111,16 @@ urlpatterns = (
             # 仅用于开发，上线需关闭
             # path("api/token/", LoginTokenView.as_view()),
 
+            path("api/token/", LoginTokenView.as_view()),
+            # 前端页面映射
+            path('web/', web_view, name='web_view'),
+            path('web/<path:filename>', serve_web_files, name='serve_web_files'),
+        ]
+        + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+        + static(settings.STATIC_URL, document_root=settings.STATIC_URL)
+        + [re_path(ele.get('re_path'), include(ele.get('include'))) for ele in settings.PLUGINS_URL_PATTERNS]
+        + [
+            # 靖堂项目模块
             # 考勤模块
             path("api/", include("jtgame.attendance.urls")),
             # 授权书模块
@@ -123,13 +133,10 @@ urlpatterns = (
             path("api/", include("jtgame.income_statement.urls")),
             # 腾讯文档模块
             path("api/", include("jtgame.tencent_docx.urls")),
-
-            path("api/token/", LoginTokenView.as_view()),
-            # 前端页面映射
-            path('web/', web_view, name='web_view'),
-            path('web/<path:filename>', serve_web_files, name='serve_web_files'),
         ]
-        + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-        + static(settings.STATIC_URL, document_root=settings.STATIC_URL)
-        + [re_path(ele.get('re_path'), include(ele.get('include'))) for ele in settings.PLUGINS_URL_PATTERNS]
+        + [
+            # 游戏后台模块
+            # gd后台模块
+            path("api/", include("gamebackend.gdbackend.urls")),
+        ]
 )
