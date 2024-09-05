@@ -27,21 +27,25 @@ class DeptSerializer(CustomModelSerializer):
 
     dept_user_count = serializers.SerializerMethodField()
 
-    def get_dept_user_count(self, obj: Dept):
+    @staticmethod
+    def get_dept_user_count(obj: Dept):
         return Users.objects.filter(dept=obj).count()
 
-    def get_hasChild(self, instance):
+    @staticmethod
+    def get_hasChild(instance):
         hasChild = Dept.objects.filter(parent=instance.id)
         if hasChild:
             return True
         return False
 
-    def get_status_label(self, obj: Dept):
+    @staticmethod
+    def get_status_label(obj: Dept):
         if obj.status:
             return "启用"
         return "禁用"
 
-    def get_has_children(self, obj: Dept):
+    @staticmethod
+    def get_has_children(obj: Dept):
         return Dept.objects.filter(parent_id=obj.id).count()
 
     class Meta:

@@ -1,36 +1,51 @@
 [
     {
-        "name": "DVAdmin团队",
-        "key": "dvadmin",
+        "name": "靖堂",
         "sort": 1,
         "owner": "",
         "phone": "",
         "email": "",
         "status": true,
         "parent": null,
+        "dept_belong_id": null,
         "children": [
             {
-                "name": "运营部",
-                "key": "",
+                "name": "运营",
                 "sort": 2,
                 "owner": "",
-                "phone": "",
-                "email": "",
+                "phone": null,
+                "email": null,
                 "status": true,
                 "parent": 1,
-                "children": []
+                "dept_belong_id": 6,
+                "children": [],
+                "key": "yunyin"
             },
             {
-                "name": "技术部",
-                "key": "technology",
-                "sort": 1,
+                "name": "商务",
+                "sort": 2,
                 "owner": "",
-                "phone": "",
-                "email": "",
+                "phone": null,
+                "email": null,
                 "status": true,
-                "parent": 3,
-                "children": []
+                "parent": 1,
+                "dept_belong_id": 7,
+                "children": [],
+                "key": "shangwu"
+            },
+            {
+                "name": "客服",
+                "sort": 2,
+                "owner": "",
+                "phone": null,
+                "email": null,
+                "status": true,
+                "parent": 1,
+                "dept_belong_id": 8,
+                "children": [],
+                "key": "kefu"
             }
-        ]
+        ],
+        "key": "JT"
     }
 ]

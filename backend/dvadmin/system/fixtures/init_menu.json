@@ -29,12 +29,6 @@
                 "children": [],
                 "menu_button": [
                     {
-                        "name": "查询",
-                        "value": "menu:Search",
-                        "api": "/api/system/menu/",
-                        "method": 0
-                    },
-                    {
                         "name": "详情",
                         "value": "menu:Retrieve",
                         "api": "/api/system/menu/{id}/",
@@ -65,27 +59,21 @@
                         "method": 0
                     },
                     {
-                        "name": "新增",
-                        "value": "menu:Create",
+                        "name": "查询",
+                        "value": "menu:Search",
                         "api": "/api/system/menu/",
-                        "method": 1
-                    },
-                    {
-                        "name": "上移",
-                        "value": "menu:MoveUp",
-                        "api": "/api/system/menu/mode_up/",
-                        "method": 1
-                    },
-                    {
-                        "name": "下移",
-                        "value": "menu:MoveDown",
-                        "api": "/api/system/menu/mode_down/",
-                        "method": 1
+                        "method": 0
                     },
                     {
                         "name": "新增按钮权限",
                         "value": "btn:Create",
                         "api": "/api/system/menu_button/",
+                        "method": 1
+                    },
+                    {
+                        "name": "自动匹配列权限",
+                        "value": "column:Match",
+                        "api": "/api/system/column/auto_match_fields/",
                         "method": 1
                     },
                     {
@@ -95,9 +83,21 @@
                         "method": 1
                     },
                     {
-                        "name": "自动匹配列权限",
-                        "value": "column:Match",
-                        "api": "/api/system/column/auto_match_fields/",
+                        "name": "下移",
+                        "value": "menu:MoveDown",
+                        "api": "/api/system/menu/mode_down/",
+                        "method": 1
+                    },
+                    {
+                        "name": "上移",
+                        "value": "menu:MoveUp",
+                        "api": "/api/system/menu/mode_up/",
+                        "method": 1
+                    },
+                    {
+                        "name": "新增",
+                        "value": "menu:Create",
+                        "api": "/api/system/menu/",
                         "method": 1
                     },
                     {
@@ -137,7 +137,8 @@
                         "method": 3
                     }
                 ],
-                "menu_field": []
+                "menu_field": [],
+                "dept_belong_id": null
             },
             {
                 "name": "部门管理",
@@ -167,13 +168,19 @@
                         "method": 0
                     },
                     {
-                        "name": "获取所有部门",
+                        "name": "查询所有",
                         "value": "dept:SearchAll",
                         "api": "/api/system/dept/all_dept/",
                         "method": 0
                     },
                     {
-                        "name": "部门顶部信息",
+                        "name": "懒加载查询所有",
+                        "value": "dept:LazySearchAll",
+                        "api": "/api/system/dept/dept_lazy_tree/",
+                        "method": 0
+                    },
+                    {
+                        "name": "头信息",
                         "value": "dept:HeaderInfo",
                         "api": "/api/system/dept/dept_info/",
                         "method": 0
@@ -209,7 +216,8 @@
                         "method": 3
                     }
                 ],
-                "menu_field": []
+                "menu_field": [],
+                "dept_belong_id": null
             },
             {
                 "name": "角色管理",
@@ -325,7 +333,8 @@
                         "title": "修改时间",
                         "model": "Role"
                     }
-                ]
+                ],
+                "dept_belong_id": null
             },
             {
                 "name": "用户管理",
@@ -473,7 +482,8 @@
                         "title": "用户类型",
                         "model": "Users"
                     }
-                ]
+                ],
+                "dept_belong_id": null
             },
             {
                 "name": "消息中心",
@@ -572,7 +582,8 @@
                         "title": "修改时间",
                         "model": "MessageCenter"
                     }
-                ]
+                ],
+                "dept_belong_id": null
             },
             {
                 "name": "接口白名单",
@@ -671,11 +682,13 @@
                         "title": "url",
                         "model": "ApiWhiteList"
                     }
-                ]
+                ],
+                "dept_belong_id": null
             }
         ],
         "menu_button": [],
-        "menu_field": []
+        "menu_field": [],
+        "dept_belong_id": null
     },
     {
         "name": "常规配置",
@@ -703,7 +716,7 @@
                 "status": true,
                 "cache": false,
                 "visible": true,
-                "parent": 10,
+                "parent": 8,
                 "children": [],
                 "menu_button": [
                     {
@@ -737,7 +750,8 @@
                         "method": 3
                     }
                 ],
-                "menu_field": []
+                "menu_field": [],
+                "dept_belong_id": null
             },
             {
                 "name": "字典管理",
@@ -751,7 +765,7 @@
                 "status": true,
                 "cache": false,
                 "visible": true,
-                "parent": 10,
+                "parent": 8,
                 "children": [],
                 "menu_button": [
                     {
@@ -866,7 +880,8 @@
                         "title": "字典编号",
                         "model": "Dictionary"
                     }
-                ]
+                ],
+                "dept_belong_id": null
             },
             {
                 "name": "地区管理",
@@ -880,7 +895,7 @@
                 "status": true,
                 "cache": false,
                 "visible": true,
-                "parent": 10,
+                "parent": 8,
                 "children": [],
                 "menu_button": [
                     {
@@ -985,7 +1000,8 @@
                         "title": "修改时间",
                         "model": "Area"
                     }
-                ]
+                ],
+                "dept_belong_id": null
             },
             {
                 "name": "附件管理",
@@ -999,7 +1015,7 @@
                 "status": true,
                 "cache": false,
                 "visible": true,
-                "parent": 10,
+                "parent": 8,
                 "children": [],
                 "menu_button": [
                     {
@@ -1098,11 +1114,13 @@
                         "title": "url",
                         "model": "FileList"
                     }
-                ]
+                ],
+                "dept_belong_id": null
             }
         ],
         "menu_button": [],
-        "menu_field": []
+        "menu_field": [],
+        "dept_belong_id": null
     },
     {
         "name": "日志管理",
@@ -1130,7 +1148,7 @@
                 "status": true,
                 "cache": false,
                 "visible": true,
-                "parent": 15,
+                "parent": 13,
                 "children": [],
                 "menu_button": [
                     {
@@ -1267,7 +1285,8 @@
                         "title": "登录用户名",
                         "model": "LoginLog"
                     }
-                ]
+                ],
+                "dept_belong_id": null
             },
             {
                 "name": "操作日志",
@@ -1281,7 +1300,7 @@
                 "status": true,
                 "cache": false,
                 "visible": true,
-                "parent": 15,
+                "parent": 13,
                 "children": [],
                 "menu_button": [
                     {
@@ -1388,10 +1407,1432 @@
                         "title": "修改时间",
                         "model": "OperationLog"
                     }
-                ]
+                ],
+                "dept_belong_id": null
             }
         ],
         "menu_button": [],
-        "menu_field": []
+        "menu_field": [],
+        "dept_belong_id": null
+    },
+    {
+        "name": "定时任务",
+        "icon": "iconfont icon-caijian",
+        "sort": 5,
+        "is_link": false,
+        "is_catalog": true,
+        "web_path": "/celeryManage",
+        "component": "",
+        "component_name": "",
+        "status": true,
+        "cache": true,
+        "visible": true,
+        "parent": null,
+        "children": [
+            {
+                "name": "调度模型",
+                "icon": "iconfont icon-tongzhi4",
+                "sort": 1,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/scheduleManage",
+                "component": "plugins/dvadmin3-celery-web/src/scheduleManage/index",
+                "component_name": "scheduleManage",
+                "status": true,
+                "cache": true,
+                "visible": true,
+                "parent": 34,
+                "children": [],
+                "menu_button": [],
+                "menu_field": [],
+                "dept_belong_id": null
+            },
+            {
+                "name": "任务管理",
+                "icon": "iconfont icon-caijian",
+                "sort": 2,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/taskManage",
+                "component": "plugins/dvadmin3-celery-web/src/taskManage/index",
+                "component_name": "taskManage",
+                "status": true,
+                "cache": true,
+                "visible": true,
+                "parent": 34,
+                "children": [],
+                "menu_button": [],
+                "menu_field": [],
+                "dept_belong_id": null
+            }
+        ],
+        "menu_button": [],
+        "menu_field": [],
+        "dept_belong_id": null
+    },
+    {
+        "name": "日报管理",
+        "icon": "iconfont icon-diannao-shuju",
+        "sort": 6,
+        "is_link": false,
+        "is_catalog": true,
+        "web_path": "/daily",
+        "component": "",
+        "component_name": "",
+        "status": true,
+        "cache": true,
+        "visible": true,
+        "parent": null,
+        "children": [
+            {
+                "name": "火山云账号",
+                "icon": "iconfont icon-shangchuan",
+                "sort": 1,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/daily/console",
+                "component": "dailyreport/ConsoleAccount/index",
+                "component_name": "cnsoleaccunt",
+                "status": true,
+                "cache": true,
+                "visible": true,
+                "parent": 27,
+                "children": [],
+                "menu_button": [
+                    {
+                        "name": "查询",
+                        "value": "cnsoleaccunt:Search",
+                        "api": "/api/cnsoleaccunt/",
+                        "method": 0
+                    },
+                    {
+                        "name": "详情",
+                        "value": "cnsoleaccunt:Retrieve",
+                        "api": "/api/cnsoleaccunt/{id}/",
+                        "method": 0
+                    },
+                    {
+                        "name": "新增",
+                        "value": "cnsoleaccunt:Create",
+                        "api": "/api/cnsoleaccunt/",
+                        "method": 1
+                    },
+                    {
+                        "name": "复制",
+                        "value": "cnsoleaccunt:Copy",
+                        "api": "/api/cnsoleaccunt/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导入",
+                        "value": "cnsoleaccunt:Import",
+                        "api": "/api/cnsoleaccunt/import_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导出",
+                        "value": "cnsoleaccunt:Export",
+                        "api": "/api/cnsoleaccunt/export_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "编辑",
+                        "value": "cnsoleaccunt:Update",
+                        "api": "/api/cnsoleaccunt/{id}/",
+                        "method": 2
+                    },
+                    {
+                        "name": "删除",
+                        "value": "cnsoleaccunt:Delete",
+                        "api": "/api/cnsoleaccunt/{id}/",
+                        "method": 3
+                    }
+                ],
+                "menu_field": [],
+                "dept_belong_id": null
+            },
+            {
+                "name": "Quick账号",
+                "icon": "iconfont icon-wenducanshu-05",
+                "sort": 2,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/daily/quick",
+                "component": "dailyreport/QuickAccount/index",
+                "component_name": "quickaccunt",
+                "status": true,
+                "cache": true,
+                "visible": true,
+                "parent": 27,
+                "children": [],
+                "menu_button": [
+                    {
+                        "name": "查询",
+                        "value": "quickaccunt:Search",
+                        "api": "/api/quickaccunt/",
+                        "method": 0
+                    },
+                    {
+                        "name": "详情",
+                        "value": "quickaccunt:Retrieve",
+                        "api": "/api/quickaccunt/{id}/",
+                        "method": 0
+                    },
+                    {
+                        "name": "新增",
+                        "value": "quickaccunt:Create",
+                        "api": "/api/quickaccunt/",
+                        "method": 1
+                    },
+                    {
+                        "name": "复制",
+                        "value": "quickaccunt:Copy",
+                        "api": "/api/quickaccunt/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导入",
+                        "value": "quickaccunt:Import",
+                        "api": "/api/quickaccunt/import_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导出",
+                        "value": "quickaccunt:Export",
+                        "api": "/api/quickaccunt/export_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "编辑",
+                        "value": "quickaccunt:Update",
+                        "api": "/api/quickaccunt/{id}/",
+                        "method": 2
+                    },
+                    {
+                        "name": "删除",
+                        "value": "quickaccunt:Delete",
+                        "api": "/api/quickaccunt/{id}/",
+                        "method": 3
+                    }
+                ],
+                "menu_field": [],
+                "dept_belong_id": null
+            },
+            {
+                "name": "日报数据",
+                "icon": "iconfont icon-ico_shuju",
+                "sort": 8,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/daily/data",
+                "component": "dailyreport/DailyReport/index",
+                "component_name": "reportdata",
+                "status": true,
+                "cache": true,
+                "visible": true,
+                "parent": 27,
+                "children": [],
+                "menu_button": [
+                    {
+                        "name": "查询",
+                        "value": "reportdata:Search",
+                        "api": "/api/reportdata/",
+                        "method": 0
+                    },
+                    {
+                        "name": "详情",
+                        "value": "reportdata:Retrieve",
+                        "api": "/api/reportdata/{id}/",
+                        "method": 0
+                    },
+                    {
+                        "name": "新增",
+                        "value": "reportdata:Create",
+                        "api": "/api/reportdata/",
+                        "method": 1
+                    },
+                    {
+                        "name": "复制",
+                        "value": "reportdata:Copy",
+                        "api": "/api/reportdata/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导入",
+                        "value": "reportdata:Import",
+                        "api": "/api/reportdata/import_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导出",
+                        "value": "reportdata:Export",
+                        "api": "/api/reportdata/export_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "编辑",
+                        "value": "reportdata:Update",
+                        "api": "/api/reportdata/{id}/",
+                        "method": 2
+                    },
+                    {
+                        "name": "删除",
+                        "value": "reportdata:Delete",
+                        "api": "/api/reportdata/{id}/",
+                        "method": 3
+                    }
+                ],
+                "menu_field": [],
+                "dept_belong_id": null
+            },
+            {
+                "name": "实例管理",
+                "icon": "iconfont icon-diannao1",
+                "sort": 9,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/consoles",
+                "component": "dailyreport/Consoles/index",
+                "component_name": "consoles",
+                "status": true,
+                "cache": true,
+                "visible": true,
+                "parent": 27,
+                "children": [],
+                "menu_button": [
+                    {
+                        "name": "查询",
+                        "value": "consoles:Search",
+                        "api": "/api/consoles/",
+                        "method": 0
+                    },
+                    {
+                        "name": "详情",
+                        "value": "consoles:Retrieve",
+                        "api": "/api/consoles/{id}/",
+                        "method": 0
+                    },
+                    {
+                        "name": "新增",
+                        "value": "consoles:Create",
+                        "api": "/api/consoles/",
+                        "method": 1
+                    },
+                    {
+                        "name": "复制",
+                        "value": "consoles:Copy",
+                        "api": "/api/consoles/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导入",
+                        "value": "consoles:Import",
+                        "api": "/api/consoles/import_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导出",
+                        "value": "consoles:Export",
+                        "api": "/api/consoles/export_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "编辑",
+                        "value": "consoles:Update",
+                        "api": "/api/consoles/{id}/",
+                        "method": 2
+                    },
+                    {
+                        "name": "续费",
+                        "value": "consoles:Renew",
+                        "api": "/api/consoles/{id}/renew/",
+                        "method": 2
+                    },
+                    {
+                        "name": "删除",
+                        "value": "consoles:Delete",
+                        "api": "/api/consoles/{id}/",
+                        "method": 3
+                    }
+                ],
+                "menu_field": [],
+                "dept_belong_id": null
+            }
+        ],
+        "menu_button": [],
+        "menu_field": [],
+        "dept_belong_id": null
+    },
+    {
+        "name": "考勤管理",
+        "icon": "fa fa-id-badge",
+        "sort": 7,
+        "is_link": false,
+        "is_catalog": true,
+        "web_path": "/attendance",
+        "component": "",
+        "component_name": "",
+        "status": true,
+        "cache": true,
+        "visible": true,
+        "parent": null,
+        "children": [
+            {
+                "name": "请假申请",
+                "icon": "fa fa-sign-in",
+                "sort": 1,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/leave",
+                "component": "attendance/leave/index",
+                "component_name": "leave",
+                "status": true,
+                "cache": false,
+                "visible": true,
+                "parent": 16,
+                "children": [],
+                "menu_button": [
+                    {
+                        "name": "查询",
+                        "value": "leave:Search",
+                        "api": "/api/leave/",
+                        "method": 0
+                    },
+                    {
+                        "name": "详情",
+                        "value": "leave:Retrieve",
+                        "api": "/api/leave/{id}/",
+                        "method": 0
+                    },
+                    {
+                        "name": "新增",
+                        "value": "leave:Create",
+                        "api": "/api/leave/",
+                        "method": 1
+                    },
+                    {
+                        "name": "复制",
+                        "value": "leave:Copy",
+                        "api": "/api/leave/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导入",
+                        "value": "leave:Import",
+                        "api": "/api/leave/import_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导出",
+                        "value": "leave:Export",
+                        "api": "/api/leave/export_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "编辑",
+                        "value": "leave:Update",
+                        "api": "/api/leave/{id}/",
+                        "method": 2
+                    },
+                    {
+                        "name": "审核",
+                        "value": "leave:Approval",
+                        "api": "/api/leave/{id}/approve/",
+                        "method": 2
+                    },
+                    {
+                        "name": "删除",
+                        "value": "leave:Delete",
+                        "api": "/api/leave/{id}/",
+                        "method": 3
+                    }
+                ],
+                "menu_field": [
+                    {
+                        "field_name": "create_datetime",
+                        "title": "创建时间",
+                        "model": "Leave"
+                    },
+                    {
+                        "field_name": "creator",
+                        "title": "创建人",
+                        "model": "Leave"
+                    },
+                    {
+                        "field_name": "dept_belong_id",
+                        "title": "数据归属部门",
+                        "model": "Leave"
+                    },
+                    {
+                        "field_name": "description",
+                        "title": "描述",
+                        "model": "Leave"
+                    },
+                    {
+                        "field_name": "duration",
+                        "title": "请假时长",
+                        "model": "Leave"
+                    },
+                    {
+                        "field_name": "end_time",
+                        "title": "请假结束时间",
+                        "model": "Leave"
+                    },
+                    {
+                        "field_name": "id",
+                        "title": "Id",
+                        "model": "Leave"
+                    },
+                    {
+                        "field_name": "leave_type",
+                        "title": "请假类型",
+                        "model": "Leave"
+                    },
+                    {
+                        "field_name": "modifier",
+                        "title": "修改人",
+                        "model": "Leave"
+                    },
+                    {
+                        "field_name": "reason",
+                        "title": "请假原因",
+                        "model": "Leave"
+                    },
+                    {
+                        "field_name": "reference_duration",
+                        "title": "参考时长",
+                        "model": "Leave"
+                    },
+                    {
+                        "field_name": "start_time",
+                        "title": "请假开始时间",
+                        "model": "Leave"
+                    },
+                    {
+                        "field_name": "status",
+                        "title": "请假状态",
+                        "model": "Leave"
+                    },
+                    {
+                        "field_name": "update_datetime",
+                        "title": "修改时间",
+                        "model": "Leave"
+                    }
+                ],
+                "dept_belong_id": null
+            }
+        ],
+        "menu_button": [],
+        "menu_field": [],
+        "dept_belong_id": null
+    },
+    {
+        "name": "游戏管理",
+        "icon": "iconfont icon-caidan",
+        "sort": 8,
+        "is_link": false,
+        "is_catalog": true,
+        "web_path": "/manage",
+        "component": "",
+        "component_name": "",
+        "status": true,
+        "cache": true,
+        "visible": true,
+        "parent": null,
+        "children": [
+            {
+                "name": "游戏列表",
+                "icon": "ele-Expand",
+                "sort": 1,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/manage/game",
+                "component": "gamemanage/Games/index",
+                "component_name": "game_manage",
+                "status": true,
+                "cache": true,
+                "visible": true,
+                "parent": 20,
+                "children": [],
+                "menu_button": [
+                    {
+                        "name": "查询",
+                        "value": "game_manage:Search",
+                        "api": "/api/game_manage/",
+                        "method": 0
+                    },
+                    {
+                        "name": "详情",
+                        "value": "game_manage:Retrieve",
+                        "api": "/api/game_manage/{id}/",
+                        "method": 0
+                    },
+                    {
+                        "name": "新增",
+                        "value": "game_manage:Create",
+                        "api": "/api/game_manage/",
+                        "method": 1
+                    },
+                    {
+                        "name": "复制",
+                        "value": "game_manage:Copy",
+                        "api": "/api/game_manage/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导入",
+                        "value": "game_manage:Import",
+                        "api": "/api/game_manage/import_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导出",
+                        "value": "game_manage:Export",
+                        "api": "/api/game_manage/export_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "编辑",
+                        "value": "game_manage:Update",
+                        "api": "/api/game_manage/{id}/",
+                        "method": 2
+                    },
+                    {
+                        "name": "删除",
+                        "value": "game_manage:Delete",
+                        "api": "/api/game_manage/{id}/",
+                        "method": 3
+                    }
+                ],
+                "menu_field": [
+                    {
+                        "field_name": "create_datetime",
+                        "title": "创建时间",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "creator",
+                        "title": "创建人",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "dept_belong_id",
+                        "title": "数据归属部门",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "desc",
+                        "title": "游戏描述",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "description",
+                        "title": "描述",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "discount",
+                        "title": "游戏折扣",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "id",
+                        "title": "Id",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "issue",
+                        "title": "游戏发行类型",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "modifier",
+                        "title": "修改人",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "name",
+                        "title": "游戏上线名称",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "parent",
+                        "title": "游戏发行主体",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "quick_name",
+                        "title": "游戏quick名称",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "release_date",
+                        "title": "游戏发行时间",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "status",
+                        "title": "游戏状态",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "stop_add_date",
+                        "title": "游戏停新增时间",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "stop_operation_date",
+                        "title": "游戏停运营时间",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "stop_recharge_date",
+                        "title": "游戏停充值时间",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "type",
+                        "title": "游戏类型",
+                        "model": "Games"
+                    },
+                    {
+                        "field_name": "update_datetime",
+                        "title": "修改时间",
+                        "model": "Games"
+                    }
+                ],
+                "dept_belong_id": null
+            },
+            {
+                "name": "渠道列表",
+                "icon": "ele-Expand",
+                "sort": 2,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/manage/channel",
+                "component": "gamemanage/Channel/index",
+                "component_name": "channel_manage",
+                "status": true,
+                "cache": true,
+                "visible": true,
+                "parent": 20,
+                "children": [],
+                "menu_button": [
+                    {
+                        "name": "查询",
+                        "value": "channel_manage:Search",
+                        "api": "/api/channel_manage/",
+                        "method": 0
+                    },
+                    {
+                        "name": "详情",
+                        "value": "channel_manage:Retrieve",
+                        "api": "/api/channel_manage/{id}/",
+                        "method": 0
+                    },
+                    {
+                        "name": "新增",
+                        "value": "channel_manage:Create",
+                        "api": "/api/channel_manage/",
+                        "method": 1
+                    },
+                    {
+                        "name": "复制",
+                        "value": "channel_manage:Copy",
+                        "api": "/api/channel_manage/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导入",
+                        "value": "channel_manage:Import",
+                        "api": "/api/channel_manage/import_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导出",
+                        "value": "channel_manage:Export",
+                        "api": "/api/channel_manage/export_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "编辑",
+                        "value": "channel_manage:Update",
+                        "api": "/api/channel_manage/{id}/",
+                        "method": 2
+                    },
+                    {
+                        "name": "删除",
+                        "value": "channel_manage:Delete",
+                        "api": "/api/channel_manage/{id}/",
+                        "method": 3
+                    }
+                ],
+                "menu_field": [
+                    {
+                        "field_name": "alias",
+                        "title": "渠道别名",
+                        "model": "Channel"
+                    },
+                    {
+                        "field_name": "channel_fee_ratio",
+                        "title": "渠道费比例",
+                        "model": "Channel"
+                    },
+                    {
+                        "field_name": "channel_ratio",
+                        "title": "渠道分成比例",
+                        "model": "Channel"
+                    },
+                    {
+                        "field_name": "channel_tips",
+                        "title": "渠道备注",
+                        "model": "Channel"
+                    },
+                    {
+                        "field_name": "company_name",
+                        "title": "渠道公司名",
+                        "model": "Channel"
+                    },
+                    {
+                        "field_name": "create_datetime",
+                        "title": "创建时间",
+                        "model": "Channel"
+                    },
+                    {
+                        "field_name": "creator",
+                        "title": "创建人",
+                        "model": "Channel"
+                    },
+                    {
+                        "field_name": "dept_belong_id",
+                        "title": "数据归属部门",
+                        "model": "Channel"
+                    },
+                    {
+                        "field_name": "description",
+                        "title": "描述",
+                        "model": "Channel"
+                    },
+                    {
+                        "field_name": "id",
+                        "title": "Id",
+                        "model": "Channel"
+                    },
+                    {
+                        "field_name": "modifier",
+                        "title": "修改人",
+                        "model": "Channel"
+                    },
+                    {
+                        "field_name": "name",
+                        "title": "渠道名称",
+                        "model": "Channel"
+                    },
+                    {
+                        "field_name": "our_ratio",
+                        "title": "我方分成比例",
+                        "model": "Channel"
+                    },
+                    {
+                        "field_name": "status",
+                        "title": "渠道状态",
+                        "model": "Channel"
+                    },
+                    {
+                        "field_name": "update_datetime",
+                        "title": "修改时间",
+                        "model": "Channel"
+                    }
+                ],
+                "dept_belong_id": null
+            },
+            {
+                "name": "研发列表",
+                "icon": "ele-Expand",
+                "sort": 3,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/manage/research",
+                "component": "gamemanage/Research/index",
+                "component_name": "research_manage",
+                "status": true,
+                "cache": true,
+                "visible": true,
+                "parent": 20,
+                "children": [],
+                "menu_button": [
+                    {
+                        "name": "查询",
+                        "value": "research_manage:Search",
+                        "api": "/api/research_manage/",
+                        "method": 0
+                    },
+                    {
+                        "name": "详情",
+                        "value": "research_manage:Retrieve",
+                        "api": "/api/research_manage/{id}/",
+                        "method": 0
+                    },
+                    {
+                        "name": "新增",
+                        "value": "research_manage:Create",
+                        "api": "/api/research_manage/",
+                        "method": 1
+                    },
+                    {
+                        "name": "复制",
+                        "value": "research_manage:Copy",
+                        "api": "/api/research_manage/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导入",
+                        "value": "research_manage:Import",
+                        "api": "/api/research_manage/import_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导出",
+                        "value": "research_manage:Export",
+                        "api": "/api/research_manage/export_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "编辑",
+                        "value": "research_manage:Update",
+                        "api": "/api/research_manage/{id}/",
+                        "method": 2
+                    },
+                    {
+                        "name": "删除",
+                        "value": "research_manage:Delete",
+                        "api": "/api/research_manage/{id}/",
+                        "method": 3
+                    }
+                ],
+                "menu_field": [
+                    {
+                        "field_name": "alias",
+                        "title": "研发别名",
+                        "model": "Research"
+                    },
+                    {
+                        "field_name": "company_name",
+                        "title": "研发公司名",
+                        "model": "Research"
+                    },
+                    {
+                        "field_name": "create_datetime",
+                        "title": "创建时间",
+                        "model": "Research"
+                    },
+                    {
+                        "field_name": "creator",
+                        "title": "创建人",
+                        "model": "Research"
+                    },
+                    {
+                        "field_name": "dept_belong_id",
+                        "title": "数据归属部门",
+                        "model": "Research"
+                    },
+                    {
+                        "field_name": "description",
+                        "title": "描述",
+                        "model": "Research"
+                    },
+                    {
+                        "field_name": "id",
+                        "title": "Id",
+                        "model": "Research"
+                    },
+                    {
+                        "field_name": "modifier",
+                        "title": "修改人",
+                        "model": "Research"
+                    },
+                    {
+                        "field_name": "name",
+                        "title": "研发名称",
+                        "model": "Research"
+                    },
+                    {
+                        "field_name": "research_ratio",
+                        "title": "研发分成比例",
+                        "model": "Research"
+                    },
+                    {
+                        "field_name": "research_tips",
+                        "title": "研发备注",
+                        "model": "Research"
+                    },
+                    {
+                        "field_name": "slotting_ratio",
+                        "title": "通道费比例",
+                        "model": "Research"
+                    },
+                    {
+                        "field_name": "status",
+                        "title": "研发状态",
+                        "model": "Research"
+                    },
+                    {
+                        "field_name": "update_datetime",
+                        "title": "修改时间",
+                        "model": "Research"
+                    }
+                ],
+                "dept_belong_id": null
+            },
+            {
+                "name": "渠道分成列表",
+                "icon": "ele-Expand",
+                "sort": 4,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/manage/revenue_split",
+                "component": "gamemanage/RevenueSplit/index",
+                "component_name": "revenue_split_manage",
+                "status": true,
+                "cache": true,
+                "visible": true,
+                "parent": 20,
+                "children": [],
+                "menu_button": [
+                    {
+                        "name": "查询",
+                        "value": "revenue_split_manage:Search",
+                        "api": "/api/revenue_split_manage/",
+                        "method": 0
+                    },
+                    {
+                        "name": "详情",
+                        "value": "revenue_split_manage:Retrieve",
+                        "api": "/api/revenue_split_manage/{id}/",
+                        "method": 0
+                    },
+                    {
+                        "name": "新增",
+                        "value": "revenue_split_manage:Create",
+                        "api": "/api/revenue_split_manage/",
+                        "method": 1
+                    },
+                    {
+                        "name": "复制",
+                        "value": "revenue_split_manage:Copy",
+                        "api": "/api/revenue_split_manage/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导入",
+                        "value": "revenue_split_manage:Import",
+                        "api": "/api/revenue_split_manage/import_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导出",
+                        "value": "revenue_split_manage:Export",
+                        "api": "/api/revenue_split_manage/export_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "编辑",
+                        "value": "revenue_split_manage:Update",
+                        "api": "/api/revenue_split_manage/{id}/",
+                        "method": 2
+                    },
+                    {
+                        "name": "删除",
+                        "value": "revenue_split_manage:Delete",
+                        "api": "/api/revenue_split_manage/{id}/",
+                        "method": 3
+                    }
+                ],
+                "menu_field": [
+                    {
+                        "field_name": "channel",
+                        "title": "渠道名称",
+                        "model": "RevenueSplit"
+                    },
+                    {
+                        "field_name": "channel_fee_ratio",
+                        "title": "渠道费比例",
+                        "model": "RevenueSplit"
+                    },
+                    {
+                        "field_name": "channel_ratio",
+                        "title": "渠道分成比例",
+                        "model": "RevenueSplit"
+                    },
+                    {
+                        "field_name": "channel_tips",
+                        "title": "分成备注",
+                        "model": "RevenueSplit"
+                    },
+                    {
+                        "field_name": "create_datetime",
+                        "title": "创建时间",
+                        "model": "RevenueSplit"
+                    },
+                    {
+                        "field_name": "creator",
+                        "title": "创建人",
+                        "model": "RevenueSplit"
+                    },
+                    {
+                        "field_name": "dept_belong_id",
+                        "title": "数据归属部门",
+                        "model": "RevenueSplit"
+                    },
+                    {
+                        "field_name": "description",
+                        "title": "描述",
+                        "model": "RevenueSplit"
+                    },
+                    {
+                        "field_name": "game",
+                        "title": "游戏名称",
+                        "model": "RevenueSplit"
+                    },
+                    {
+                        "field_name": "id",
+                        "title": "Id",
+                        "model": "RevenueSplit"
+                    },
+                    {
+                        "field_name": "modifier",
+                        "title": "修改人",
+                        "model": "RevenueSplit"
+                    },
+                    {
+                        "field_name": "our_ratio",
+                        "title": "我方分成比例",
+                        "model": "RevenueSplit"
+                    },
+                    {
+                        "field_name": "update_datetime",
+                        "title": "修改时间",
+                        "model": "RevenueSplit"
+                    }
+                ],
+                "dept_belong_id": null
+            },
+            {
+                "name": "研发分成列表",
+                "icon": "ele-Expand",
+                "sort": 5,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/manage/research_split",
+                "component": "gamemanage/ResearchSplit/index",
+                "component_name": "research_split_manage",
+                "status": true,
+                "cache": true,
+                "visible": true,
+                "parent": 20,
+                "children": [],
+                "menu_button": [
+                    {
+                        "name": "查询",
+                        "value": "research_split_manage:Search",
+                        "api": "/api/research_split_manage/",
+                        "method": 0
+                    },
+                    {
+                        "name": "详情",
+                        "value": "research_split_manage:Retrieve",
+                        "api": "/api/research_split_manage/{id}/",
+                        "method": 0
+                    },
+                    {
+                        "name": "新增",
+                        "value": "research_split_manage:Create",
+                        "api": "/api/research_split_manage/",
+                        "method": 1
+                    },
+                    {
+                        "name": "复制",
+                        "value": "research_split_manage:Copy",
+                        "api": "/api/research_split_manage/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导入",
+                        "value": "research_split_manage:Import",
+                        "api": "/api/research_split_manage/import_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导出",
+                        "value": "research_split_manage:Export",
+                        "api": "/api/research_split_manage/export_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "编辑",
+                        "value": "research_split_manage:Update",
+                        "api": "/api/research_split_manage/{id}/",
+                        "method": 2
+                    },
+                    {
+                        "name": "删除",
+                        "value": "research_split_manage:Delete",
+                        "api": "/api/research_split_manage/{id}/",
+                        "method": 3
+                    }
+                ],
+                "menu_field": [
+                    {
+                        "field_name": "create_datetime",
+                        "title": "创建时间",
+                        "model": "ResearchSplit"
+                    },
+                    {
+                        "field_name": "creator",
+                        "title": "创建人",
+                        "model": "ResearchSplit"
+                    },
+                    {
+                        "field_name": "dept_belong_id",
+                        "title": "数据归属部门",
+                        "model": "ResearchSplit"
+                    },
+                    {
+                        "field_name": "description",
+                        "title": "描述",
+                        "model": "ResearchSplit"
+                    },
+                    {
+                        "field_name": "game",
+                        "title": "游戏名称",
+                        "model": "ResearchSplit"
+                    },
+                    {
+                        "field_name": "id",
+                        "title": "Id",
+                        "model": "ResearchSplit"
+                    },
+                    {
+                        "field_name": "modifier",
+                        "title": "修改人",
+                        "model": "ResearchSplit"
+                    },
+                    {
+                        "field_name": "research",
+                        "title": "研发名称",
+                        "model": "ResearchSplit"
+                    },
+                    {
+                        "field_name": "research_ratio",
+                        "title": "研发分成比例",
+                        "model": "ResearchSplit"
+                    },
+                    {
+                        "field_name": "research_tips",
+                        "title": "分成备注",
+                        "model": "ResearchSplit"
+                    },
+                    {
+                        "field_name": "slotting_ratio",
+                        "title": "通道费比例",
+                        "model": "ResearchSplit"
+                    },
+                    {
+                        "field_name": "update_datetime",
+                        "title": "修改时间",
+                        "model": "ResearchSplit"
+                    }
+                ],
+                "dept_belong_id": null
+            },
+            {
+                "name": "上传对接表",
+                "icon": "iconfont icon-caozuo-wailian",
+                "sort": 6,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/manage/upload_dddd",
+                "component": "gamemanage/UploadDDDD/index",
+                "component_name": "upload_dddd",
+                "status": true,
+                "cache": true,
+                "visible": true,
+                "parent": 20,
+                "children": [],
+                "menu_button": [],
+                "menu_field": [],
+                "dept_belong_id": null
+            }
+        ],
+        "menu_button": [],
+        "menu_field": [],
+        "dept_belong_id": null
+    },
+    {
+        "name": "授权书",
+        "icon": "iconfont icon-dict",
+        "sort": 9,
+        "is_link": false,
+        "is_catalog": true,
+        "web_path": "/authorletter",
+        "component": "",
+        "component_name": "",
+        "status": true,
+        "cache": true,
+        "visible": true,
+        "parent": null,
+        "children": [
+            {
+                "name": "版号信息",
+                "icon": "iconfont icon-bolangnengshiyanchang",
+                "sort": 1,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/authorletter/manage",
+                "component": "authorletter/manage/index",
+                "component_name": "authorletter_manage",
+                "status": true,
+                "cache": true,
+                "visible": true,
+                "parent": 18,
+                "children": [],
+                "menu_button": [
+                    {
+                        "name": "查询",
+                        "value": "authorletter_manage:Search",
+                        "api": "/api/authorletter_manage/",
+                        "method": 0
+                    },
+                    {
+                        "name": "详情",
+                        "value": "authorletter_manage:Retrieve",
+                        "api": "/api/authorletter_manage/{id}/",
+                        "method": 0
+                    },
+                    {
+                        "name": "新增",
+                        "value": "authorletter_manage:Create",
+                        "api": "/api/authorletter_manage/",
+                        "method": 1
+                    },
+                    {
+                        "name": "复制",
+                        "value": "authorletter_manage:Copy",
+                        "api": "/api/authorletter_manage/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导入",
+                        "value": "authorletter_manage:Import",
+                        "api": "/api/authorletter_manage/import_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "导出",
+                        "value": "authorletter_manage:Export",
+                        "api": "/api/authorletter_manage/export_data/",
+                        "method": 1
+                    },
+                    {
+                        "name": "编辑",
+                        "value": "authorletter_manage:Update",
+                        "api": "/api/authorletter_manage/{id}/",
+                        "method": 2
+                    },
+                    {
+                        "name": "删除",
+                        "value": "authorletter_manage:Delete",
+                        "api": "/api/authorletter_manage/{id}/",
+                        "method": 3
+                    }
+                ],
+                "menu_field": [
+                    {
+                        "field_name": "authorization_end_date",
+                        "title": "授权结束日期",
+                        "model": "AuthorInfo"
+                    },
+                    {
+                        "field_name": "authorization_start_date",
+                        "title": "授权开始日期",
+                        "model": "AuthorInfo"
+                    },
+                    {
+                        "field_name": "create_datetime",
+                        "title": "创建时间",
+                        "model": "AuthorInfo"
+                    },
+                    {
+                        "field_name": "creator",
+                        "title": "创建人",
+                        "model": "AuthorInfo"
+                    },
+                    {
+                        "field_name": "dept_belong_id",
+                        "title": "数据归属部门",
+                        "model": "AuthorInfo"
+                    },
+                    {
+                        "field_name": "description",
+                        "title": "描述",
+                        "model": "AuthorInfo"
+                    },
+                    {
+                        "field_name": "entity",
+                        "title": "主体模型",
+                        "model": "AuthorInfo"
+                    },
+                    {
+                        "field_name": "icp_license",
+                        "title": "ICP备案/许可证书",
+                        "model": "AuthorInfo"
+                    },
+                    {
+                        "field_name": "id",
+                        "title": "Id",
+                        "model": "AuthorInfo"
+                    },
+                    {
+                        "field_name": "isbn",
+                        "title": "出版物号",
+                        "model": "AuthorInfo"
+                    },
+                    {
+                        "field_name": "modifier",
+                        "title": "修改人",
+                        "model": "AuthorInfo"
+                    },
+                    {
+                        "field_name": "name",
+                        "title": "版号",
+                        "model": "AuthorInfo"
+                    },
+                    {
+                        "field_name": "publication_approval_number",
+                        "title": "出版复批文号",
+                        "model": "AuthorInfo"
+                    },
+                    {
+                        "field_name": "publisher",
+                        "title": "出版社",
+                        "model": "AuthorInfo"
+                    },
+                    {
+                        "field_name": "software_registration_number",
+                        "title": "软著登记编号",
+                        "model": "AuthorInfo"
+                    },
+                    {
+                        "field_name": "update_datetime",
+                        "title": "修改时间",
+                        "model": "AuthorInfo"
+                    }
+                ],
+                "dept_belong_id": null
+            }
+        ],
+        "menu_button": [],
+        "menu_field": [],
+        "dept_belong_id": null
     }
 ]

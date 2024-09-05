@@ -6,15 +6,13 @@
 @Created on: 2021/6/1 001 22:47
 @Remark: 自定义序列化器
 """
+from django_restql.mixins import DynamicFieldsMixin
 from rest_framework import serializers
 from rest_framework.fields import empty
 from rest_framework.request import Request
 from rest_framework.serializers import ModelSerializer
-from django.utils.functional import cached_property
-from rest_framework.utils.serializer_helpers import BindingDict
 
 from dvadmin.system.models import Users
-from django_restql.mixins import DynamicFieldsMixin
 
 
 class CustomModelSerializer(DynamicFieldsMixin, ModelSerializer):
@@ -27,7 +25,8 @@ class CustomModelSerializer(DynamicFieldsMixin, ModelSerializer):
     modifier_field_id = "modifier"
     modifier_name = serializers.SerializerMethodField(read_only=True)
 
-    def get_modifier_name(self, instance):
+    @staticmethod
+    def get_modifier_name(instance):
         if not hasattr(instance, "modifier"):
             return None
         queryset = (
@@ -43,6 +42,9 @@ class CustomModelSerializer(DynamicFieldsMixin, ModelSerializer):
     creator_field_id = "creator"
     creator_name = serializers.SlugRelatedField(
         slug_field="name", source="creator", read_only=True
+    )
+    creator_jobid = serializers.SlugRelatedField(
+        slug_field="jobid", source="creator", read_only=True
     )
     # 数据所属部门字段
     dept_belong_id_field_name = "dept_belong_id"

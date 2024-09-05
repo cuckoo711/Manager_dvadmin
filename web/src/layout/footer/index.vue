@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-footer pb5 pt2">
 		<div class="layout-footer-warp">
-			<div>❤️ Powered by Django-Vue3-Admin Copyright © DVAdmin团队 ❤️</div>
+			<div>❤️ Powered by Cuckoo Copyright © 布谷不咕鸟 ❤️</div>
 		</div>
 	</div>
 </template>

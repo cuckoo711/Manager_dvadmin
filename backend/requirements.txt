@@ -29,4 +29,6 @@ gunicorn==22.0.0
 gevent==24.2.1
 Pillow==10.4.0
 dvadmin-celery==1.0.5
-pyinstaller==6.9.0
+pyinstaller==6.8.0
+ddddocr==1.5.5
+volcengine-python-sdk==2.2.1

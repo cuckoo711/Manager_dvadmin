@@ -2,6 +2,7 @@
     {
         "url": "/api/system/dept_lazy_tree/",
         "method": 0,
-        "enable_datasource": true
+        "enable_datasource": true,
+        "dept_belong_id": null
     }
 ]
