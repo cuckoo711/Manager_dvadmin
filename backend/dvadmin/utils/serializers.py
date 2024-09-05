@@ -24,7 +24,6 @@ class CustomModelSerializer(DynamicFieldsMixin, ModelSerializer):
     # 修改人的审计字段名称, 默认modifier, 继承使用时可自定义覆盖
     modifier_field_id = "modifier"
     modifier_name = serializers.SerializerMethodField(read_only=True)
-    dept_belong_id = serializers.IntegerField(required=False, allow_null=True)
 
     @staticmethod
     def get_modifier_name(instance):
@@ -54,7 +53,7 @@ class CustomModelSerializer(DynamicFieldsMixin, ModelSerializer):
         format="%Y-%m-%d %H:%M:%S", required=False, read_only=True
     )
     update_datetime = serializers.DateTimeField(
-        format="%Y-%m-%d %H:%M:%S", required=False
+        format="%Y-%m-%d %H:%M:%S", required=False, read_only=True
     )
 
     def __init__(self, instance=None, data=empty, request=None, **kwargs):
@@ -77,7 +76,7 @@ class CustomModelSerializer(DynamicFieldsMixin, ModelSerializer):
                         and validated_data.get(self.dept_belong_id_field_name, None) is None
                 ):
                     validated_data[self.dept_belong_id_field_name] = getattr(
-                        self.request.user, "dept_id", None
+                        self.request.user, "dept_id", validated_data.get(self.dept_belong_id_field_name, None)
                     )
         return super().create(validated_data)
 

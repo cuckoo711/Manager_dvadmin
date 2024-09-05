@@ -35,6 +35,8 @@ class MessageCenterSerializer(CustomModelSerializer):
         return serializer.data
 
     def get_user_info(self, instance, parsed_query):
+        if instance.target_type  in (1,2,3):
+            return []
         users = instance.target_user.all()
         # You can do what ever you want in here
         # `parsed_query` param is passed to BookSerializer to allow further querying
@@ -105,6 +107,8 @@ class MessageCenterTargetUserListSerializer(CustomModelSerializer):
         return serializer.data
 
     def get_user_info(self, instance, parsed_query):
+        if instance.target_type  in (1,2,3):
+            return []
         users = instance.target_user.all()
         # You can do what ever you want in here
         # `parsed_query` param is passed to BookSerializer to allow further querying
