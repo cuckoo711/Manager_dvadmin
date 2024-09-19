@@ -41,3 +41,15 @@ class GDActiveConfigSerializer(CustomModelSerializer):
 class GDActiveConfigViewSet(CustomModelViewSet):
     queryset = GDActiveConfig.objects.all()
     serializer_class = GDActiveConfigSerializer
+
+
+class GDBackSerializer(CustomModelSerializer):
+    class Meta:
+        model = GDUser
+        fields = '__all__'
+        read_only_fields = ["id"]
+
+
+class GDBackViewSet(CustomModelViewSet):
+    queryset = GDUser.objects.all()
+    serializer_class = GDBackSerializer
