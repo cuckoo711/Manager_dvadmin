@@ -189,9 +189,32 @@ function createRequestFunction(service: any) {
 	};
 }
 
+function createUploadRequestFunction(service: any) {
+    return function (config: any) {
+        const configDefault = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            timeout: 120000,
+            baseURL: getBaseURL(),
+            data: {},
+        };
+
+        // const token = userStore.getToken;
+        const token = Session.get('token');
+        if (token != null) {
+            // @ts-ignore
+            configDefault.headers.Authorization = 'CUCKOO ' + token;
+        }
+        return service(Object.assign(configDefault, config));
+    };
+}
+
 // 用于真实网络请求的实例和请求方法
 export const service = createService();
 export const request = createRequestFunction(service);
+export const uploadRequest = createUploadRequestFunction(service);
+
 
 // 用于模拟网络请求的实例和请求方法
 export const serviceForMock = createService();

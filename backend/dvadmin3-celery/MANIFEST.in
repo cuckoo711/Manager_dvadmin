@@ -1,0 +1,2 @@
+include dvadmin3_celery/fixtures/init_menu.json
+include django_celery_results/locale/*
