@@ -137,8 +137,8 @@ yarn build
 4. 安装依赖环境
 	pip3 install -r requirements.txt
 5. 执行迁移命令：
-	python3 manage.py makemigrations
-	python3 manage.py migrate
+	python manage.py makemigrations
+	python manage.py migrate
 6. 初始化数据
 	python3 manage.py init
 7. 初始化省市县数据:

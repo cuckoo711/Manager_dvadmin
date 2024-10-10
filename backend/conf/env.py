@@ -25,10 +25,13 @@ TABLE_PREFIX = "jtadmin_"
 # ******** redis配置，无redis 可不进行配置  ******** #
 # ================================================= #
 REDIS_DB = 1
-CELERY_BROKER_DB = 3
+CELERY_BROKER_DB = 2
+CELERY_RESULT_DB = 3
 REDIS_PASSWORD = 'CUCKOONB'
-REDIS_HOST = '180.184.172.138'
+REDIS_HOST = '127.0.0.1'
 REDIS_URL = f'redis://:{REDIS_PASSWORD or ""}@{REDIS_HOST}:6379'
+CELERY_BROKER_URL = f'{REDIS_URL}/{CELERY_BROKER_DB}'
+CELERY_RESULT_BACKEND = f'{REDIS_URL}/{CELERY_RESULT_DB}'
 # ================================================= #
 # ****************** 功能 启停  ******************* #
 # ================================================= #

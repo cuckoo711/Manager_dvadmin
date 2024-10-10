@@ -73,7 +73,7 @@ INSTALLED_APPS = [
     "jtgame.authorization",
     "jtgame.daily_report",
     "jtgame.income_statement",
-    "jtgame.tencent_docx",
+    "jtgame.service_table",
 
     # 游戏后台整合
     "gamebackend.gdbackend",  # 官斗
@@ -176,6 +176,8 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = "media"  # 项目下的目录
 MEDIA_URL = "/media/"  # 跟STATIC_URL类似，指定用户可以通过这个url找到文件
+
+TEMPLATE_FILE_PATH = os.path.join(BASE_DIR, "media", "template_files")
 
 # 添加以下代码以后就不用写{% load staticfiles %}，可以直接引用
 STATICFILES_FINDERS = (
@@ -428,6 +430,7 @@ PLUGINS_URL_PATTERNS = []
 # ********** 一键导入插件配置开始 **********
 # 例如:
 # from dvadmin_upgrade_center.settings import *    # 升级中心
+# noinspection PyUnresolvedReferences
 from dvadmin3_celery.settings import *            # celery 异步任务
 # from dvadmin_cloud_storage.settings import *      # 云存储
 # from dvadmin_third.settings import *            # 第三方用户管理

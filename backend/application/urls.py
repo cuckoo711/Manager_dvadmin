@@ -131,8 +131,8 @@ urlpatterns = (
             path("api/", include("jtgame.daily_report.urls")),
             # 收入模块
             path("api/", include("jtgame.income_statement.urls")),
-            # 腾讯文档模块
-            path("api/", include("jtgame.tencent_docx.urls")),
+            # 开服模块
+            path("api/", include("jtgame.service_table.urls")),
         ]
         + [
             # 游戏后台模块
