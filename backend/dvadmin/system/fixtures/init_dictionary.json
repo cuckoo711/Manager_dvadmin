@@ -9,7 +9,6 @@
         "status": true,
         "sort": 1,
         "remark": null,
-        "dept_belong_id": null,
         "children": [
             {
                 "label": "启用",
@@ -21,7 +20,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -34,7 +32,6 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -49,7 +46,6 @@
         "status": true,
         "sort": 2,
         "remark": null,
-        "dept_belong_id": null,
         "children": [
             {
                 "label": "新增",
@@ -61,7 +57,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -74,7 +69,6 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -87,7 +81,6 @@
                 "status": true,
                 "sort": 3,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -100,7 +93,6 @@
                 "status": true,
                 "sort": 4,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -113,7 +105,6 @@
                 "status": true,
                 "sort": 5,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -126,7 +117,6 @@
                 "status": true,
                 "sort": 6,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -139,7 +129,6 @@
                 "status": true,
                 "sort": 7,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -152,7 +141,6 @@
                 "status": true,
                 "sort": 8,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -165,7 +153,6 @@
                 "status": true,
                 "sort": 9,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -178,7 +165,30 @@
                 "status": true,
                 "sort": 10,
                 "remark": null,
-                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "label": "生成",
+                "value": "Generate",
+                "parent": 4,
+                "type": 0,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 11,
+                "remark": null,
+                "children": []
+            },
+            {
+                "label": "下载",
+                "value": "Download",
+                "parent": 4,
+                "type": 0,
+                "color": "primary",
+                "is_value": false,
+                "status": true,
+                "sort": 12,
+                "remark": null,
                 "children": []
             }
         ]
@@ -193,7 +203,6 @@
         "status": true,
         "sort": 3,
         "remark": null,
-        "dept_belong_id": null,
         "children": [
             {
                 "label": "启用",
@@ -205,7 +214,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -218,7 +226,6 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -233,7 +240,6 @@
         "status": true,
         "sort": 4,
         "remark": null,
-        "dept_belong_id": null,
         "children": [
             {
                 "label": "是",
@@ -245,7 +251,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -258,7 +263,6 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -273,7 +277,6 @@
         "status": true,
         "sort": 5,
         "remark": null,
-        "dept_belong_id": null,
         "children": [
             {
                 "label": "是",
@@ -285,7 +288,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -298,7 +300,6 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -313,7 +314,6 @@
         "status": true,
         "sort": 6,
         "remark": null,
-        "dept_belong_id": null,
         "children": [
             {
                 "label": "后台用户",
@@ -325,7 +325,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -338,7 +337,6 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -353,7 +351,6 @@
         "status": true,
         "sort": 7,
         "remark": null,
-        "dept_belong_id": null,
         "children": [
             {
                 "label": "text",
@@ -365,7 +362,6 @@
                 "status": true,
                 "sort": 0,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -378,7 +374,6 @@
                 "status": true,
                 "sort": 0,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -391,7 +386,6 @@
                 "status": true,
                 "sort": 0,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -404,7 +398,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -417,7 +410,6 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -430,7 +422,6 @@
                 "status": true,
                 "sort": 3,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -443,7 +434,6 @@
                 "status": true,
                 "sort": 4,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -456,7 +446,6 @@
                 "status": true,
                 "sort": 5,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -469,7 +458,6 @@
                 "status": true,
                 "sort": 6,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -482,7 +470,6 @@
                 "status": true,
                 "sort": 6,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -495,7 +482,6 @@
                 "status": true,
                 "sort": 7,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -508,7 +494,6 @@
                 "status": true,
                 "sort": 8,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -521,7 +506,6 @@
                 "status": true,
                 "sort": 9,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -534,7 +518,6 @@
                 "status": true,
                 "sort": 11,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -547,7 +530,6 @@
                 "status": true,
                 "sort": 13,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -560,7 +542,6 @@
                 "status": true,
                 "sort": 14,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -575,7 +556,6 @@
         "status": true,
         "sort": 8,
         "remark": null,
-        "dept_belong_id": null,
         "children": [
             {
                 "label": "未知",
@@ -587,7 +567,6 @@
                 "status": true,
                 "sort": 0,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -600,7 +579,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -613,7 +591,6 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -628,7 +605,6 @@
         "status": true,
         "sort": 9,
         "remark": null,
-        "dept_belong_id": null,
         "children": [
             {
                 "label": "待审批",
@@ -640,7 +616,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -653,7 +628,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -666,7 +640,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -681,7 +654,6 @@
         "status": true,
         "sort": 10,
         "remark": null,
-        "dept_belong_id": null,
         "children": [
             {
                 "label": "事假",
@@ -693,7 +665,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -706,7 +677,6 @@
                 "status": true,
                 "sort": 2,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -719,7 +689,6 @@
                 "status": true,
                 "sort": 3,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -732,7 +701,6 @@
                 "status": true,
                 "sort": 4,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -745,7 +713,6 @@
                 "status": true,
                 "sort": 5,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -758,7 +725,6 @@
                 "status": true,
                 "sort": 6,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -771,7 +737,6 @@
                 "status": true,
                 "sort": 7,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -784,7 +749,6 @@
                 "status": true,
                 "sort": 8,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -797,7 +761,6 @@
                 "status": true,
                 "sort": 9,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -812,7 +775,6 @@
         "status": true,
         "sort": 11,
         "remark": null,
-        "dept_belong_id": null,
         "children": [
             {
                 "label": "work_start_morning",
@@ -824,7 +786,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -837,7 +798,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -850,7 +810,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -863,112 +822,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
-                "children": []
-            }
-        ]
-    },
-    {
-        "label": "游戏类型",
-        "value": "game_types",
-        "parent": null,
-        "type": 0,
-        "color": null,
-        "is_value": false,
-        "status": true,
-        "sort": 12,
-        "remark": null,
-        "dept_belong_id": null,
-        "children": [
-            {
-                "label": "常规",
-                "value": "1",
-                "parent": 66,
-                "type": 1,
-                "color": "primary",
-                "is_value": false,
-                "status": true,
-                "sort": 1,
-                "remark": null,
-                "dept_belong_id": null,
-                "children": []
-            },
-            {
-                "label": "BT版",
-                "value": "2",
-                "parent": 66,
-                "type": 1,
-                "color": "primary",
-                "is_value": false,
-                "status": true,
-                "sort": 1,
-                "remark": null,
-                "dept_belong_id": null,
-                "children": []
-            },
-            {
-                "label": "外置0.1折",
-                "value": "3",
-                "parent": 66,
-                "type": 1,
-                "color": "primary",
-                "is_value": false,
-                "status": true,
-                "sort": 1,
-                "remark": null,
-                "dept_belong_id": null,
-                "children": []
-            },
-            {
-                "label": "内置0.1折",
-                "value": "4",
-                "parent": 66,
-                "type": 1,
-                "color": "primary",
-                "is_value": false,
-                "status": true,
-                "sort": 1,
-                "remark": null,
-                "dept_belong_id": null,
-                "children": []
-            },
-            {
-                "label": "外置0.05折",
-                "value": "5",
-                "parent": 66,
-                "type": 1,
-                "color": "primary",
-                "is_value": false,
-                "status": true,
-                "sort": 1,
-                "remark": null,
-                "dept_belong_id": null,
-                "children": []
-            },
-            {
-                "label": "内置0.05折",
-                "value": "6",
-                "parent": 66,
-                "type": 1,
-                "color": "primary",
-                "is_value": false,
-                "status": true,
-                "sort": 1,
-                "remark": null,
-                "dept_belong_id": null,
-                "children": []
-            },
-            {
-                "label": "未知",
-                "value": "0",
-                "parent": 66,
-                "type": 1,
-                "color": "primary",
-                "is_value": false,
-                "status": true,
-                "sort": 1,
-                "remark": null,
-                "dept_belong_id": null,
                 "children": []
             }
         ]
@@ -983,7 +836,6 @@
         "status": true,
         "sort": 13,
         "remark": null,
-        "dept_belong_id": null,
         "children": [
             {
                 "label": "未上线",
@@ -995,7 +847,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -1008,7 +859,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -1021,7 +871,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -1034,7 +883,6 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -1047,86 +895,79 @@
                 "status": true,
                 "sort": 1,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             }
         ]
     },
     {
-        "label": "游戏发行",
-        "value": "game_issue",
+        "label": "授权书状态",
+        "value": "authorizationletter_status",
         "parent": null,
         "type": 0,
         "color": null,
         "is_value": false,
         "status": true,
-        "sort": 14,
+        "sort": 15,
         "remark": null,
-        "dept_belong_id": null,
         "children": [
             {
-                "label": "大混服",
+                "label": "未生成",
+                "value": "0",
+                "parent": 95,
+                "type": 1,
+                "color": "warning",
+                "is_value": false,
+                "status": true,
+                "sort": 1,
+                "remark": null,
+                "children": []
+            },
+            {
+                "label": "已生成",
                 "value": "1",
-                "parent": 78,
+                "parent": 95,
                 "type": 1,
                 "color": "success",
                 "is_value": false,
                 "status": true,
-                "sort": 1,
+                "sort": 2,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
-                "label": "小混服",
+                "label": "正在生成",
                 "value": "2",
-                "parent": 78,
-                "type": 1,
-                "color": "success",
-                "is_value": false,
-                "status": true,
-                "sort": 1,
-                "remark": null,
-                "dept_belong_id": null,
-                "children": []
-            },
-            {
-                "label": "专服",
-                "value": "3",
-                "parent": 78,
+                "parent": 95,
                 "type": 1,
                 "color": "primary",
                 "is_value": false,
                 "status": true,
-                "sort": 1,
+                "sort": 3,
                 "remark": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
-                "label": "未知",
-                "value": "0",
-                "parent": 78,
+                "label": "生成失败",
+                "value": "3",
+                "parent": 95,
+                "type": 1,
+                "color": "danger",
+                "is_value": false,
+                "status": true,
+                "sort": 4,
+                "remark": null,
+                "children": []
+            },
+            {
+                "label": "发送失败",
+                "value": "4",
+                "parent": 95,
                 "type": 1,
                 "color": "info",
                 "is_value": false,
                 "status": true,
-                "sort": 1,
+                "sort": 5,
                 "remark": null,
-                "dept_belong_id": null,
-                "children": []
-            },
-            {
-                "label": "大大混服",
-                "value": "4",
-                "parent": 78,
-                "type": 1,
-                "color": "success",
-                "is_value": false,
-                "status": true,
-                "sort": 1,
-                "remark": null,
-                "dept_belong_id": null,
                 "children": []
             }
         ]

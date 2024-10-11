@@ -6,6 +6,9 @@
 @Created on: 2022/9/21 16:30
 @Remark:
 """
+import json
+
+from celery import current_app
 from django.core.exceptions import ValidationError
 from django_celery_beat.models import PeriodicTask, CrontabSchedule, cronexp, IntervalSchedule
 from rest_framework import serializers
@@ -139,3 +142,24 @@ class CeleryTaskModelViewSet(CustomModelViewSet):
         instance.enabled = body_data.get('enabled')
         instance.save()
         return SuccessResponse(msg="修改成功", data=None)
+
+    @action(detail=True, methods=['post'])
+    def run_task(self, request, *args, **kwargs):
+        """运行任务"""
+        instance = self.get_object()
+        task_name = instance.task
+        task_args = instance.args
+        task_kwargs = instance.kwargs
+
+        celery_task = current_app.tasks.get(task_name)
+        if not celery_task:
+            return ErrorResponse(msg="任务不存在", data=None)
+
+        try:
+            args = json.loads(task_args) if task_args else []
+            kwargs = json.loads(task_kwargs) if task_kwargs else {}
+        except ValueError as e:
+            return ErrorResponse(msg=f"参数解析错误: {str(e)}", data=None)
+
+        celery_task.apply_async(args=args, kwargs=kwargs)
+        return SuccessResponse(msg="任务已执行", data=None)

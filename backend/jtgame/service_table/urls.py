@@ -14,5 +14,6 @@ from .views import *
 
 router = DefaultRouter()
 router.register(r'ServiceTableTemplate', ServiceTableTemplateViewSet)
+router.register(r'ServiceTableNormal', ServiceTableNormalViewSet)
 
 urlpatterns = router.urls

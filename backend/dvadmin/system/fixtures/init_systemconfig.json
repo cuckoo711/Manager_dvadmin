@@ -11,7 +11,6 @@
         "rule": null,
         "placeholder": null,
         "setting": null,
-        "dept_belong_id": null,
         "children": [
             {
                 "parent": 1,
@@ -25,14 +24,13 @@
                 "rule": [],
                 "placeholder": "请输入网站标题",
                 "setting": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
                 "parent": 1,
                 "title": "网站小图标",
                 "key": "web_favicon",
-                "value": "https://gameManageApi.jingtanggame.com/media/files\\9\\d\\9dab34a0563add888db70438265fd614.png",
+                "value": "https://gamemanageapi.jingtanggame.com/media/files/2/b/2b5939f20d7cb8eb1e4a44ad5c0c7118.png",
                 "sort": 1,
                 "status": true,
                 "data_options": null,
@@ -40,7 +38,6 @@
                 "rule": [],
                 "placeholder": "请输入网站小图标",
                 "setting": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -60,7 +57,6 @@
                 ],
                 "placeholder": "请选择",
                 "setting": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -80,7 +76,133 @@
                 ],
                 "placeholder": "请输入默认密码",
                 "setting": null,
-                "dept_belong_id": null,
+                "children": []
+            },
+            {
+                "parent": 1,
+                "title": "网站域名",
+                "key": "base_url",
+                "value": "https://gamemanageapi.jingtanggame.com/",
+                "sort": 2,
+                "status": true,
+                "data_options": null,
+                "form_item_type": 0,
+                "rule": [
+                    "{ \"type\": \"url\", \"message\": \"请输入正确的URL地址\"}"
+                ],
+                "placeholder": "请输入网站绑定的域名",
+                "setting": null,
+                "children": []
+            }
+        ]
+    },
+    {
+        "parent": null,
+        "title": "文件存储配置",
+        "key": "file_storage",
+        "value": null,
+        "sort": 0,
+        "status": true,
+        "data_options": null,
+        "form_item_type": 0,
+        "rule": null,
+        "placeholder": null,
+        "setting": null,
+        "children": [
+            {
+                "parent": 21,
+                "title": "存储引擎",
+                "key": "file_engine",
+                "value": "local",
+                "sort": 1,
+                "status": true,
+                "data_options": null,
+                "form_item_type": 0,
+                "rule": [
+                    "{\"required\": true, \"message\": \"必填项不能为空\"}"
+                ],
+                "placeholder": "请选择存储引擎",
+                "setting": null,
+                "children": []
+            },
+            {
+                "parent": 21,
+                "title": "文件是否备份",
+                "key": "file_backup",
+                "value": false,
+                "sort": 2,
+                "status": true,
+                "data_options": null,
+                "form_item_type": 9,
+                "rule": [
+                    "{\"required\": true, \"message\": \"必填项不能为空\"}"
+                ],
+                "placeholder": "启用云存储时,文件是否备份到本地",
+                "setting": null,
+                "children": []
+            },
+            {
+                "parent": 21,
+                "title": "阿里云-AccessKey",
+                "key": "aliyun_access_key",
+                "value": null,
+                "sort": 3,
+                "status": false,
+                "data_options": null,
+                "form_item_type": 0,
+                "rule": [
+                    "{\"required\": true, \"message\": \"必填项不能为空\"}"
+                ],
+                "placeholder": "请输入AccessKey",
+                "setting": null,
+                "children": []
+            },
+            {
+                "parent": 21,
+                "title": "阿里云-Secret",
+                "key": "aliyun_access_secret",
+                "value": null,
+                "sort": 4,
+                "status": false,
+                "data_options": null,
+                "form_item_type": 0,
+                "rule": [
+                    "{\"required\": true, \"message\": \"必填项不能为空\"}"
+                ],
+                "placeholder": "请输入Secret",
+                "setting": null,
+                "children": []
+            },
+            {
+                "parent": 21,
+                "title": "阿里云-Endpoint",
+                "key": "aliyun_endpoint",
+                "value": null,
+                "sort": 5,
+                "status": false,
+                "data_options": null,
+                "form_item_type": 0,
+                "rule": [
+                    "{\"required\": true, \"message\": \"必填项不能为空\"}"
+                ],
+                "placeholder": "请输入Endpoint",
+                "setting": null,
+                "children": []
+            },
+            {
+                "parent": 21,
+                "title": "阿里云-上传路径",
+                "key": "aliyun_path",
+                "value": "/media/",
+                "sort": 5,
+                "status": false,
+                "data_options": null,
+                "form_item_type": 0,
+                "rule": [
+                    "{\"required\": true, \"message\": \"必填项不能为空\"}"
+                ],
+                "placeholder": "请输入上传路径",
+                "setting": null,
                 "children": []
             }
         ]
@@ -97,7 +219,6 @@
         "rule": null,
         "placeholder": null,
         "setting": null,
-        "dept_belong_id": null,
         "children": [
             {
                 "parent": 6,
@@ -111,7 +232,6 @@
                 "rule": [],
                 "placeholder": "请输入网站标题",
                 "setting": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -131,7 +251,6 @@
                 ],
                 "placeholder": "请输入网站名称",
                 "setting": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -140,9 +259,9 @@
                 "key": "site_logo",
                 "value": [
                     {
-                        "uid": 1714146815777,
-                        "url": "https://gameManageApi.jingtanggame.com/media/files\\9\\d\\9dab34a0563add888db70438265fd614.png",
-                        "name": "rounded_logo.png",
+                        "uid": 1721958634334,
+                        "url": "https://gamemanageapi.jingtanggame.com/media/files/2/b/2b5939f20d7cb8eb1e4a44ad5c0c7118.png",
+                        "name": "QQ_1721798665418.png",
                         "status": "success"
                     }
                 ],
@@ -153,7 +272,6 @@
                 "rule": [],
                 "placeholder": "请上传网站logo",
                 "setting": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -162,8 +280,10 @@
                 "key": "login_background",
                 "value": [
                     {
-                        "url": "https://gameManageApi.jingtanggame.com/media/files\\3\\1\\310ed3b261f985c129f5deedbf8f5673.jpg",
-                        "name": "e1d2dda10ece26ea011f3b6c1c90b3e2.jpg"
+                        "uid": 1721958634337,
+                        "url": "https://gamemanageapi.jingtanggame.com/media/files/3/1/310ed3b261f985c129f5deedbf8f5673.jpg",
+                        "name": "e1d2dda10ece26ea011f3b6c1c90b3e2.jpg",
+                        "status": "success"
                     }
                 ],
                 "sort": 3,
@@ -173,7 +293,6 @@
                 "rule": [],
                 "placeholder": "请上传登录背景页",
                 "setting": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -193,14 +312,13 @@
                 ],
                 "placeholder": "请输入版权信息",
                 "setting": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
                 "parent": 6,
                 "title": "备案信息",
                 "key": "keep_record",
-                "value": " ",
+                "value": " 沪ICP备16021329号-1",
                 "sort": 5,
                 "status": true,
                 "data_options": null,
@@ -213,7 +331,6 @@
                 ],
                 "placeholder": "请输入备案信息",
                 "setting": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -228,7 +345,6 @@
                 "rule": "",
                 "placeholder": "请输入帮助信息",
                 "setting": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -243,7 +359,6 @@
                 "rule": [],
                 "placeholder": "请填写隐私链接",
                 "setting": null,
-                "dept_belong_id": null,
                 "children": []
             },
             {
@@ -258,7 +373,6 @@
                 "rule": [],
                 "placeholder": "请输入条款链接",
                 "setting": null,
-                "dept_belong_id": null,
                 "children": []
             }
         ]

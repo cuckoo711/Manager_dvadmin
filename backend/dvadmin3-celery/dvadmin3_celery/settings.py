@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from application import settings
 
 # ================================================= #
@@ -47,6 +49,35 @@ if not hasattr(settings, 'CELERY_RESULT_BACKEND'):
 if not hasattr(settings, 'CELERYBEAT_SCHEDULER'):
     settings.CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
 
+if not hasattr(settings, 'CELERY_ACCEPT_CONTENT'):
+    settings.CELERY_ACCEPT_CONTENT = ['json']
+
+if not hasattr(settings, 'CELERY_TASK_SERIALIZER'):
+    settings.CELERY_TASK_SERIALIZER = 'json'
+
+if not hasattr(settings, 'CELERY_RESULT_SERIALIZER'):
+    settings.CELERY_RESULT_SERIALIZER = 'json'
+
+if not hasattr(settings, 'CELERY_TIMEZONE'):
+    settings.CELERY_TIMEZONE = 'Asia/Shanghai'
+
+if not hasattr(settings, 'CELERY_ENABLE_UTC'):
+    settings.CELERY_ENABLE_UTC = False
+
+if not hasattr(settings, 'DJANGO_CELERY_BEAT_TZ_AWARE'):
+    settings.DJANGO_CELERY_BEAT_TZ_AWARE = False
+
+if not hasattr(settings, 'CELERY_TASK_TRACK_STARTED'):
+    settings.CELERY_TASK_TRACK_STARTED = True
+
+if not hasattr(settings, 'CELERY_TASK_TIME_LIMIT'):
+    settings.CELERY_TASK_TIME_LIMIT = 30 * 60
+
+if not hasattr(settings, 'CELERY_TASK_SOFT_TIME_LIMIT'):
+    settings.CELERY_TASK_SOFT_TIME_LIMIT = 30 * 60
+
+settings.CELERY_broker_connection_retry_on_startup = True
+
 # ********** 注册路由 **********
 settings.PLUGINS_URL_PATTERNS += plugins_url_patterns
 
@@ -54,3 +85,5 @@ settings.PLUGINS_URL_PATTERNS += plugins_url_patterns
 CELERY_ENABLE_UTC = False
 DJANGO_CELERY_BEAT_TZ_AWARE = False
 broker_connection_retry_on_startup = True
+CELERY_broker_connection_retry_on_startup = True
+
