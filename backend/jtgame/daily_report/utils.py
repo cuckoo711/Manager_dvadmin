@@ -314,7 +314,8 @@ def RenewConsole(account: ConsoleAccount, instance_id: str):
     )
 
     try:
-        result = api_instance.renew_instance(renew_instance_request)
-        return {'status': True, 'message': '续费成功', 'data': result.to_dict()}
+        result = api_instance.renew_instance(renew_instance_request).to_dict()
+        del configuration, api_instance, renew_instance_request
+        return {'status': True, 'message': '续费成功', 'data': result}
     except ApiException as e:
         return {'status': False, 'message': '续费失败', 'data': str(e)}

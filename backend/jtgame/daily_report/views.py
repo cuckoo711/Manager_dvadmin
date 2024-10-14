@@ -9,7 +9,7 @@ from dvadmin.utils.backends import logger
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 from jtgame.daily_report.models import ConsoleAccount, QuickAccount, ReportData, Consoles
-from jtgame.daily_report.tasks import task__update_consoles
+from jtgame.daily_report.tasks import task__update_consoles, task__renew
 from jtgame.daily_report.utils import RenewConsole
 
 
@@ -83,9 +83,7 @@ class ConsolesViewSet(CustomModelViewSet):
     @action(detail=False, methods=['get'])
     def manual_refresh(self, request):
         try:
-            # task__make_daily_report.delay()
-            # DailyReport().make_daily_report(update=True)
-            task__update_consoles.delay()
+            task__update_consoles.apply_async().get()
             return JsonResponse({"message": "更新操作已提交", "status": True})
         except Exception as e:
             return JsonResponse({"message": f"服务器错误: {e}", "status": False})
@@ -97,54 +95,9 @@ class ConsolesViewSet(CustomModelViewSet):
             if instance.renewal_status:
                 return JsonResponse({'status': False, 'message': '续费失败', 'data': '服务器正在续费中，请稍后再试'})
 
-            instance_id = instance.instance_id
-            instance_account = instance.account
-
-            # 通过instance_id和account找到对应的服务器账号
-            console_account = ConsoleAccount.objects.filter(account=instance_account).first()
-            if not console_account:
-                raise Exception('未找到对应的服务器账号')
-            instance.renewal_status = True
-            instance.save()
-            response = RenewConsole(console_account, instance_id)
-
-            # 更新日报
-            logger.info('准备更新服务器信息, 等待5秒...')
-            sleep(3)
-            # DailyReport().make_daily_report(update=True)
-            task__update_consoles.delay()
-            logger.info('更新服务器信息完成')
-            instance.renewal_status = False
-            instance.save()
+            response = task__renew.apply_async((instance.instance_id, instance.account)).get()
+            sleep(5)
+            task__update_consoles.apply_async().get()
             return JsonResponse(response)
         except Exception as e:
             return JsonResponse({'status': False, 'message': '续费失败', 'data': str(e)})
-
-# @csrf_exempt
-# def get_report(request):
-#     if request.method == 'POST':
-#         try:
-#             post_data = json.loads(request.body)
-#             if not post_data or 'date' not in post_data:
-#                 return JsonResponse({"error": "Invalid data"}, status=400)
-#             result = ReportData.objects.filter(date=post_data.get('date')).first()
-#             return JsonResponse(result.data if result else {}, status=200)
-#         except Exception as e:
-#             return JsonResponse({"error": f"Server error: {e}"}, status=500)
-#     else:
-#         date = datetime.now().strftime('%Y-%m-%d')
-#         result = ReportData.objects.filter(date=date).first()
-#         return JsonResponse(result.data if result else {}, status=200)
-
-
-# @csrf_exempt
-# def manual_update(request):
-#     print('manual_update')
-#     if request.method == 'GET':
-#         try:
-#             task__make_daily_report.delay()
-#             return JsonResponse({"message": "更新任务已经开始"})
-#         except Exception as e:
-#             return JsonResponse({"error": f"服务器错误: {e}"})
-#     else:
-#         return JsonResponse({"error": "请求方法不允许"})

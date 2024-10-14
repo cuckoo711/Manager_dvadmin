@@ -7,10 +7,10 @@ FILE NAME: views.py
 Editor: 30386
 """
 import os
-import re
-from datetime import timedelta
+import shutil
+from datetime import datetime
 
-import pandas as pd
+from celery import chain
 from django.http import JsonResponse, HttpResponse
 from rest_framework import serializers
 from rest_framework.decorators import action
@@ -20,6 +20,7 @@ from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 from jtgame.game_manage.models import Channel
 from jtgame.service_table.models import ServiceTableTemplate, ServiceTableNormal
+from jtgame.service_table.tasks import task__generate_service_table
 from jtgame.service_table.utils import build_output_path
 
 
@@ -115,43 +116,8 @@ class ServiceTableNormalViewSet(CustomModelViewSet):
                 if not normal:
                     return JsonResponse({"error": "未找到开服表"}, status=200)
 
-                output_path = build_output_path()
-                first_service_path = f"{output_path}/{normal.game_name}_带首服.xlsx"
-                no_first_service_path = f"{output_path}/{normal.game_name}.xlsx"
-                start_datetime = normal.open_datetime
-                frequency = normal.open_frequency
-                count = normal.open_count
-                normal.copy_content = ''
-                data = []
-
-                server_name_match = re.search(r"(\D+)(\d+)(\D*)", normal.open_name)
-                if not server_name_match:
-                    return JsonResponse({"error": "开服名称格式错误"}, status=200)
-                server_name_prefix = server_name_match.group(1) + '{}' + server_name_match.group(3)
-                server_name_suffix = int(server_name_match.group(2))
-
-                for _ in range(count + 1):
-                    server_name = server_name_prefix.format(server_name_suffix)
-                    current_date = start_datetime.strftime("%Y/%m/%d")
-                    current_time = start_datetime.strftime("%H:%M:%S")
-                    current_datetime = start_datetime.strftime("%Y/%m/%d %H:%M")
-                    data.append([normal.game_name, current_date, current_time,
-                                 current_datetime, server_name, server_name_suffix])
-                    normal.copy_content += f"{server_name}\t{current_time}" + '\n'.join('' for _ in range(frequency)) + '\n'
-                    start_datetime += timedelta(days=frequency)
-                    server_name_suffix += 1
-
-                columns = ['游戏名', '日期', '时间', '开服时间', '区服名称', '区服序号']
-                df = pd.DataFrame(data, columns=columns)
-                df.to_excel(first_service_path, index=False)
-                df.iloc[1:].to_excel(no_first_service_path, index=False)
-
-                normal.first_service_path = first_service_path
-                normal.no_first_service_path = no_first_service_path
-
-                normal.generate_status = '1'
-                normal.save()
-                return JsonResponse({"message": "生成成功"}, status=200)
+                response = task__generate_service_table(normal.id).apply_async().get()
+                return JsonResponse(response, status=200)
             except Exception as e:
                 logger.error(f"生成开服表失败，错误信息：{str(e)}")
                 return JsonResponse({"error": f"生成失败: {e}"}, status=200)
@@ -177,7 +143,8 @@ class ServiceTableNormalViewSet(CustomModelViewSet):
                 with open(normal.first_service_path, 'rb') as f:
                     response = HttpResponse(
                         f.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-                    response['Content-Disposition'] = f'attachment; filename={os.path.basename(normal.first_service_path)}'
+                    response[
+                        'Content-Disposition'] = f'attachment; filename={os.path.basename(normal.first_service_path)}'
                     return response
             except Exception as e:
                 logger.error(f"下载带首服表失败，错误信息：{str(e)}")
@@ -204,9 +171,58 @@ class ServiceTableNormalViewSet(CustomModelViewSet):
                 with open(normal.no_first_service_path, 'rb') as f:
                     response = HttpResponse(
                         f.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-                    response['Content-Disposition'] = f'attachment; filename={os.path.basename(normal.no_first_service_path)}'
+                    response[
+                        'Content-Disposition'] = f'attachment; filename={os.path.basename(normal.no_first_service_path)}'
                     return response
             except Exception as e:
                 logger.error(f"下载不带首服表失败，错误信息：{str(e)}")
                 return JsonResponse({"error": "下载失败"}, status=200)
+        return JsonResponse({"error": "请求方式错误"}, status=200)
+
+    @action(methods=['post'], detail=False, name='批量下载开服表', url_path='batchDownloadServiceTable')
+    def batch_download_service_table(self, request, pk=None):
+        """
+        批量下载开服表
+        """
+        if request.user.is_anonymous:
+            return JsonResponse({"error": "未登录用户无法下载文件"}, status=200)
+
+        if request.method == 'POST':
+            data = request.data
+            if "ids" not in data:
+                return JsonResponse({"error": "未选择开服表"}, status=200)
+            ids = data.get("ids")
+            first_service_path_list = []
+            no_first_service_path_list = []
+            for id_ in ids:
+                normal = ServiceTableNormal.objects.filter(id=id_).first()
+                if not normal:
+                    continue
+                if not normal.first_service_path:
+                    continue
+                first_service_path_list.append(normal.first_service_path)
+                if not normal.no_first_service_path:
+                    continue
+                no_first_service_path_list.append(normal.no_first_service_path)
+            temp_path = build_output_path()
+            today = datetime.now().strftime("%Y-%m-%d")
+            today_path = f"{temp_path}/{today}开服表"
+            today_path_zip = f"{temp_path}/{today}开服表.zip"
+            first_service_path = f"{today_path}/{today}开服表_带首服"
+            no_first_service_path = f"{today_path}/{today}开服表_不带首服"
+            os.makedirs(first_service_path, exist_ok=True)
+            os.makedirs(no_first_service_path, exist_ok=True)
+
+            for path in first_service_path_list:
+                shutil.copy(path, first_service_path)
+            for path in no_first_service_path_list:
+                shutil.copy(path, no_first_service_path)
+
+            shutil.make_archive(today_path, 'zip', today_path)
+            shutil.rmtree(today_path)
+
+            with open(today_path_zip, 'rb') as f:
+                response = HttpResponse(f.read(), content_type='application/zip')
+                return response
+
         return JsonResponse({"error": "请求方式错误"}, status=200)
