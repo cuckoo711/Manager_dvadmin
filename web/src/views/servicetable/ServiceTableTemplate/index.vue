@@ -153,7 +153,6 @@ export default defineComponent({
   method: {},
   components: {UploadFilled},
   setup() {
-
     const {crudBinding, crudRef, crudExpose} = useFs({createCrudOptions});
     onMounted(() => {
       crudExpose.doRefresh();
@@ -191,7 +190,6 @@ export default defineComponent({
     };
 
     const onRemove: UploadProps['onRemove'] = (_) => {
-      // console.log('remove', uploadFile)
       fileList.value = []
     }
 
@@ -206,12 +204,10 @@ export default defineComponent({
         url: '/api/channel_manage/?page=1&limit=99999',
         method: 'get',
       });
-      console.log('response', response);
       channel_options.value = response.data.map((item: any) => ({
         value: item.id,
         label: item.name,
       }));
-      console.log('channel_options', channel_options.value);
     };
 
     const submitTemplate = async () => {
@@ -280,6 +276,4 @@ export default defineComponent({
     }
   },
 });
-</script>
-<script setup lang="ts">
 </script>

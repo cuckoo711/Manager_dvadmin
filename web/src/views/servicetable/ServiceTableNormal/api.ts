@@ -68,3 +68,13 @@ export function DownloadNoFirst(id: any) {
 		responseType: 'blob',
     });
 }
+
+
+export function batchDownloadServiceTable(data: any) {
+    return request({
+        url: apiPrefix + 'batchDownloadServiceTable/',
+        method: 'post',
+        data: data,
+        responseType: 'blob',
+    });
+}

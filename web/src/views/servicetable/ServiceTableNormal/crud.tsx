@@ -16,6 +16,8 @@ import {dictionary} from '/@/utils/dictionary';
 import {errorMessage, infoMessage, successMessage, warningMessage} from '/@/utils/message';
 import {auth} from '/@/utils/authFunction'
 import {commonCrudConfig} from "/@/utils/commonCrud";
+import {nextTick, ref} from "vue";
+import XEUtils from "xe-utils";
 // 注意：以下FastCrud配置应替换为实际的JavaScript/TypeScript代码片段
 export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps): CreateCrudOptionsRet {
     const pageRequest = async (query: UserPageQuery) => {
@@ -40,8 +42,42 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
     const downloadnofirstRequest = async (row: any) => {
         return await api.DownloadNoFirst(row.id);
     }
+    // 记录选中的行
+	const selectedRows = ref<any>([]);
+
+	const onSelectionChange = (changed: any) => {
+		const tableData = crudExpose.getTableData();
+		const unChanged = tableData.filter((row: any) => !changed.includes(row));
+		// 添加已选择的行
+		XEUtils.arrayEach(changed, (item: any) => {
+			const ids = XEUtils.pluck(selectedRows.value, 'id');
+			if (!ids.includes(item.id)) {
+				selectedRows.value = XEUtils.union(selectedRows.value, [item]);
+			}
+		});
+		// 剔除未选择的行
+		XEUtils.arrayEach(unChanged, (unItem: any) => {
+			selectedRows.value = XEUtils.remove(selectedRows.value, (item: any) => item.id !== unItem.id);
+		});
+	};
+	const toggleRowSelection = () => {
+		// 多选后，回显默认勾选
+		const tableRef = crudExpose.getBaseTableRef();
+		const tableData = crudExpose.getTableData();
+		const selected = XEUtils.filter(tableData, (item: any) => {
+			const ids = XEUtils.pluck(selectedRows.value, 'id');
+			return ids.includes(item.id);
+		});
+
+		nextTick(() => {
+			XEUtils.arrayEach(selected, (item) => {
+				tableRef.toggleRowSelection(item, true);
+			});
+		});
+	};
 
     return {
+        selectedRows,
         crudOptions: {
             request: {
                 pageRequest,
@@ -82,10 +118,10 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         show: auth("ServiceTableNormal:Generate"),
                         click: async (obj: any) => {
                             const result = await generateServiceTable(obj.row);
-                            if (result.status) {
+                            if (result.message) {
                                 successMessage(`${result.message}`);
                             } else {
-                                errorMessage(`${result.message}`);
+                                errorMessage(`${result.error}`);
                             }
                             await crudExpose?.doRefresh();
                         }
@@ -145,7 +181,6 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                                         }
                                     } catch (e) {
                                         errorMessage(`调用失败: ${e}`);
-
                                     }
                                 } else {
                                     warningMessage("当前任务状态不支持下载");
@@ -203,6 +238,11 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     },
                 },
             },
+            table: {
+				rowKey: 'id', //设置你的主键id， 默认rowKey=id
+				onSelectionChange,
+				onRefreshed: () => toggleRowSelection(),
+			},
             form: {
                 col: {span: 24},
                 labelWidth: '110px',
@@ -212,6 +252,16 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 },
             },
             columns: {
+                $checked: {
+                    title: '选择',
+                    form: {show: false},
+                    column: {
+                        type: 'selection',
+                        align: 'center',
+                        width: '70px',
+                        columnSetDisabled: true, //禁止在列设置中选择
+                    },
+                },
                 _index: {
                     title: '序号',
                     form: {show: false},
