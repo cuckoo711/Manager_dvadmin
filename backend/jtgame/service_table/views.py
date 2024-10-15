@@ -67,13 +67,14 @@ class ServiceTableTemplateViewSet(CustomModelViewSet):
                     with open(template_file_path, 'wb') as f:
                         for chunk in template_file.chunks():
                             f.write(chunk)
-                    template_fields = template_fields.strip().replace(' ', '').replace('\n', '').replace('，', ',')
+                    template_fields = template_fields.strip().replace(' ', '').replace('\n', '').replace(
+                        '，', ',').replace('、', ',')
                     template = ServiceTableTemplate.objects.create(
                         channel=channel,
                         template_path=template_file_path,
                         template_fields=template_fields,
                         is_split=is_split,
-                        is_enable=True,
+                        is_enable="1",
                         creator=request.user,
                         dept_belong_id=request.user.dept_belong_id
                     )
