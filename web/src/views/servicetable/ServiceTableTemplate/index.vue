@@ -1,5 +1,5 @@
+<!--suppress ALL -->
 <template>
-  <!--suppress HtmlUnknownTag -->
   <fs-page>
     <div>
       <el-container>
@@ -21,9 +21,10 @@
                     content="请选择模板对应渠道"
                     placement="bottom"
                 >
-                  <el-select placeholder="请选择渠道" clearable filterable v-model="channel_id" style="width: 200px">
-                    <el-option v-for="item in channel_options" :key="item.value" :label="item.label"
-                               :value="item.value"/>
+                  <el-select placeholder="请选择渠道" clearable filterable v-model="serviceTemplateSelectedChannelId"
+                             style="width: 200px">
+                    <el-option v-for="channel in serviceTemplateChannelOptions" :key="channel.value" :label="channel.label"
+                               :value="channel.value"/>
                   </el-select>
                 </el-tooltip>
               </template>
@@ -40,6 +41,8 @@
                     class="box-item"
                     effect="dark"
                     content="
+                        请按照以下格式填写模板表头字段：<br>
+                        ### 注意, 空格请使用 '&&' 代替 ###<br>
                         标签信息：<br>
                         - 游戏名：game_name<br>
                         - 游戏 ID：game_id<br>
@@ -68,7 +71,7 @@
 
                 >
                   <el-input
-                      v-model="textarea"
+                      v-model="serviceTemplateHeaderFields"
                       :rows="1"
                       type="textarea"
                       placeholder="请输入模板表头字段"
@@ -89,7 +92,7 @@
                     content="如选择分表，将按照游戏将数据分表存储，否则将存储在同一张表中"
                     placement="bottom"
                 >
-                  <el-switch v-model="isSplit" active-value="1" inactive-value="2"
+                  <el-switch v-model="serviceTemplateIsSplitTable" active-value="1" inactive-value="2"
                              active-text="是" inactive-text="否" style="margin-left: 10px;"/>
                 </el-tooltip>
               </template>
@@ -109,16 +112,16 @@
                     placement="bottom"
                 >
                   <el-upload
-                      ref="upload"
+                      ref="serviceTemplateUploadRef"
                       name="file"
                       accept=".xlsx,.xls"
                       :show-file-list="true"
                       :auto-upload="false"
-                      :before-remove="beforeRemove"
-                      :on-remove="onRemove"
-                      :on-exceed="handleExceed"
+                      :before-remove="serviceTemplateBeforeRemoveFile"
+                      :on-remove="serviceTemplateOnRemoveFile"
+                      :on-exceed="serviceTemplateHandleFileExceed"
                       :limit="1"
-                      v-model:file-list="fileList"
+                      v-model:file-list="serviceTemplateUploadedFileList"
                   >
                     <el-button type="primary">选择文件</el-button>
                   </el-upload>
@@ -126,13 +129,13 @@
               </template>
             </el-table-column>
           </el-table>
-          <el-button type="primary" style="margin: 10px; float: right;" @click="submitTemplate">提交</el-button>
+          <el-button type="primary" style="margin: 10px; float: right;" @click="serviceTemplateSubmit">
+            提交
+          </el-button>
         </el-card>
       </el-container>
     </div>
-
     <div :style="{height: 'calc(100% - 240px)'}">
-      <!--suppress HtmlUnknownTag -->
       <fs-crud ref="crudRef" v-bind="crudBinding"></fs-crud>
     </div>
   </fs-page>
@@ -141,35 +144,30 @@
 <script lang="ts">
 import {defineComponent, onMounted, ref} from "vue";
 import {UploadFilled} from "@element-plus/icons-vue";
-import {dict, useFs} from '@fast-crud/fast-crud';
+import {useFs} from '@fast-crud/fast-crud';
 import {createCrudOptions} from './crud';
 import {request} from "/@/utils/service";
 import {ElMessage, ElMessageBox, genFileId, UploadFile, UploadInstance, UploadProps, UploadRawFile} from "element-plus";
-import {uploadTemplate} from "/@/views/servicetable/ServiceTableTemplate/api";
+import {uploadTemplate} from "./api";
 
 export default defineComponent({
-  name: 'RevenueSplit',
-  methods: {dict},
-  method: {},
+  name: 'ServiceTableTemplate',
   components: {UploadFilled},
   setup() {
     const {crudBinding, crudRef, crudExpose} = useFs({createCrudOptions});
-    onMounted(() => {
-      crudExpose.doRefresh();
-    });
+    const serviceTemplateChannelOptions = ref<{ value: string; label: string }[]>([]);
+    const serviceTemplateSelectedChannelId = ref<string>('');
+    const serviceTemplateUploadInstance = ref<UploadInstance>();
+    const serviceTemplateUploadedFileList = ref<UploadFile[]>([]);
+    const serviceTemplateHeaderFields = ref<string>('');
+    const serviceTemplateIsSplitTable = ref<string>('0');
 
-    const channel_options = ref<{ value: string; label: string }[]>([]);
-    const channel_id = ref<string>('');
-    const upload = ref<UploadInstance>();
-    const fileList = ref<UploadFile[]>([]);
-    const templateHeader = ref<string>('');
-    const textarea = ref<string>('');
-    const isSplit = ref<string>('0');
     onMounted(async () => {
-      await getChannelOptions();
+      crudExpose.doRefresh();
+      await serviceTemplateFetchChannelOptions();
     });
 
-    const beforeRemove: UploadProps['beforeRemove'] = async (uploadFile) => {
+    const serviceTemplateBeforeRemoveFile: UploadProps['beforeRemove'] = async (uploadFile) => {
       return ElMessageBox.confirm(
           `取消上传 ${uploadFile.name} ?`,
           '提示',
@@ -189,61 +187,68 @@ export default defineComponent({
       );
     };
 
-    const onRemove: UploadProps['onRemove'] = (_) => {
-      fileList.value = []
-    }
+    const serviceTemplateOnRemoveFile: UploadProps['onRemove'] = (_) => {
+      serviceTemplateUploadedFileList.value = [];
+    };
 
-    const handleExceed: UploadProps['onExceed'] = (files) => {
-      upload.value!.clearFiles()
-      const file = files[0] as UploadRawFile
-      file.uid = genFileId()
-      upload.value!.handleStart(file)
-    }
-    const getChannelOptions = async () => {
+    const serviceTemplateHandleFileExceed: UploadProps['onExceed'] = (files) => {
+      serviceTemplateUploadInstance.value?.clearFiles();
+      const file = files[0] as UploadRawFile;
+      file.uid = genFileId();
+      serviceTemplateUploadInstance.value?.handleStart(file);
+    };
+
+    const serviceTemplateFetchChannelOptions = async () => {
       const response = await request({
         url: '/api/channel_manage/?page=1&limit=99999',
         method: 'get',
       });
-      channel_options.value = response.data.map((item: any) => ({
+      serviceTemplateChannelOptions.value = response.data.map((item: any) => ({
         value: item.id,
         label: item.name,
       }));
     };
 
-    const submitTemplate = async () => {
-      if (!channel_id.value) {
+    const serviceTemplateValidateFileSize = (size: number) => {
+      return size <= 1024 * 1024 * 10;
+    };
+
+    const serviceTemplateShowConfirmation = async (message: string) => {
+      return await ElMessageBox.confirm(message, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).catch(() => false);
+    };
+
+    const serviceTemplateSubmit = async () => {
+      if (!serviceTemplateSelectedChannelId.value) {
         ElMessage.error('请选择渠道');
         return;
       }
-      if (!textarea.value) {
+      if (!serviceTemplateHeaderFields.value) {
         ElMessage.error('请输入模板表头字段');
         return;
       }
-      if (!fileList.value.length) {
+      if (!serviceTemplateUploadedFileList.value.length) {
         ElMessage.error('请上传模板文件');
         return;
       }
-      const size = fileList.value[0].size || 0;
-      if (size > 1024 * 1024 * 10) {
+      const size = serviceTemplateUploadedFileList.value[0].size || 0;
+      if (!serviceTemplateValidateFileSize(size)) {
         ElMessage.error('文件大小不能超过 10MB');
         return;
       }
-      const confirm = await ElMessageBox.confirm('确定提交模板？',
-          '提示',
-          {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).catch(() => false);
+      const confirm = await serviceTemplateShowConfirmation('确定提交模板？');
       if (!confirm) {
         return;
       }
-      const file: any = fileList.value[0].raw || fileList.value[0];
+      const file: any = serviceTemplateUploadedFileList.value[0].raw || serviceTemplateUploadedFileList.value[0];
       try {
         const formData = new FormData();
-        formData.append('channel_id', channel_id.value);
-        formData.append('fields', textarea.value);
-        formData.append('is_split', isSplit.value);
+        formData.append('channel_id', serviceTemplateSelectedChannelId.value);
+        formData.append('fields', serviceTemplateHeaderFields.value);
+        formData.append('is_split', serviceTemplateIsSplitTable.value);
         formData.append('file', file);
         await uploadTemplate(formData);
         ElMessage.success('提交成功');
@@ -252,28 +257,25 @@ export default defineComponent({
         console.error(e);
       }
       await crudExpose.doRefresh();
-    };
-
+    }
 
     return {
       crudBinding,
       crudRef,
       crudExpose,
-      channel_options,
+      serviceTemplateChannelOptions,
 
-      channel_id,
-      templateHeader,
-      fileList,
-      upload,
-      textarea,
-      isSplit,
+      serviceTemplateSelectedChannelId,
+      serviceTemplateHeaderFields,
+      serviceTemplateUploadedFileList,
+      serviceTemplateUploadInstance,
+      serviceTemplateIsSplitTable,
 
-      beforeRemove,
-      onRemove,
-      handleExceed,
-      // getChannelOptions,
-      submitTemplate,
+      serviceTemplateBeforeRemoveFile,
+      serviceTemplateOnRemoveFile,
+      serviceTemplateHandleFileExceed,
+      serviceTemplateSubmit,
     }
   },
-});
+})
 </script>
