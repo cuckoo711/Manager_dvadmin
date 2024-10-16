@@ -61,7 +61,7 @@ const handleBatchDownload = async () => {
   const data = {
     ids: XEUtils.pluck(selectedRows.value, 'id')
   }
-  console.log(data);
+  // console.log(data);
   const response = await batchDownloadServiceTable(data);
   try {
     if (response.data) {

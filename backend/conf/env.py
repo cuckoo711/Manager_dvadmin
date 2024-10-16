@@ -31,7 +31,10 @@ REDIS_PASSWORD = 'CUCKOONB'
 REDIS_HOST = '127.0.0.1'
 REDIS_URL = f'redis://:{REDIS_PASSWORD or ""}@{REDIS_HOST}:6379'
 CELERY_BROKER_URL = f'{REDIS_URL}/{CELERY_BROKER_DB}'
-CELERY_RESULT_BACKEND = f'{REDIS_URL}/{CELERY_RESULT_DB}'
+# CELERY_RESULT_BACKEND = f'{REDIS_URL}/{CELERY_RESULT_DB}'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'  # Backend数据库
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'  # Backend数据库
 # ================================================= #
 # ****************** 功能 启停  ******************* #
 # ================================================= #
@@ -47,7 +50,3 @@ LOGIN_NO_CAPTCHA_AUTH = True
 ALLOWED_HOSTS = ["*"]
 # 列权限中排除App应用
 COLUMN_EXCLUDE_APPS = []
-# 腾讯文档client_id
-TENCENT_DOCX_CLIENT_ID = ''
-# 腾讯文档client_secret
-TENCENT_DOCX_CLIENT_SECRET = ''

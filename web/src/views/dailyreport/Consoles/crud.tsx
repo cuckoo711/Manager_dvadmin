@@ -31,6 +31,9 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
     const addRequest = async ({form}: AddReq) => {
         return await api.AddObj(form);
     };
+    const exportRequest = async (query: UserPageQuery) => {
+        return api.exportData(query);
+    }
 
     return {
         crudOptions: {
@@ -43,6 +46,17 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
             actionbar: {
                 buttons: {
                     add: {show: false},
+                    export:{ //这个export便是导出的按钮
+						text:"导出",//按钮文字
+						title:"导出",//鼠标停留显示的信息
+						click(){
+                            ElMessage({
+                                message: '开始导出所有数据，耗时较长请耐心等待，请勿重复点击...',
+                                type: 'success'
+                            })
+                            return exportRequest(crudExpose!.getSearchFormData())
+						},
+					},
                     refresh: {
                         show: true,
                         text: '手动刷新',

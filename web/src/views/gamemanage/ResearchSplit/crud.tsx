@@ -62,7 +62,6 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                             })
                             return exportRequest(crudExpose!.getSearchFormData())
 						},
-
 					}
                 }
             },

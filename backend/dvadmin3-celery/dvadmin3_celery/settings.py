@@ -40,14 +40,16 @@ settings.TENANT_SHARED_APPS += tenant_shared_apps
 # ********** celery 配置 **********
 if not hasattr(settings, 'BROKER_URL'):
     settings.BROKER_URL = f'{settings.REDIS_URL}/{getattr(settings, "CELERY_BROKER_DB") or 2}'
+    settings.CELERY_BROKER_URL = settings.BROKER_URL
 
 # ********** 执行结果保存位置 **********
 if not hasattr(settings, 'CELERY_RESULT_BACKEND'):
+
     settings.CELERY_RESULT_BACKEND = 'django-db'
 
 # ********** Backend数据库 **********
 if not hasattr(settings, 'CELERYBEAT_SCHEDULER'):
-    settings.CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
+    settings.CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 if not hasattr(settings, 'CELERY_ACCEPT_CONTENT'):
     settings.CELERY_ACCEPT_CONTENT = ['json']
@@ -85,5 +87,4 @@ settings.PLUGINS_URL_PATTERNS += plugins_url_patterns
 CELERY_ENABLE_UTC = False
 DJANGO_CELERY_BEAT_TZ_AWARE = False
 broker_connection_retry_on_startup = True
-CELERY_broker_connection_retry_on_startup = True
 

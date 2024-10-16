@@ -1,6 +1,6 @@
 // // Consoles API - Auto-generated on 2024-07-12 13:49:43
 
-import {request} from '/@/utils/service';
+import {downloadFile, request} from '/@/utils/service';
 import {UserPageQuery, AddReq, DelReq, EditReq, InfoReq} from '@fast-crud/fast-crud';
 
 export const apiPrefix = '/api/consoles/';
@@ -57,4 +57,12 @@ export function ManualRefresh() {
         url: apiPrefix + 'manual_refresh/',
         method: 'get',
     });
+}
+
+export function exportData(params: any) {
+	return downloadFile({
+		url: apiPrefix + 'export_data/',
+		params: params,
+		method: 'get',
+	});
 }

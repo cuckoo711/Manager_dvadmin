@@ -71,14 +71,34 @@ class ConsolesSerializer(CustomModelSerializer):
         fields = '__all__'
 
 
+class ConsolesExportSerializer(CustomModelSerializer):
+    class Meta:
+        model = Consoles
+        fields = '__all__'
+
+
 class ConsolesViewSet(CustomModelViewSet):
     queryset = Consoles.objects.all()
     serializer_class = ConsolesSerializer
+    export_field_label = {
+        "eip_address": "主IPv4地址",
+        "account": "所属账号",
+        "instance_id": "实例ID",
+        "instance_name": "实例名称",
+        "cpus": "CPU",
+        "memory_size": "内存",
+    }
+    export_serializer_class = ConsolesExportSerializer
 
     def get_object(self) -> Consoles:
         filter_kwargs = {'id': self.kwargs['pk']}
         obj = self.queryset.filter(**filter_kwargs).first()
         return obj
+
+    def get_queryset(self):
+        if getattr(self, 'values_queryset', None):
+            return self.values_queryset
+        return super().get_queryset()
 
     @action(detail=False, methods=['get'])
     def manual_refresh(self, request):
