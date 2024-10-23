@@ -1,16 +1,14 @@
 import * as api from './api';
 import {
-    dict,
-    UserPageQuery,
     AddReq,
-    DelReq,
-    EditReq,
-    compute,
     CreateCrudOptionsProps,
-    CreateCrudOptionsRet
+    CreateCrudOptionsRet,
+    DelReq,
+    dict,
+    EditReq,
+    UserPageQuery
 } from '@fast-crud/fast-crud';
 import {dictionary} from '/@/utils/dictionary';
-import {successMessage} from '/@/utils/message';
 import {auth} from "/@/utils/authFunction";
 import {commonCrudConfig} from "/@/utils/commonCrud";
 
@@ -120,10 +118,9 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         show: true,
                     },
                     column: {
-                        // align: 'center',
-                        // width: 300,
-                        // showOverflowTooltip: true,
-                        show: false,
+                        align: 'center',
+                        width: 300,
+                        showOverflowTooltip: true,
                     },
                     form: {
                         rules: [
@@ -154,40 +151,39 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                             }
                         }
                     }
-                }, stop_add_date: {
-                    title: "停新增日期",
-                    type: "date",
-                    column: {
-                        align: 'center',
-                        sortable: true,
-                        width: 120,
-                    },
-                    form: {
-                        component: {
-                            props: {
-                                format: 'YYYY-MM-DD',
-                                valueFormat: 'YYYY-MM-DD'
-                            }
-                        }
-                    }
-                }, stop_operation_date: {
-                    title: "停运营日期",
-                    type: "date",
-                    column: {
-                        align: 'center',
-                        sortable: true,
-                        width: 120,
-                    },
-                    form: {
-                        component: {
-                            props: {
-                                format: 'YYYY-MM-DD',
-                                valueFormat: 'YYYY-MM-DD'
-                            }
-                        }
-                    }
-                },
-                parent: {
+                // }, stop_add_date: {
+                //     title: "停新增日期",
+                //     type: "date",
+                //     column: {
+                //         align: 'center',
+                //         sortable: true,
+                //         width: 120,
+                //     },
+                //     form: {
+                //         component: {
+                //             props: {
+                //                 format: 'YYYY-MM-DD',
+                //                 valueFormat: 'YYYY-MM-DD'
+                //             }
+                //         }
+                //     }
+                // }, stop_operation_date: {
+                //     title: "停运营日期",
+                //     type: "date",
+                //     column: {
+                //         align: 'center',
+                //         sortable: true,
+                //         width: 120,
+                //     },
+                //     form: {
+                //         component: {
+                //             props: {
+                //                 format: 'YYYY-MM-DD',
+                //                 valueFormat: 'YYYY-MM-DD'
+                //             }
+                //         }
+                //     }
+                }, parent: {
                     title: "发行主体",
                     type: "input",
                     column: {
@@ -208,7 +204,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 }, discount: {
                     title: "折算比例",
                     type: "number",
-                    search: { show: true },
+                    search: {show: true},
                     column: {
                         align: 'center',
                         width: 100,

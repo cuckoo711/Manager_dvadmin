@@ -6,14 +6,15 @@ Project Name: Manager_dvadmin
 FILE NAME: urls.py
 Editor: 30386
 """
-from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from .views import *
 
-
 router = DefaultRouter()
+router.register(r'ServiceTableChannel', ServiceTableChannelViewSet)
+router.register(r'ServiceTableMap', ServiceTableMapViewSet)
 router.register(r'ServiceTableTemplate', ServiceTableTemplateViewSet)
 router.register(r'ServiceTableNormal', ServiceTableNormalViewSet)
+router.register(r'ServiceTableSplit', ServiceTableSplitViewSet)
 
 urlpatterns = router.urls

@@ -1,9 +1,9 @@
-// // Consoles API - Auto-generated on 2024-07-12 13:49:43
+// // ServiceTableSplit API - Auto-generated on 2024-10-16 10:26:09
 
-import {downloadFile, request} from '/@/utils/service';
+import {request, uploadRequest} from '/@/utils/service';
 import {UserPageQuery, AddReq, DelReq, EditReq, InfoReq} from '@fast-crud/fast-crud';
 
-export const apiPrefix = '/api/consoles/';
+export const apiPrefix = '/api/ServiceTableSplit/';
 
 export function GetList(query: UserPageQuery) {
     return request({
@@ -36,14 +36,6 @@ export function UpdateObj(obj: EditReq) {
     });
 }
 
-export function RenewObj(obj: EditReq) {
-    return request({
-        url: apiPrefix + obj.id + '/renew/',
-        method: 'put',
-        data: obj,
-    });
-}
-
 export function DelObj(id: DelReq) {
     return request({
         url: apiPrefix + id + '/',
@@ -52,17 +44,17 @@ export function DelObj(id: DelReq) {
     });
 }
 
-export function ManualRefresh() {
+export function generateServiceTable(id: any) {
     return request({
-        url: apiPrefix + 'manual_refresh/',
+        url: apiPrefix + id + '/generateServiceSplitTable/',
         method: 'get',
     });
 }
 
-export function exportData(params: any) {
-	return downloadFile({
-		url: apiPrefix + 'export_data/',
-		params: params,
-		method: 'get',
-	});
+export function DownloadSplitZip(id: any) {
+    return request({
+        url: apiPrefix + id + '/downloadSplitZip/',
+        method: 'get',
+        responseType: 'blob',
+    });
 }

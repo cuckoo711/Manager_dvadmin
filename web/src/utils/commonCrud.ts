@@ -233,16 +233,24 @@ export const commonCrudConfig = (options = {
                         }
                     }
                 },
-                valueResolve(context: any) {
-                    const {key, value} = context
-                    //value解析，就是把组件的值转化为后台所需要的值
-                    //在form表单点击保存按钮后，提交到后台之前执行转化
+                valueResolve(context) {
+                    const {key, value} = context;
                     if (value) {
-                        context.form.create_datetime_after = value[0]
-                        context.form.create_datetime_before = value[1]
+                        // 假设 value 是一个数组并且 value[0] 和 value[1] 都是日期字符串
+                        const startDate = value[0];
+                        const endDate = value[1];
+
+                        // 确保只有一个有效的时间部分
+                        if (typeof startDate === 'string') {
+                            context.form.create_datetime_after = startDate.split(' ')[0];  // 保留日期部分
+                        }
+
+                        if (typeof endDate === 'string') {
+                            context.form.create_datetime_before = endDate.split(' ')[0];  // 保留日期部分
+                        }
                     }
-                    //  ↑↑↑↑↑ 注意这里是form，不是row
                 }
+
             },
             column: {
                 width: 160,

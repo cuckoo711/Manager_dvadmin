@@ -56,7 +56,7 @@ export function DownloadFirst(id: any) {
     return request({
         url: apiPrefix + id + '/DownloadFirst/',
         method: 'get',
-		responseType: 'blob',
+        responseType: 'blob',
     });
 }
 
@@ -65,10 +65,17 @@ export function DownloadNoFirst(id: any) {
     return request({
         url: apiPrefix + id + '/DownloadNoFirst/',
         method: 'get',
-		responseType: 'blob',
+        responseType: 'blob',
     });
 }
 
+export function batchGenerateServiceTable(data: any) {
+    return request({
+        url: apiPrefix + 'batchGenerateServiceTable/',
+        method: 'post',
+        data: data,
+    });
+}
 
 export function batchDownloadServiceTable(data: any) {
     return request({
@@ -76,5 +83,20 @@ export function batchDownloadServiceTable(data: any) {
         method: 'post',
         data: data,
         responseType: 'blob',
+    });
+}
+
+export function ClearServerTable() {
+    return request({
+        url: apiPrefix + 'cleanFiles/',
+        method: 'get',
+    });
+}
+
+export function batchSplitTaskServiceTable(data: any) {
+    return request({
+        url: apiPrefix + 'batchSplitTaskServiceTable/',
+        method: 'post',
+        data: data,
     });
 }

@@ -4,7 +4,8 @@
   </fs-page>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="ServiceTableSplit">
+// ServiceTableSplit Page - Auto-generated on 2024-07-22 11:26:56
 import {ref, onMounted} from 'vue';
 import {useFs} from '@fast-crud/fast-crud';
 import {createCrudOptions} from './crud';

@@ -132,7 +132,7 @@ def handle_game(sheet, messages, coverList):
     return False
 
 
-def process_channel_data(data, game, messages, processed_channels, cover:bool):
+def process_channel_data(data, game, messages, processed_channels, cover: bool):
     load_in = [False, False]
     channel_name = ''
 
@@ -241,7 +241,7 @@ def handle_scheduling(sheet, messages, coverList):
                     game = Games.objects.filter(name=game_name).first()
                     if not game:
                         raise Games.DoesNotExist
-                    if "GameDetail" in coverList:
+                    if "GameDetail" in coverList or not game.quick_name:
                         if not quick.strip():
                             quick = game_name.replace(".", "")
                         game.quick_name = quick

@@ -1,14 +1,27 @@
-import hashlib
 import os
 
-import pandas
 from django.db import models
 
 from dvadmin.utils.models import CoreModel, table_prefix
-from jtgame.game_manage.models import Channel
 
 
 # Create your models here.
+
+class ServiceTableChannel(CoreModel):
+    name = models.CharField(max_length=50, verbose_name='渠道名称')
+    column = models.CharField(max_length=50, verbose_name='列名', null=True, default='')
+
+    class Meta:
+        db_table = table_prefix + 'service_table_channel'
+        verbose_name = '开服表渠道'
+        verbose_name_plural = verbose_name
+        ordering = ('-create_datetime',)
+
+
+class ServiceTableMap(CoreModel):
+    game_name = models.CharField(max_length=50, verbose_name='游戏名称')
+    channel = models.ForeignKey(ServiceTableChannel, on_delete=models.CASCADE, verbose_name='渠道')
+    game_map_name = models.CharField(max_length=50, verbose_name='游戏映射名称')
 
 
 # 开服表模板
@@ -21,10 +34,24 @@ class ServiceTableTemplate(CoreModel):
         ('0', '否'),
         ('1', '是'),
     )
-    channel = models.ForeignKey(Channel, on_delete=models.CASCADE, verbose_name='所属渠道')
-    template_path = models.CharField(max_length=255, verbose_name='模板路径', null=True)
+    OUTPUT_FORMAT = (
+        ('0', 'xls'),
+        ('1', 'xlsx'),
+        ('2', 'csv'),
+    )
+    # 输出引擎
+    OUTPUT_ENGINE = (
+        ('0', 'ExcelWriter'),
+        ('1', 'DataFrame'),
+        ('2', 'Workbook'),
+    )
+
+    channel = models.ForeignKey(ServiceTableChannel, on_delete=models.CASCADE, verbose_name='渠道')
+    template_name = models.CharField(max_length=255, verbose_name='模板名字', null=True)
     template_fields = models.TextField(verbose_name='模板字段')
     is_split = models.CharField(max_length=1, choices=IS_SPLIT, verbose_name='是否分表', default='0')
+    output_format = models.CharField(max_length=1, choices=OUTPUT_FORMAT, verbose_name='输出格式', default='0')
+    output_engine = models.CharField(max_length=1, choices=OUTPUT_ENGINE, verbose_name='输出引擎', default='0')
     is_enable = models.CharField(max_length=1, choices=IS_ENABLE, verbose_name='是否启用', default='1')
 
     class Meta:
@@ -37,17 +64,13 @@ class ServiceTableTemplate(CoreModel):
         self.check_template_fields()
 
     def __str__(self):
-        return self.channel.name + '模板:' + self.template_path
+        return self.channel.name + '模板:' + self.template_name
 
     def check_template_fields(self):
-        self.template_fields = self.template_fields.strip().replace(
-            ' ', '').replace('\n', '').replace('，', ',')
-
-    # 删除条目时删除文件
-    def delete(self, *args, **kwargs):
-        if os.path.exists(self.template_path):
-            os.remove(self.template_path)
-        super().delete(*args, **kwargs)
+        self.template_fields = self.template_fields.strip()
+        if not (self.template_fields.startswith('{') and self.template_fields.endswith('}')):
+            self.template_fields = self.template_fields.replace(
+                ' ', '').replace('\n', '').replace('，', ',')
 
 
 # 开服表通用
@@ -84,3 +107,22 @@ class ServiceTableNormal(CoreModel):
             os.remove(self.no_first_service_path)
         super().delete(*args, **kwargs)
 
+
+class ServiceTableSplit(CoreModel):
+    GENERATE_STATUS = (
+        ('0', '未生成'),
+        ('1', '已生成'),
+        ('2', '生成失败'),
+        ('3', '生成中'),
+    )
+    output_dir = models.CharField(max_length=255, verbose_name='输出目录', null=True)
+    service_table_normals = models.ManyToManyField(ServiceTableNormal, verbose_name='开服表通用')
+    service_table_split_zip = models.CharField(max_length=255, verbose_name='分表压缩包路径', null=True)
+    generate_log = models.TextField(verbose_name='生成日志', null=True, default='')
+    generate_status = models.CharField(max_length=1, choices=GENERATE_STATUS, verbose_name='生成状态', default='0')
+
+    class Meta:
+        db_table = table_prefix + 'service_table_split'
+        verbose_name = '开服表分表'
+        verbose_name_plural = verbose_name
+        ordering = ('-create_datetime',)

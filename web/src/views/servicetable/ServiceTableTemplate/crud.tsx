@@ -46,27 +46,27 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 editRequest,
                 delRequest,
             },
-            search: {
-                show: false
-            },
-            toolbar: {
-                show: false,
-            },
             actionbar: {
-                show: false,
+                buttons: {
+                    add: {
+                        show: auth("ServiceTableTemplate:Create")
+                    }
+                }
             },
             rowHandle: {
                 //固定右侧
                 fixed: 'right',
-                width: 150,
+                width: 120,
                 buttons: {
                     view: {
                         show: false,
                     },
                     edit: {
-                        show: auth("ServiceTableTemplate:Edit"),
+                        type: 'text',
+                        show: auth("ServiceTableTemplate:Update")
                     },
                     remove: {
+                        type: 'text',
                         show: auth("ServiceTableTemplate:Delete")
                     },
                 },
@@ -89,9 +89,10 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         width: '70px',
                         columnSetDisabled: true, //禁止在列设置中选择
                     },
-                }, creator_name: {}, channel: {
-                    title: "所属渠道",
+                }, channel: {
+                    title: "渠道名称",
                     type: "dict-select",
+                    search: {show: true},
                     column: {
                         show: false,
                     },
@@ -105,38 +106,93 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         },
                     },
                     dict: dict({
-                        url: '/api/channel_manage/?page=1&limit=99999',
+                        url: '/api/ServiceTableChannel/?page=1&limit=99999',
                         value: 'id',
                         label: 'name',
                     })
-                }, channel_name: {
+                }, template_name: {
+                    title: "模板名称",
+                    type: "input",
+                    form: {
+                        rules: [{required: true, message: '请输入模板名称'}],
+                    },
+                    column: {
+                        align: 'center',
+                        show: true,
+                        width: 200,
+                    },
+                },
+                channel_name: {
                     title: "所属渠道",
                     type: "input",
                     column: {
                         align: 'center',
                         show: true,
-                        width: 150,
+                        width: 200,
                     },
                     form: {
                         show: false
                     },
-                }, template_path: {
-                    title: "模板路径",
-                    type: "text",
-                    form: {show: false},
-
                 }, template_fields: {
                     title: "模板字段",
                     type: "textarea",
-                    column: {show: false},
+                    form: {
+                        rules: [{required: true, message: '请输入模板字段'}],
+                    },
+                    column: {
+                        align: 'center',
+                        show: true,
+                        showOverflowTooltip: true,
+                    },
 
                 }, is_split: {
                     title: "是否分表",
                     type: 'dict-select',
                     dict: dict({
-                        data: dictionary('button_whether_number'),
+                        data: [
+                            {'label': '是', 'value': '1', 'color': 'success'},
+                            {'label': '否', 'value': '2', 'color': 'warning'},
+                        ],
+                        label: "label",
+                        value: "value"
                     }),
+                    column: {
+                        width: 100
+                    },
+                    search: {show: true},
 
+                }, output_format: {
+                    title: "输出格式",
+                    type: 'dict-select',
+                    dict: dict({
+                        data: [
+                            {'label': 'xls', 'value': '0', 'color': 'primary'},
+                            {'label': 'xlsx', 'value': '1', 'color': 'success'},
+                            {'label': 'csv', 'value': '2', 'color': 'info'},
+                        ],
+                        label: "label",
+                        value: "value"
+                    }),
+                    column: {
+                        width: 100
+                    },
+                    search: {show: true},
+                }, output_engine: {
+                    title: "输出引擎",
+                    type: 'dict-select',
+                    dict: dict({
+                        data: [
+                            {'label': 'ExcelWriter', 'value': '0', 'color': 'primary'},
+                            {'label': 'DataFrame', 'value': '1', 'color': 'success'},
+                            {'label': 'Workbook', 'value': '2', 'color': 'info'},
+                        ],
+                        label: "label",
+                        value: "value"
+                    }),
+                    column: {
+                        width: 100
+                    },
+                    search: {show: true},
                 }, is_enable: {
                     title: "是否启用",
                     type: 'dict-select',
@@ -144,14 +200,22 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         rules: [{required: true, message: '请选择是否启用'}],
                     },
                     dict: dict({
-                        data: dictionary('button_status_number'),
+                        data: [
+                            {'label': '启用', 'value': '1', 'color': 'success'},
+                            {'label': '禁用', 'value': '0', 'color': 'warning'},
+                        ],
+                        label: "label",
+                        value: "value"
                     }),
+                    column: {
+                        width: 100,
+                        show: true,
+                    },
+                    search: {show: true},
 
                 },
                 ...commonCrudConfig({
-                    creator_name: {table: true},
                     update_datetime: {table: true},
-                    create_datetime: {table: true},
                 })
             },
         },

@@ -7,6 +7,7 @@ from celery.result import GroupResult as CeleryGroupResult
 from celery.result import result_from_tuple
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from . import managers
@@ -129,6 +130,12 @@ class TaskResult(models.Model):
 
     def __str__(self):
         return '<Task: {0.task_id} ({0.status})>'.format(self)
+
+    def save(self, *args, **kwargs):
+        if not self.date_created:
+            self.date_created = timezone.now()
+        self.date_done = timezone.now()
+        super().save(*args, **kwargs)
 
 
 class ChordCounter(models.Model):

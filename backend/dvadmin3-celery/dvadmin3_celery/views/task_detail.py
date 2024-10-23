@@ -7,19 +7,16 @@
 @Remark:
 """
 
-import time
-
-from django_celery_results.models import TaskResult
 import django_filters
+from django_celery_results.models import TaskResult
 
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 
 
-
-
 class CeleryTaskDetailSerializer(CustomModelSerializer):
     """定时任务详情 序列化器"""
+
     class Meta:
         model = TaskResult
         fields = '__all__'
@@ -27,11 +24,10 @@ class CeleryTaskDetailSerializer(CustomModelSerializer):
 
 class CeleryTaskDetailFilterSet(django_filters.FilterSet):
     date_created = django_filters.BaseRangeFilter(field_name="date_created")
+
     class Meta:
         model = TaskResult
         fields = ['id', 'status', 'date_done', 'date_created', 'result', 'task_name']
-
-
 
 
 class CeleryTaskDetailViewSet(CustomModelViewSet):

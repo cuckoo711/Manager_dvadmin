@@ -42,39 +42,42 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
     const downloadnofirstRequest = async (row: any) => {
         return await api.DownloadNoFirst(row.id);
     }
+    const ClearServerTable = async () => {
+        return await api.ClearServerTable();
+    }
     // 记录选中的行
-	const selectedRows = ref<any>([]);
+    const selectedRows = ref<any>([]);
 
-	const onSelectionChange = (changed: any) => {
-		const tableData = crudExpose.getTableData();
-		const unChanged = tableData.filter((row: any) => !changed.includes(row));
-		// 添加已选择的行
-		XEUtils.arrayEach(changed, (item: any) => {
-			const ids = XEUtils.pluck(selectedRows.value, 'id');
-			if (!ids.includes(item.id)) {
-				selectedRows.value = XEUtils.union(selectedRows.value, [item]);
-			}
-		});
-		// 剔除未选择的行
-		XEUtils.arrayEach(unChanged, (unItem: any) => {
-			selectedRows.value = XEUtils.remove(selectedRows.value, (item: any) => item.id !== unItem.id);
-		});
-	};
-	const toggleRowSelection = () => {
-		// 多选后，回显默认勾选
-		const tableRef = crudExpose.getBaseTableRef();
-		const tableData = crudExpose.getTableData();
-		const selected = XEUtils.filter(tableData, (item: any) => {
-			const ids = XEUtils.pluck(selectedRows.value, 'id');
-			return ids.includes(item.id);
-		});
+    const onSelectionChange = (changed: any) => {
+        const tableData = crudExpose.getTableData();
+        const unChanged = tableData.filter((row: any) => !changed.includes(row));
+        // 添加已选择的行
+        XEUtils.arrayEach(changed, (item: any) => {
+            const ids = XEUtils.pluck(selectedRows.value, 'id');
+            if (!ids.includes(item.id)) {
+                selectedRows.value = XEUtils.union(selectedRows.value, [item]);
+            }
+        });
+        // 剔除未选择的行
+        XEUtils.arrayEach(unChanged, (unItem: any) => {
+            selectedRows.value = XEUtils.remove(selectedRows.value, (item: any) => item.id !== unItem.id);
+        });
+    };
+    const toggleRowSelection = () => {
+        // 多选后，回显默认勾选
+        const tableRef = crudExpose.getBaseTableRef();
+        const tableData = crudExpose.getTableData();
+        const selected = XEUtils.filter(tableData, (item: any) => {
+            const ids = XEUtils.pluck(selectedRows.value, 'id');
+            return ids.includes(item.id);
+        });
 
-		nextTick(() => {
-			XEUtils.arrayEach(selected, (item) => {
-				tableRef.toggleRowSelection(item, true);
-			});
-		});
-	};
+        nextTick(() => {
+            XEUtils.arrayEach(selected, (item) => {
+                tableRef.toggleRowSelection(item, true);
+            });
+        });
+    };
 
     return {
         selectedRows,
@@ -90,12 +93,26 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     add: {
                         show: auth("ServiceTableNormal:Create")
                     },
+                    clear: {
+                        show: auth("AuthorizationLetter:Clear"),
+                        text: '清理文件',
+                        type: 'info',
+                        click: async () => {
+                            const result = await api.ClearServerTable();
+                            if (result.status) {
+                                successMessage(`${result.message}`);
+                            } else {
+                                errorMessage(`${result.message}`);
+                            }
+                            await crudExpose?.doRefresh();
+                        }
+                    }
                 }
             },
             rowHandle: {
                 //固定右侧
                 fixed: 'right',
-                width: 550,
+                width: 300,
                 buttons: {
                     view: {
                         show: false,
@@ -239,10 +256,10 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 },
             },
             table: {
-				rowKey: 'id', //设置你的主键id， 默认rowKey=id
-				onSelectionChange,
-				onRefreshed: () => toggleRowSelection(),
-			},
+                rowKey: 'id', //设置你的主键id， 默认rowKey=id
+                onSelectionChange,
+                onRefreshed: () => toggleRowSelection(),
+            },
             form: {
                 col: {span: 24},
                 labelWidth: '110px',
@@ -275,6 +292,10 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     title: "游戏名称",
                     type: "text",
                     search: {show: true},
+                    column: {
+                        align: 'center',
+                        width: 300,
+                    },
 
                 }, open_name: {
                     title: "初始区服名称",
@@ -300,55 +321,6 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     column: {
                         align: 'center',
                         width: 240,
-                    },
-                    search: {
-                        show: true,
-                        col: {span: 8},
-                        component: {
-                            type: 'datetimerange',
-                            props: {
-                                'start-placeholder': '开始时间',
-                                'end-placeholder': '结束时间',
-                                'value-format': 'YYYY-MM-DD HH:mm:ss',
-                                'picker-options': {
-                                    shortcuts: [{
-                                        text: '最近一周',
-                                        onClick(picker) {
-                                            const end = new Date();
-                                            const start = new Date();
-                                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                                            picker.$emit('pick', [start, end]);
-                                        }
-                                    }, {
-                                        text: '最近一个月',
-                                        onClick(picker) {
-                                            const end = new Date();
-                                            const start = new Date();
-                                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                                            picker.$emit('pick', [start, end]);
-                                        }
-                                    }, {
-                                        text: '最近三个月',
-                                        onClick(picker) {
-                                            const end = new Date();
-                                            const start = new Date();
-                                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                                            picker.$emit('pick', [start, end]);
-                                        }
-                                    }]
-                                }
-                            }
-                        },
-                        valueResolve(context: any) {
-                            const {key, value} = context
-                            //value解析，就是把组件的值转化为后台所需要的值
-                            //在form表单点击保存按钮后，提交到后台之前执行转化
-                            if (value) {
-                                context.form.update_datetime_after = value[0]
-                                context.form.update_datetime_before = value[1]
-                            }
-                            //  ↑↑↑↑↑ 注意这里是form，不是row
-                        }
                     },
 
                 }, copy_content: {
@@ -381,7 +353,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         show: false
                     },
 
-                }, generate_status: {
+                }, create_datetime: {}, generate_status: {
                     title: "生成状态",
                     type: "dict-select",
                     form: {
@@ -392,7 +364,9 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         label: "label",
                         value: "value"
                     })
-                }, ...commonCrudConfig()
+                }, ...commonCrudConfig({
+                    create_datetime: {table: true, search: true},
+                })
             },
         },
     };

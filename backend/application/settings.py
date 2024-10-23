@@ -178,6 +178,8 @@ MEDIA_ROOT = "media"  # 项目下的目录
 MEDIA_URL = "/media/"  # 跟STATIC_URL类似，指定用户可以通过这个url找到文件
 
 TEMPLATE_FILE_PATH = os.path.join(BASE_DIR, "media", "template_files")
+SERVER_TABLE_FILE_PATH = os.path.join(BASE_DIR, "media", "server_table_files")
+SERVER_SPLIT_FILE_PATH = os.path.join(BASE_DIR, "media", "server_split_files")
 
 # 添加以下代码以后就不用写{% load staticfiles %}，可以直接引用
 STATICFILES_FINDERS = (

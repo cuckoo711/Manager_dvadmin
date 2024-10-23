@@ -15,10 +15,14 @@ else:
     from celery import Celery
 
     app = Celery(f"application")
+app.conf.broker_connection_retry_on_startup = True
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 # app.autodiscover_tasks(['dvadmin3_celery.tasks', 'jtgame.authorization.tasks', 'jtgame.daily_report.tasks'])
 platforms.C_FORCE_ROOT = True
+app.conf.timezone = settings.CELERY_TIMEZONE
+app.conf.enable_utc = True
+
 
 
 def retry_base_task_error():

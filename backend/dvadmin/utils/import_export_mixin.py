@@ -10,6 +10,7 @@ from openpyxl.worksheet.table import Table, TableStyleInfo
 from rest_framework.decorators import action
 from rest_framework.request import Request
 
+from dvadmin.utils.backends import logger
 from dvadmin.utils.import_export import import_to_data
 from dvadmin.utils.json_response import DetailResponse
 from dvadmin.utils.request_util import get_verbose_name
@@ -51,6 +52,7 @@ class ImportSerializerMixin:
         length = 4
         if string is None:
             return length
+        string = str(string)
         if self.is_number(string):
             return length
         for char in string:
@@ -282,6 +284,7 @@ class ExportSerializerMixin:
         length = 4
         if string is None:
             return length
+        string = str(string)
         if self.is_number(string):
             return length
         for char in string:

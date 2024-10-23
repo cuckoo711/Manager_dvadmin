@@ -16,9 +16,9 @@ class FileSerializer(CustomModelSerializer):
         # base_url = f"{self.request.scheme}://{self.request.get_host()}/"
         base_url = dispatch.get_system_config_values(
             "base.base_url") or f"{self.request.scheme}://{self.request.get_host()}/"
-        print(f"base_url: {base_url}\n"
-              f"instance.url: {instance.url}\n"
-              f"instance.file_url: {instance.file_url}")
+        # print(f"base_url: {base_url}\n"
+        #       f"instance.url: {instance.url}\n"
+        #       f"instance.file_url: {instance.file_url}")
         if str(instance.url).startswith('http'):
             return instance.url
         return base_url + (instance.file_url or f'media/{str(instance.url)}')

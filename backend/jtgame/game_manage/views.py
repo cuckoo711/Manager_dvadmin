@@ -142,6 +142,7 @@ class RevenueSplitViewSet(CustomModelViewSet):
 
     export_field_label = {
         'game_name': '游戏名称',
+        'game_release_date': '发行日期',
         'channel_name': '渠道名称',
         'our_ratio': '我方分成比例',
         'channel_ratio': '渠道分成比例',
@@ -165,6 +166,7 @@ class ResearchSplitViewSet(CustomModelViewSet):
 
     export_field_label = {
         'game_name': '游戏名称',
+        'game_release_date': '发行日期',
         'research_name': '研发名称',
         'research_ratio': '研发分成比例',
         'research_fee_ratio': '研发费比例',
