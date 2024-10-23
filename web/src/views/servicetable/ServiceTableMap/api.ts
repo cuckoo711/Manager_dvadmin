@@ -1,9 +1,9 @@
-// // ServiceTableTemplate API - Auto-generated on 2024-10-10 10:49:30
+// // ServiceTableMap API - Auto-generated on 2024-10-16 15:36:48
 
 import {request, uploadRequest} from '/@/utils/service';
 import { UserPageQuery, AddReq, DelReq, EditReq, InfoReq } from '@fast-crud/fast-crud';
 
-export const apiPrefix = '/api/ServiceTableTemplate/';
+export const apiPrefix = '/api/ServiceTableMap/';
 export function GetList(query: UserPageQuery) {
 	return request({
 		url: apiPrefix,
@@ -42,13 +42,10 @@ export function DelObj(id: DelReq) {
 	});
 }
 
-export function uploadTemplate(data: FormData) {
-	// console.log(file);  // 调试输出文件对象
-
+export function uploadMap(data: FormData) {
 	return uploadRequest({
-		url: apiPrefix + 'uploadTemplate/',
+		url: apiPrefix + 'uploadMap/',
 		method: 'post',
 		data: data,
 	});
 }
-

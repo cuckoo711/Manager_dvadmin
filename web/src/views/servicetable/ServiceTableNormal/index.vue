@@ -2,9 +2,17 @@
   <fs-page>
     <fs-crud ref="crudRef" v-bind="crudBinding">
       <template #pagination-left>
+        <el-tooltip content="生成开服表">
+          <el-button text type="primary" :disabled="selectedRowsCount === 0" :icon="UploadFilled" circle
+                     @click="handleBatchGenerate"/>
+        </el-tooltip>
         <el-tooltip content="打包下载">
           <el-button text type="primary" :disabled="selectedRowsCount === 0" :icon="Download" circle
                      @click="handleBatchDownload"/>
+        </el-tooltip>
+        <el-tooltip content="创建分表任务">
+          <el-button text type="primary" :disabled="selectedRowsCount === 0" :icon="Upload" circle
+                     @click="handleBatchSplitTask"/>
         </el-tooltip>
       </template>
       <template #pagination-right>
@@ -36,8 +44,12 @@ import {useFs} from '@fast-crud/fast-crud';
 import {createCrudOptions} from './crud';
 import {ElMessage, ElMessageBox} from 'element-plus';
 import XEUtils from 'xe-utils';
-import {Close, Delete, Download} from '@element-plus/icons-vue';
-import {batchDownloadServiceTable} from "/@/views/servicetable/ServiceTableNormal/api";
+import {Close, Delete, Download, Upload, UploadFilled} from '@element-plus/icons-vue';
+import {
+  batchDownloadServiceTable,
+  batchGenerateServiceTable,
+  batchSplitTaskServiceTable
+} from "/@/views/servicetable/ServiceTableNormal/api";
 import {errorMessage} from "/@/utils/message";
 // 当前选择的菜单信息
 let selectOptions: any = ref({name: null});
@@ -50,7 +62,25 @@ const selectedRowsCount = computed(() => {
   return selectedRows.value.length;
 });
 
-// 批量删除
+const handleBatchGenerate = async () => {
+  await ElMessageBox.confirm(`确定要生成这${selectedRows.value.length}条记录的开服表吗`, '确认', {
+    distinguishCancelAndClose: true,
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    closeOnClickModal: false,
+  });
+  const data = {
+    ids: XEUtils.pluck(selectedRows.value, 'id')
+  }
+  try {
+    const response = await batchGenerateServiceTable(data);
+    ElMessage.success('已提交生成开服表任务' + response.message);
+  } catch (e) {
+    errorMessage(`调用失败: ${e}`);
+  }
+  await crudExpose.doRefresh();
+};
+
 const handleBatchDownload = async () => {
   await ElMessageBox.confirm(`确定要批量下载这${selectedRows.value.length}条记录吗`, '确认', {
     distinguishCancelAndClose: true,
@@ -85,6 +115,25 @@ const handleBatchDownload = async () => {
     } else {
       errorMessage(`下载失败: ${response.message}`);
     }
+  } catch (e) {
+    errorMessage(`调用失败: ${e}`);
+  }
+  await crudExpose.doRefresh();
+};
+
+const handleBatchSplitTask = async () => {
+  await ElMessageBox.confirm(`确定要创建这${selectedRows.value.length}条记录的分表任务吗`, '确认', {
+    distinguishCancelAndClose: true,
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    closeOnClickModal: false,
+  });
+  const data = {
+    ids: XEUtils.pluck(selectedRows.value, 'id')
+  }
+  try {
+    const response = await batchSplitTaskServiceTable(data);
+    ElMessage.success('已提交分表任务' + response.message);
   } catch (e) {
     errorMessage(`调用失败: ${e}`);
   }

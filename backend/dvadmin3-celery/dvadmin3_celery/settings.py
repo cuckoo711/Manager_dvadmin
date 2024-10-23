@@ -84,7 +84,5 @@ settings.CELERY_broker_connection_retry_on_startup = True
 settings.PLUGINS_URL_PATTERNS += plugins_url_patterns
 
 # 避免时区的问题
-CELERY_ENABLE_UTC = False
-DJANGO_CELERY_BEAT_TZ_AWARE = False
-broker_connection_retry_on_startup = True
-
+CELERY_ENABLE_UTC = True
+DJANGO_CELERY_BEAT_TZ_AWARE = True
