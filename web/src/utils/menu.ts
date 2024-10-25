@@ -5,7 +5,7 @@ import XEUtils from "xe-utils"
  * @param {Array} menuData
  * @return {*}
  */
-export const handleMenu = (menuData: Array<any>) => {
+export const handleMenu = (menuData: Array<any>): { frameOut: Array<any>; frameIn: any[] } => {
     // 先处理menu meta数据转换
     const handleMeta = (item: any) => {
         item.meta = {
@@ -24,7 +24,8 @@ export const handleMenu = (menuData: Array<any>) => {
     }
 
     // 处理框架外的路由
-    const handleFrame = (item: any) => {
+    // noinspection JSUnusedLocalSymbols
+    const handleFrame: (item: any) => any = (item: any) => {
         if (item.is_iframe) {
             item.meta = {
                 title: item.title,
@@ -46,6 +47,7 @@ export const handleMenu = (menuData: Array<any>) => {
     const defaultRoutes: Array<any> = []
     // 框架外路由
     const iframeRoutes: Array<any> = []
+    menuData.sort((a, b) => a.sort - b.sort);
 
     menuData.forEach((val) => {
         // if (val.is_iframe) {

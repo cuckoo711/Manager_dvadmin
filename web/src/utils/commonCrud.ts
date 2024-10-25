@@ -104,6 +104,7 @@ export const commonCrudConfig = (options = {
             },
             column: {
                 width: 100,
+                align: 'center',
                 show: options.modifier_name?.table || false,
             },
             form: {
@@ -120,6 +121,7 @@ export const commonCrudConfig = (options = {
             },
             column: {
                 width: 100,
+                align: 'center',
                 show: options.creator_name?.table || false,
             },
             form: {
@@ -183,6 +185,7 @@ export const commonCrudConfig = (options = {
             },
             column: {
                 width: 160,
+                align: 'center',
                 show: options.update_datetime?.table || false,
             },
             form: {

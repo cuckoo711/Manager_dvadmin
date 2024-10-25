@@ -68,15 +68,18 @@ INSTALLED_APPS = [
     "dvadmin.system",
 
     # 靖堂管理系统
-    "jtgame.game_manage",
-    "jtgame.attendance",
-    "jtgame.authorization",
-    "jtgame.daily_report",
-    "jtgame.income_statement",
-    "jtgame.service_table",
+    "apps.jtgame.game_manage",
+    "apps.jtgame.attendance",
+    "apps.jtgame.authorization",
+    "apps.jtgame.daily_report",
+    "apps.jtgame.income_statement",
+    "apps.jtgame.service_table",
 
     # 游戏后台整合
-    "gamebackend.gdbackend",  # 官斗
+    "apps.gamebackend.gdbackend",  # 官斗
+
+    # Quick后台
+    "apps.quickbackend.quickcommon",
 
     "plugins.dvadmin3_fastcrud",
 ]
@@ -341,7 +344,7 @@ SIMPLE_JWT = {
     # token有效时长
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1440),
     # token刷新后的有效时间
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
     # 设置前缀
     "AUTH_HEADER_TYPES": ("CUCKOO",),
     "ROTATE_REFRESH_TOKENS": True,
