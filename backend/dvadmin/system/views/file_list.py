@@ -1,12 +1,10 @@
 import hashlib
-import mimetypes
 
 from rest_framework import serializers
-from rest_framework.decorators import action
 
 from application import dispatch
 from dvadmin.system.models import FileList
-from dvadmin.utils.json_response import DetailResponse
+from dvadmin.utils.backends import logger
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 
@@ -15,8 +13,15 @@ class FileSerializer(CustomModelSerializer):
     url = serializers.SerializerMethodField(read_only=True)
 
     def get_url(self, instance):
-        base_url = f"{self.request.scheme}://{self.request.get_host()}/"
-        return base_url + (instance.file_url or (f'media/{str(instance.url)}'))
+        # base_url = f"{self.request.scheme}://{self.request.get_host()}/"
+        base_url = dispatch.get_system_config_values(
+            "base.base_url") or f"{self.request.scheme}://{self.request.get_host()}/"
+        # print(f"base_url: {base_url}\n"
+        #       f"instance.url: {instance.url}\n"
+        #       f"instance.file_url: {instance.file_url}")
+        if str(instance.url).startswith('http'):
+            return instance.url
+        return base_url + (instance.file_url or f'media/{str(instance.url)}')
 
     class Meta:
         model = FileList
@@ -37,30 +42,14 @@ class FileSerializer(CustomModelSerializer):
         validated_data['mime_type'] = file.content_type
         if file_backup:
             validated_data['url'] = file
-        if file_engine == 'oss':
-            from dvadmin_cloud_storage.views.aliyun import ali_oss_upload
-            file_path = ali_oss_upload(file)
-            if file_path:
-                validated_data['file_url'] = file_path
-            else:
-                raise ValueError("上传失败")
-        elif file_engine == 'cos':
-            from dvadmin_cloud_storage.views.tencent import tencent_cos_upload
-            file_path = tencent_cos_upload(file)
-            if file_path:
-                validated_data['file_url'] = file_path
-            else:
-                raise ValueError("上传失败")
-        else:
-            validated_data['url'] = file
         # 审计字段
         try:
             request_user = self.request.user
             validated_data['dept_belong_id'] = request_user.dept.id
             validated_data['creator'] = request_user.id
             validated_data['modifier'] = request_user.id
-        except:
-            pass
+        except Exception as e:
+            logger.error(f"创建文件审计字段异常: {e}")
         return super().create(validated_data)
 
 

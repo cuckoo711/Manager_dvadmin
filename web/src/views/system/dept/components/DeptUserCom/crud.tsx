@@ -5,6 +5,7 @@ import * as api from './api';
 import { dictionary } from '/@/utils/dictionary';
 import { successMessage } from '/@/utils/message';
 import {auth} from "/@/utils/authFunction";
+import {APIResponseData} from "/@/views/system/dept/types";
 
 export const createCrudOptions = function ({ crudExpose, context }: CreateCrudOptionsProps): CreateCrudOptionsRet {
 	const pageRequest = async (query: UserPageQuery) => {
@@ -37,7 +38,7 @@ export const createCrudOptions = function ({ crudExpose, context }: CreateCrudOp
 	};
 
 	const exportRequest = async (query: UserPageQuery) => {
-		return await api.exportData(query);
+		return api.exportData(query);
 	};
 
 	return {
@@ -210,6 +211,20 @@ export const createCrudOptions = function ({ crudExpose, context }: CreateCrudOp
 						},
 					},
 				},
+				jobid: {
+					title: '工号',
+					type: 'input',
+					column: {
+						minWidth: 120, //最小列宽
+                        align: 'center',
+					},
+					form: {
+						component: {
+							span: 12,
+							placeholder: '请输入工号',
+						},
+					},
+				},
 				dept: {
 					title: '部门',
 					type: 'dict-tree',
@@ -220,14 +235,10 @@ export const createCrudOptions = function ({ crudExpose, context }: CreateCrudOp
 						label: 'name',
 					}),
 					column: {
-						minWidth: 200, //最小列宽
-						formatter({value,row,index}){
-							return row.dept_name_all
-						}
+						minWidth: 100, //最小列宽
 					},
 					form: {
 						rules: [
-							// 表单校验规则
 							{
 								required: true,
 								message: '必填项',
@@ -257,16 +268,13 @@ export const createCrudOptions = function ({ crudExpose, context }: CreateCrudOp
 					},
 					type: 'dict-select',
 					dict: dict({
-						url: '/api/system/role/',
+						url: '/api/system/role/?limit=9999',
 						value: 'id',
 						label: 'name',
 					}),
 					column: {
-						minWidth: 200, //最小列宽
-						formatter({value,row,index}){
-							const values = row.role_info.map((item:any) => item.name);
-							return values.join(',')
-						}
+						minWidth: 100, //最小列宽
+						showOverflowTooltip: true,
 					},
 					form: {
 						rules: [

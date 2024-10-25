@@ -1,5 +1,30 @@
 [
     {
+        "url": "/api/system/user/",
+        "method": 0,
+        "enable_datasource": true
+    },
+    {
+        "url": "/api/incomedata/get_income/",
+        "method": 1,
+        "enable_datasource": true
+    },
+    {
+        "url": "/api/incomedata/get_income/",
+        "method": 0,
+        "enable_datasource": true
+    },
+    {
+        "url": "/api/reportdata/get_report/",
+        "method": 1,
+        "enable_datasource": true
+    },
+    {
+        "url": "/api/reportdata/get_report/",
+        "method": 0,
+        "enable_datasource": true
+    },
+    {
         "url": "/api/system/dept_lazy_tree/",
         "method": 0,
         "enable_datasource": true
