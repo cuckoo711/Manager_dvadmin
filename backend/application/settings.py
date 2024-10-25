@@ -437,7 +437,6 @@ PLUGINS_URL_PATTERNS = []
 # from dvadmin_upgrade_center.settings import *    # 升级中心
 # noinspection PyUnresolvedReferences
 from dvadmin3_celery.settings import *            # celery 异步任务
-# from dvadmin_cloud_storage.settings import *      # 云存储
 # from dvadmin_third.settings import *            # 第三方用户管理
 # from dvadmin_ak_sk.settings import *            # 秘钥管理管理
 # from dvadmin_tenants.settings import *            # 租户管理
