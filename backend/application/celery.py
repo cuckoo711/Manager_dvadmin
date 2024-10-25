@@ -24,7 +24,6 @@ app.conf.timezone = settings.CELERY_TIMEZONE
 app.conf.enable_utc = True
 
 
-
 def retry_base_task_error():
     """
     celery 失败重试装饰器

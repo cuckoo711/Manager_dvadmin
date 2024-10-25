@@ -122,21 +122,23 @@ urlpatterns = (
         + [
             # 靖堂项目模块
             # 考勤模块
-            path("api/", include("jtgame.attendance.urls")),
+            path("api/", include("apps.jtgame.attendance.urls")),
             # 授权书模块
-            path("api/", include("jtgame.authorization.urls")),
+            path("api/", include("apps.jtgame.authorization.urls")),
             # 管理模块
-            path("api/", include("jtgame.game_manage.urls")),
+            path("api/", include("apps.jtgame.game_manage.urls")),
             # 日报模块
-            path("api/", include("jtgame.daily_report.urls")),
+            path("api/", include("apps.jtgame.daily_report.urls")),
             # 收入模块
-            path("api/", include("jtgame.income_statement.urls")),
+            path("api/", include("apps.jtgame.income_statement.urls")),
             # 开服模块
-            path("api/", include("jtgame.service_table.urls")),
+            path("api/", include("apps.jtgame.service_table.urls")),
+            # Quick模块
+            path("api/", include("apps.quickbackend.quickcommon.urls")),
         ]
         + [
             # 游戏后台模块
             # gd后台模块
-            path("api/", include("gamebackend.gdbackend.urls")),
+            path("api/", include("apps.gamebackend.gdbackend.urls")),
         ]
 )

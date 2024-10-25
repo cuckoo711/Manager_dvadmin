@@ -156,29 +156,54 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         width: '70px',
                         columnSetDisabled: true, //禁止在列设置中选择
                     },
-                }, output_dir: {
+                }, id: {
+                    title: "生成任务Id",
+                    type: "number",
+                    form: {show: false},
+                    column: {
+                        width: 100
+                    }
+                }, game_infos: {
+                    title: "游戏信息",
+                    type: "textarea",
+                    column: {
+                        show: true,
+                        showOverflowTooltip: true,
+                    },
+                },
+                output_dir: {
                     title: "输出目录",
                     type: "text",
+                    column: {
+                        show: false,
+                    },
                 }, service_table_split_zip: {
                     title: "分表压缩包路径",
                     type: "text",
-
+                    column: {
+                        show: false,
+                    },
                 }, generate_status: {
                     title: "生成状态",
                     type: "dict-select",
                     dict: dict({
-                        data: [{'label': '未生成', 'value': '0'}, {'label': '已生成', 'value': '1'},
-                            {'label': '生成失败', 'value': '2'}, {'label': '生成中', 'value': '3'}],
+                        data: [
+                            {'label': '未生成', 'value': '0', 'color': 'warning'},
+                            {'label': '已生成', 'value': '1', 'color': 'success'},
+                            {'label': '生成失败', 'value': '2', 'color': 'danger'},
+                            {'label': '生成中', 'value': '3', 'color': 'primary'},
+                        ],
                         label: "label",
                         value: "value"
                     }),
                     column: {
-                        width: 200
+                        width: 100
                     }
 
                 },
                 ...commonCrudConfig({
                     create_datetime: {table: true, search:true},
+                    update_datetime: {table: true},
                 })
             },
         },
