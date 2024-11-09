@@ -1,5 +1,6 @@
 import hashlib
 
+import django_filters
 from rest_framework import serializers
 
 from application import dispatch
@@ -40,6 +41,8 @@ class FileSerializer(CustomModelSerializer):
         validated_data['md5sum'] = md5.hexdigest()
         validated_data['engine'] = file_engine
         validated_data['mime_type'] = file.content_type
+        ft = {'image':0,'video':1,'audio':2}.get(file.content_type.split('/')[0], None)
+        validated_data['file_type'] = 3 if ft is None else ft
         if file_backup:
             validated_data['url'] = file
         # 审计字段
@@ -53,6 +56,22 @@ class FileSerializer(CustomModelSerializer):
         return super().create(validated_data)
 
 
+class FileAllSerializer(CustomModelSerializer):
+    
+    class Meta:
+        model = FileList
+        fields = ['id', 'name']
+
+
+class FileFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(field_name="name", lookup_expr="icontains", help_text="文件名")
+    mime_type = django_filters.CharFilter(field_name="mime_type", lookup_expr="icontains", help_text="文件类型")
+
+    class Meta:
+        model = FileList
+        fields = ['name', 'mime_type', 'upload_method', 'file_type']
+
+
 class FileViewSet(CustomModelViewSet):
     """
     文件管理接口
@@ -64,5 +83,9 @@ class FileViewSet(CustomModelViewSet):
     """
     queryset = FileList.objects.all()
     serializer_class = FileSerializer
-    filter_fields = ['name', ]
+    filter_class = FileFilter
     permission_classes = []
+
+    @action(methods=['GET'], detail=False)
+    def get_all(self, request):
+        return DetailResponse(data=self.get_serializer(self.get_queryset(), many=True).data)
