@@ -226,7 +226,7 @@ export default function ({ crudExpose, context }: CreateCrudOptionsProps): Creat
 								return null;
 							}),
 							tableConfig: {
-								url: '/api/system/role/',
+								url: '/api/system/role/?limit=9999',
 								label: 'name',
 								value: 'id',
 								isMultiple: true,

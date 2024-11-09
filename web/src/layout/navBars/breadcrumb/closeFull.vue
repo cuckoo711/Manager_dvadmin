@@ -23,7 +23,7 @@ const onCloseFullscreen = () => {
 <style scoped lang="scss">
 .layout-navbars-close-full {
 	position: fixed;
-	z-index: 9999999999;
+	z-index: 999;
 	right: -30px;
 	top: -30px;
 	.layout-navbars-close-full-icon {

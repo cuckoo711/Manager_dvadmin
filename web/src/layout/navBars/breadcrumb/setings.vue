@@ -183,7 +183,7 @@
 							v-model="getThemeConfig.lockScreenTime"
 							controls-position="right"
 							:min="1"
-							:max="9999"
+							:max="999"
 							@change="setLocalThemeConfig"
 							size="default"
 							style="width: 90px"

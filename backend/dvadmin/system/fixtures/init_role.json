@@ -3,14 +3,84 @@
         "name": "管理员",
         "key": "admin",
         "sort": 1,
-        "status": true,
-        "remark": null
+        "status": true
     },
     {
         "name": "用户",
         "key": "public",
         "sort": 2,
-        "status": true,
-        "remark": null
+        "status": true
+    },
+    {
+        "name": "游戏管理仅查看",
+        "key": "game_view",
+        "sort": 3,
+        "status": true
+    },
+    {
+        "name": "游戏管理仅操作",
+        "key": "game_manager",
+        "sort": 3,
+        "status": true
+    },
+    {
+        "name": "考勤仅用户",
+        "key": "attendance_user",
+        "sort": 4,
+        "status": true
+    },
+    {
+        "name": "考勤管理员",
+        "key": "attendance_admin",
+        "sort": 4,
+        "status": true
+    },
+    {
+        "name": "授权信息仅查看",
+        "key": "authorization_view",
+        "sort": 5,
+        "status": true
+    },
+    {
+        "name": "授权信息仅操作",
+        "key": "authorization_manager",
+        "sort": 5,
+        "status": true
+    },
+    {
+        "name": "授权书生成（创建、生成、操作）",
+        "key": "authorization_create",
+        "sort": 5,
+        "status": true
+    },
+    {
+        "name": "授权书下载（下载）",
+        "key": "authorization_download",
+        "sort": 5,
+        "status": true
+    },
+    {
+        "name": "收入详情",
+        "key": "income_data",
+        "sort": 6,
+        "status": true
+    },
+    {
+        "name": "收入手动刷新",
+        "key": "income_refresh",
+        "sort": 6,
+        "status": true
+    },
+    {
+        "name": "下架、关服公告生成（创建、生成、操作）",
+        "key": "notice_creat",
+        "sort": 7,
+        "status": true
+    },
+    {
+        "name": "下架、关服公告下载查看",
+        "key": "notice_view_download",
+        "sort": 7,
+        "status": true
     }
 ]

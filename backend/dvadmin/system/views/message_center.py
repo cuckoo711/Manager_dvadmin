@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-import json
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django_restql.fields import DynamicSerializerMethodField
 from rest_framework import serializers
-from rest_framework.decorators import action, permission_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 
 from dvadmin.system.models import MessageCenter, Users, MessageCenterTargetUser
 from dvadmin.utils.json_response import SuccessResponse, DetailResponse
@@ -208,6 +207,7 @@ class MessageCenterViewSet(CustomModelViewSet):
     create_serializer_class = MessageCenterCreateSerializer
     extra_filter_backends = []
 
+    # noinspection PyTestUnpassedFixture
     def get_queryset(self):
         if self.action == 'list':
             return MessageCenter.objects.filter(creator=self.request.user.id).all()

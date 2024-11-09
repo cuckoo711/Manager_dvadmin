@@ -18,6 +18,7 @@ import {storeToRefs} from "pinia";
 import {computed} from "vue";
 import { Md5 } from 'ts-md5';
 import {commonCrudConfig} from "/@/utils/commonCrud";
+import {APIResponseData} from "/@/views/system/dept/types";
 export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps): CreateCrudOptionsRet {
     const pageRequest = async (query: UserPageQuery) => {
         return await api.GetList(query);
@@ -182,6 +183,28 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         }
                     }
                 },
+                jobid: {
+                    title: '工号',
+                    search: {
+                        show: true,
+                    },
+                    type: 'input',
+                    column: {
+                        minWidth: 100, //最小列宽
+                    },
+                    form: {
+                        rules: [
+                            // 表单校验规则
+                            {
+                                required: true,
+                                message: '工号必填项',
+                            },
+                        ],
+                        component: {
+                            placeholder: '请输入工号',
+                        },
+                    },
+                },
                 name: {
                     title: '姓名',
                     search: {
@@ -251,12 +274,13 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     },
                     type: 'dict-select',
                     dict: dict({
-                        url: '/api/system/role/',
+                        url: '/api/system/role/?limit=9999',
                         value: 'id',
                         label: 'name',
                     }),
                     column: {
                         minWidth: 200, //最小列宽
+                        showOverflowTooltip: true,
                         formatter({value,row,index}){
                             const values = row.role_info.map((item:any) => item.name);
                             return values.join(',')

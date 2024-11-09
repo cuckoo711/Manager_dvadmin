@@ -45,12 +45,12 @@
 		</div>
 
 		<div class="login-authorization z-10">
-			<p>Copyright © {{ getSystemConfig['login.copyright'] || '2021-2024 北京信码新创科技有限公司' }} 版权所有</p>
-			<p class="la-other" style="margin-top: 5px;">
+			<p>Copyright © {{ getSystemConfig['login.copyright'] || '2024 cuckoo不咕鸟' }} 版权所有</p>
+			<p class="la-other">
 				<a href="https://beian.miit.gov.cn" target="_blank">{{ getSystemConfig['login.keep_record'] ||
-					'京ICP备2021031018号' }}</a>
+					'' }}</a>
 				|
-				<a :href="getSystemConfig['login.help_url'] ? getSystemConfig['login.help_url'] : '#'"
+				<a :href="getSystemConfig['login.help_url'] ? getSystemConfig['login.help_url'] : 'http://jingtanggame.com/'"
 					target="_blank">帮助</a>
 				|
 				<a

@@ -13,10 +13,10 @@
         "setting": null,
         "children": [
             {
-                "parent": 10,
+                "parent": 1,
                 "title": "网页标题",
                 "key": "web_title",
-                "value": "DVAdmin",
+                "value": "靖堂网络",
                 "sort": 1,
                 "status": true,
                 "data_options": null,
@@ -26,11 +26,11 @@
                 "setting": null,
                 "children": []
             },
-        {
-                "parent": 10,
+            {
+                "parent": 1,
                 "title": "网站小图标",
                 "key": "web_favicon",
-                "value": "",
+                "value": "https://gamemanageapi.jingtanggame.com/media/files/2/b/2b5939f20d7cb8eb1e4a44ad5c0c7118.png",
                 "sort": 1,
                 "status": true,
                 "data_options": null,
@@ -41,10 +41,10 @@
                 "children": []
             },
             {
-                "parent": 10,
+                "parent": 1,
                 "title": "开启验证码",
                 "key": "captcha_state",
-                "value": true,
+                "value": false,
                 "sort": 1,
                 "status": true,
                 "data_options": null,
@@ -60,7 +60,7 @@
                 "children": []
             },
             {
-                "parent": 10,
+                "parent": 1,
                 "title": "创建用户默认密码",
                 "key": "default_password",
                 "value": "admin123456",
@@ -75,6 +75,133 @@
                     }
                 ],
                 "placeholder": "请输入默认密码",
+                "setting": null,
+                "children": []
+            },
+            {
+                "parent": 1,
+                "title": "网站域名",
+                "key": "base_url",
+                "value": "https://gamemanageapi.jingtanggame.com/",
+                "sort": 2,
+                "status": true,
+                "data_options": null,
+                "form_item_type": 0,
+                "rule": [
+                    "{ \"type\": \"url\", \"message\": \"请输入正确的URL地址\"}"
+                ],
+                "placeholder": "请输入网站绑定的域名",
+                "setting": null,
+                "children": []
+            }
+        ]
+    },
+    {
+        "parent": null,
+        "title": "文件存储配置",
+        "key": "file_storage",
+        "value": null,
+        "sort": 0,
+        "status": true,
+        "data_options": null,
+        "form_item_type": 0,
+        "rule": null,
+        "placeholder": null,
+        "setting": null,
+        "children": [
+            {
+                "parent": 21,
+                "title": "存储引擎",
+                "key": "file_engine",
+                "value": "local",
+                "sort": 1,
+                "status": true,
+                "data_options": null,
+                "form_item_type": 0,
+                "rule": [
+                    "{\"required\": true, \"message\": \"必填项不能为空\"}"
+                ],
+                "placeholder": "请选择存储引擎",
+                "setting": null,
+                "children": []
+            },
+            {
+                "parent": 21,
+                "title": "文件是否备份",
+                "key": "file_backup",
+                "value": false,
+                "sort": 2,
+                "status": true,
+                "data_options": null,
+                "form_item_type": 9,
+                "rule": [
+                    "{\"required\": true, \"message\": \"必填项不能为空\"}"
+                ],
+                "placeholder": "启用云存储时,文件是否备份到本地",
+                "setting": null,
+                "children": []
+            },
+            {
+                "parent": 21,
+                "title": "阿里云-AccessKey",
+                "key": "aliyun_access_key",
+                "value": null,
+                "sort": 3,
+                "status": false,
+                "data_options": null,
+                "form_item_type": 0,
+                "rule": [
+                    "{\"required\": true, \"message\": \"必填项不能为空\"}"
+                ],
+                "placeholder": "请输入AccessKey",
+                "setting": null,
+                "children": []
+            },
+            {
+                "parent": 21,
+                "title": "阿里云-Secret",
+                "key": "aliyun_access_secret",
+                "value": null,
+                "sort": 4,
+                "status": false,
+                "data_options": null,
+                "form_item_type": 0,
+                "rule": [
+                    "{\"required\": true, \"message\": \"必填项不能为空\"}"
+                ],
+                "placeholder": "请输入Secret",
+                "setting": null,
+                "children": []
+            },
+            {
+                "parent": 21,
+                "title": "阿里云-Endpoint",
+                "key": "aliyun_endpoint",
+                "value": null,
+                "sort": 5,
+                "status": false,
+                "data_options": null,
+                "form_item_type": 0,
+                "rule": [
+                    "{\"required\": true, \"message\": \"必填项不能为空\"}"
+                ],
+                "placeholder": "请输入Endpoint",
+                "setting": null,
+                "children": []
+            },
+            {
+                "parent": 21,
+                "title": "阿里云-上传路径",
+                "key": "aliyun_path",
+                "value": "/media/",
+                "sort": 5,
+                "status": false,
+                "data_options": null,
+                "form_item_type": 0,
+                "rule": [
+                    "{\"required\": true, \"message\": \"必填项不能为空\"}"
+                ],
+                "placeholder": "请输入上传路径",
                 "setting": null,
                 "children": []
             }
@@ -94,10 +221,10 @@
         "setting": null,
         "children": [
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "网站标题",
                 "key": "site_title",
-                "value": "Dvadmin",
+                "value": "靖堂网络",
                 "sort": 1,
                 "status": true,
                 "data_options": null,
@@ -108,10 +235,10 @@
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "网站名称",
                 "key": "site_name",
-                "value": "企业级后台管理系统",
+                "value": "靖堂网络科技有限公司",
                 "sort": 1,
                 "status": true,
                 "data_options": null,
@@ -127,10 +254,17 @@
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "登录网站logo",
                 "key": "site_logo",
-                "value": null,
+                "value": [
+                    {
+                        "uid": 1721958634334,
+                        "url": "https://gamemanageapi.jingtanggame.com/media/files/2/b/2b5939f20d7cb8eb1e4a44ad5c0c7118.png",
+                        "name": "QQ_1721798665418.png",
+                        "status": "success"
+                    }
+                ],
                 "sort": 2,
                 "status": true,
                 "data_options": null,
@@ -141,10 +275,17 @@
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "登录页背景图",
                 "key": "login_background",
-                "value": null,
+                "value": [
+                    {
+                        "uid": 1721958634337,
+                        "url": "https://gamemanageapi.jingtanggame.com/media/files/3/1/310ed3b261f985c129f5deedbf8f5673.jpg",
+                        "name": "e1d2dda10ece26ea011f3b6c1c90b3e2.jpg",
+                        "status": "success"
+                    }
+                ],
                 "sort": 3,
                 "status": true,
                 "data_options": null,
@@ -155,10 +296,10 @@
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "版权信息",
                 "key": "copyright",
-                "value": "2021-2024 django-vue-admin.com 版权所有",
+                "value": "2024 cuckoo不咕鸟",
                 "sort": 4,
                 "status": true,
                 "data_options": null,
@@ -174,10 +315,10 @@
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "备案信息",
                 "key": "keep_record",
-                "value": "晋ICP备18005113号-3",
+                "value": " 沪ICP备16021329号-1",
                 "sort": 5,
                 "status": true,
                 "data_options": null,
@@ -193,10 +334,10 @@
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "帮助链接",
                 "key": "help_url",
-                "value": "https://django-vue-admin.com",
+                "value": " ",
                 "sort": 6,
                 "status": true,
                 "data_options": null,
@@ -207,7 +348,7 @@
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "隐私链接",
                 "key": "privacy_url",
                 "value": "/api/system/clause/privacy.html",
@@ -221,7 +362,7 @@
                 "children": []
             },
             {
-                "parent": 1,
+                "parent": 6,
                 "title": "条款链接",
                 "key": "clause_url",
                 "value": "/api/system/clause/terms_service.html",

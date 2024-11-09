@@ -9,7 +9,7 @@ import { dynamicRoutes, notFoundAndNoPower } from '/@/router/route';
 import { formatTwoStageRoutes, formatFlatteningRoutes, router } from '/@/router/index';
 import { useRoutesList } from '/@/stores/routesList';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
-import { useMenuApi } from '/@/api/menu/index';
+import { useMenuApi } from '/@/api/menu';
 import { handleMenu } from '../utils/menu';
 import { BtnPermissionStore } from '/@/plugin/permission/store.permission';
 import {SystemConfigStore} from "/@/stores/systemConfig";
@@ -49,7 +49,7 @@ export async function initBackEndControlRoutes() {
 	const res = await getBackEndControlRoutes();
 	// 无登录权限时，添加判断
 	// https://gitee.com/lyt-top/vue-next-admin/issues/I64HVO
-	// if (res.data.length <= 0) return Promise.resolve(true);
+	if (res.data.length <= 0) return Promise.resolve(true);
 	// 处理路由（component），替换 dynamicRoutes（/@/router/route）第一个顶级 children 的路由
 	const {frameIn,frameOut} = handleMenu(res.data)
 	dynamicRoutes[0].children = await backEndComponent(frameIn);
@@ -71,9 +71,9 @@ export async function setRouters(){
 		router.addRoute(item)
 	})
 	const storesRoutesList = useRoutesList(pinia);
-	storesRoutesList.setRoutesList([...dynamicRoutes[0].children,...frameOutRouter]);
+	await storesRoutesList.setRoutesList([...dynamicRoutes[0].children, ...frameOutRouter]);
 	const storesTagsView = useTagsViewRoutes(pinia);
-	storesTagsView.setTagsViewRoutes([...dynamicRoutes[0].children,...frameOutRouter])
+	await storesTagsView.setTagsViewRoutes([...dynamicRoutes[0].children, ...frameOutRouter])
 
 }
 
@@ -82,9 +82,9 @@ export async function setRouters(){
  * @description 用于左侧菜单、横向菜单的显示
  * @description 用于 tagsView、菜单搜索中：未过滤隐藏的(isHide)
  */
-export function setFilterMenuAndCacheTagsViewRoutes() {
+export async function setFilterMenuAndCacheTagsViewRoutes() {
 	const storesRoutesList = useRoutesList(pinia);
-	storesRoutesList.setRoutesList(dynamicRoutes[0].children as any);
+	await storesRoutesList.setRoutesList(dynamicRoutes[0].children as any);
 	setCacheTagsViewRoutes();
 }
 
@@ -129,13 +129,13 @@ export async function setAddRoute() {
  */
 export function getBackEndControlRoutes() {
 	//获取所有的按钮权限
-	BtnPermissionStore().getBtnPermissionStore();
+	BtnPermissionStore().getBtnPermissionStore().then();
 	// 获取系统配置
-	SystemConfigStore().getSystemConfigs()
+	SystemConfigStore().getSystemConfigs().then();
 	// 获取所有部门信息
-	useDeptInfoStore().requestDeptInfo()
+	useDeptInfoStore().requestDeptInfo().then();
 	// 获取字典信息
-	DictionaryStore().getSystemDictionarys()
+	DictionaryStore().getSystemDictionarys().then();
 	return menuApi.getSystemMenu();
 }
 
@@ -170,16 +170,16 @@ export function backEndComponent(routes: any) {
 			}
 		}else{
 			if(item.is_iframe){
-				// const iframeRoute:RouteRecordRaw = {
-				// 	...item
-				// }
-				// router.addRoute(iframeRoute)
+				const iframeRoute:RouteRecordRaw = {
+					...item
+				}
+				router.addRoute(iframeRoute)
 				item.meta.isLink = item.link_url
-				// item.path = `${item.path}Link`
-				// item.name = `${item.name}Link`
-				// item.meta.isIframe = item.is_iframe
-				// item.meta.isKeepAlive = false
-				// item.meta.isIframeOpen = true
+				item.path = `${item.path}Link`
+				item.name = `${item.name}Link`
+				item.meta.isIframe = item.is_iframe
+				item.meta.isKeepAlive = false
+				item.meta.isIframeOpen = true
 				item.component = dynamicImport(dynamicViewsModules, 'layout/routerView/link.vue')
 			}
 		}
