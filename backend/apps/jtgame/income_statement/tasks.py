@@ -40,3 +40,10 @@ def task__make_daily_detail_report(shifting_days=0):
         result = {"success": False, "status": "error", "error": str(e), "date": today_str}
 
     return json.dumps(result, ensure_ascii=False)
+
+
+@app.task
+def task__clear_income_data():
+    today = datetime.date.today()
+    IncomeData.objects.filter(date__lt=today - datetime.timedelta(days=30)).delete()
+    return json.dumps({"success": True, "status": "delete"}, ensure_ascii=False)

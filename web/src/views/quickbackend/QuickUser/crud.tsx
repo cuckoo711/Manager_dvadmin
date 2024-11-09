@@ -16,6 +16,7 @@ import {dictionary} from '/@/utils/dictionary';
 import {successMessage} from '/@/utils/message';
 import {auth} from '/@/utils/authFunction'
 import {commonCrudConfig} from "/@/utils/commonCrud";
+import {UpdateCookie} from "./api";
 // 注意：以下FastCrud配置应替换为实际的JavaScript/TypeScript代码片段
 export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps): CreateCrudOptionsRet {
     const pageRequest = async (query: UserPageQuery) => {
@@ -64,6 +65,16 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         iconRight: 'Delete',
                         type: 'text',
                         show: auth("QuickUser:Delete")
+                    },
+                    updateCookie: {
+                        text: '更新cookie',
+                        type: 'text',
+                        iconRight: 'Refresh',
+                        show: true,
+                        click: async (obj) => {
+                            await UpdateCookie(obj.row.id);
+                            successMessage('更新成功');
+                        }
                     },
                 },
             },
@@ -117,7 +128,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     })
                 },
                 ...commonCrudConfig({
-                    creator_name: {table: true},
+                    creator_name: {table: true, },
                     update_datetime: {table: true},
                 })
             },

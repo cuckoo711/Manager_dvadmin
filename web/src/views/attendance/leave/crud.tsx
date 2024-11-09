@@ -148,30 +148,6 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         align: 'center',
                     },
                 },
-                creator: {
-                    title: '创建者',
-                    type: 'dict-select',
-                    form: {
-                        show: false,
-                    },
-                    column: {
-                        show: false,
-                    },
-                    search: {
-                        show: true,
-                        component: {
-                            props: {
-                                clearable: true,
-                                filterable: true,
-                            },
-                        },
-                    },
-                    dict: dict({
-                        url: '/api/system/user/',
-                        value: 'id',
-                        label: 'name',
-                    }),
-                },
                 creator_name: {},
                 create_datetime: {},
                 leave_type: {
@@ -329,6 +305,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         },
                         creator_name: {
                             table: true,
+                            search: true,
                         }
                     }
                 )

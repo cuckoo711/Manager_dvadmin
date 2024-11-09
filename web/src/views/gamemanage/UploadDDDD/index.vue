@@ -144,7 +144,9 @@ import {
   ElTabPane,
   ElButton,
   ElDatePicker,
-  ElMessage, ElMessageBox, genFileId
+  ElMessage,
+  ElMessageBox,
+  genFileId
 } from 'element-plus';
 import type {UploadInstance, UploadProps, UploadRawFile} from 'element-plus'
 
@@ -496,7 +498,7 @@ export default defineComponent({
     const uploadToServer = async () => {
       if (fileData.value) {
         const loadingMessage = ElMessage({
-          message: '正在上传中，请稍候（离开页面不影响上传结果）...',
+          message: '正在上传中,请稍候(离开页面不影响上传结果)...',
           type: 'info',
           showClose: false,
           duration: 0,

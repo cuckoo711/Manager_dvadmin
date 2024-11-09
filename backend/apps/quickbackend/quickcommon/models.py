@@ -16,7 +16,7 @@ class QuickUser(CoreModel):
         ('1', '失效'),
     )
     # 用户名
-    username = models.CharField(max_length=50, unique=True, verbose_name='用户名')
+    username = models.CharField(max_length=50, verbose_name='用户名')
     # 密码
     password = models.CharField(max_length=50, verbose_name='密码')
     # cookie
@@ -53,12 +53,12 @@ class QuickUser(CoreModel):
             return False
         return True
 
-    def update_cookie(self):
+    def update_cookie(self, force=False):
         """
         更新cookie
         :return: True: 更新成功 False: 更新失败 None: 无需更新
         """
-        if self.check_cookie():
+        if self.check_cookie() or force:
             cookie, expires_time = QuickLogin().get_cookie(self.username, self.password)
             if cookie and expires_time:
                 self.cookie = cookie

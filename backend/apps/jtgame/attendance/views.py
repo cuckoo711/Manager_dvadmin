@@ -56,6 +56,13 @@ class LeaveViewSet(CustomModelViewSet):
     serializer_class = LeaveSerializer
     permission_classes = []
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        creator_name = self.request.query_params.get('creator_name', None)
+        if creator_name:
+            queryset = queryset.filter(creator__name__icontains=creator_name)
+        return queryset
+
     def get_object(self) -> Leave:
         filter_kwargs = {'id': self.kwargs['pk']}
         obj = self.queryset.filter(**filter_kwargs).first()

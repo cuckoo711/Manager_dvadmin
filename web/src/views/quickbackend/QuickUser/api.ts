@@ -41,3 +41,10 @@ export function DelObj(id: DelReq) {
 		data: { id },
 	});
 }
+
+export function UpdateCookie(id: InfoReq) {
+	return request({
+		url: apiPrefix + id + '/UpdateCookie/',
+		method: 'get',
+	});
+}

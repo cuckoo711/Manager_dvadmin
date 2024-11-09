@@ -11,6 +11,7 @@ import json
 import re
 
 from django.db.models import Model
+from django.db.models.functions import Substr, Length
 
 from apps.jtgame.game_manage.models import Channel, Research, ResearchSplit, Games, RevenueSplit
 
@@ -313,10 +314,22 @@ def handle_scheduling(sheet, messages, coverList):
     return False
 
 
-def get_last2word_from_channels():
+def get_last2word_from_channels() -> list[str]:
     channels = []
     [channels.extend(_) for _ in Channel.objects.filter(status=True).values_list('alias', flat=True)]
     word2channel = [name[-2:].upper() for name in channels if
                     (len(name) > 2 and re.match(r'^[A-Z]{2}$', name[-2:].upper()))]
     word2channel = list(set(word2channel))
     return word2channel
+
+
+def get_channel_suffix() -> list[str]:
+    suffixs = []
+    quicks = Games.objects.filter(
+        status=2, quick_name__regex=r'[a-zA-Z]{2}$'
+    ).annotate(
+        last_two_chars=Substr('quick_name', Length('quick_name') - 1, 2)
+    ).values_list('last_two_chars', flat=True)
+    if quicks:
+        suffixs = list(set(quicks))
+    return suffixs

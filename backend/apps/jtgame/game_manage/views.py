@@ -134,11 +134,23 @@ class RevenueSplitViewSet(CustomModelViewSet):
     serializer_class = RevenueSplitSerializer
 
     def get_queryset(self):
+        queryset = super().get_queryset()
+        game_name = self.request.query_params.get('game_name', None)
+        if game_name:
+            queryset = queryset.filter(game__name__icontains=game_name)
+        channel_name = self.request.query_params.get('channel_name', None)
+        if channel_name:
+            queryset = queryset.filter(channel__name__icontains=channel_name)
+        game_release_date = self.request.query_params.get('game_release_date', None)
+        if game_release_date:
+            game_release_date = game_release_date.split('T')[0]
+            queryset = queryset.filter(game__release_date__icontains=game_release_date)
+
         if getattr(self, 'values_queryset', None):
             return self.values_queryset
         elif self.action == 'export_data':
             self.queryset = RevenueSplit.objects.all().select_related(*self.export_foreignKey__value_column)
-        return super().get_queryset()
+        return queryset
 
     export_field_label = {
         'game_name': '游戏名称',
@@ -158,11 +170,23 @@ class ResearchSplitViewSet(CustomModelViewSet):
     serializer_class = ResearchSplitSerializer
 
     def get_queryset(self):
+        queryset = super().get_queryset()
+        game_name = self.request.query_params.get('game_name', None)
+        if game_name:
+            queryset = queryset.filter(game__name__icontains=game_name)
+        research_name = self.request.query_params.get('research_name', None)
+        if research_name:
+            queryset = queryset.filter(research__name__icontains=research_name)
+        game_release_date = self.request.query_params.get('game_release_date', None)
+        if game_release_date:
+            game_release_date = game_release_date.split('T')[0]
+            queryset = queryset.filter(game__release_date__icontains=game_release_date)
+
         if getattr(self, 'values_queryset', None):
             return self.values_queryset
         elif self.action == 'export_data':
             self.queryset = ResearchSplit.objects.all().select_related(*self.export_foreignKey__value_column)
-        return super().get_queryset()
+        return queryset
 
     export_field_label = {
         'game_name': '游戏名称',

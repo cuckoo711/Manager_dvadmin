@@ -9,7 +9,7 @@ from dvadmin.utils.backends import logger
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 from .models import AuthorizationInfo, AuthorizationConfig, AuthorizationLetter, Notice
-from .tasks import generate_authorization_letter, generate_notice
+from .tasks import generate_authorization_letter, generate_notice, task__auto_clear_authorization_letter
 
 
 class AuthorInfoSerializer(CustomModelSerializer):
@@ -96,80 +96,12 @@ class AuthorLetterViewSet(CustomModelViewSet):
             return JsonResponse({'status': False, 'message': str(e)})
 
     @action(detail=False, methods=['get'])
-    def clear(self, request, pk=None):
+    def clear(self, request):
         if AuthorizationLetter.objects.filter(status=2).exists():
             return JsonResponse({'status': False, 'message': '存在正在生成的授权书，请稍后再试'})
         try:
-            objs = AuthorizationLetter.objects.filter(authorization_filepath__isnull=False).values_list(
-                'authorization_filepath', flat=True)
-            save_path = set(objs)
-
-            output_dir_config = AuthorizationConfig.objects.filter(key='authorization_output_dir').first()
-            if not output_dir_config:
-                return JsonResponse({'status': False, 'message': '未找到授权书输出路径配置'}, status=400)
-            output_dir = output_dir_config.value
-
-            file_count = 0
-            file_clear_count = 0
-
-            def safe_remove(_file_path):
-                try:
-                    if os.path.exists(_file_path):
-                        os.remove(_file_path)
-                        return True
-                    return False
-                except Exception as _:
-                    logger.error(f'删除文件 {_file_path} 时发生错误: {str(_)}')
-                    return False
-
-            def safe_rmdir(_dir_path):
-                try:
-                    if os.path.exists(_dir_path):
-                        os.rmdir(_dir_path)
-                        return True
-                    return False
-                except Exception as _:
-                    logger.error(f'删除目录 {_dir_path} 时发生错误: {str(_)}')
-                    return False
-
-            # 清理多余文件
-            for root, dirs, files in os.walk(output_dir):
-                for file in files:
-                    file_path = os.path.abspath(os.path.join(root, file))
-                    if file_path not in save_path:
-                        if safe_remove(file_path):
-                            file_clear_count += 1
-                    file_count += 1
-
-            dir_count = 0
-            dir_clear_count = 0
-            # 清理空目录
-            for root, dirs, files in os.walk(output_dir, topdown=False):
-                for _dir in dirs:
-                    dir_path = os.path.abspath(os.path.join(root, _dir))
-                    if not os.path.exists(dir_path):
-                        continue
-                    if not os.listdir(dir_path):
-                        if safe_rmdir(dir_path):
-                            dir_clear_count += 1
-                    dir_count += 1
-                if not os.path.exists(root):
-                    continue
-                if not os.listdir(root):
-                    if safe_rmdir(root):
-                        dir_clear_count += 1
-
-            logger.info(
-                f'清理了{file_clear_count}个文件，共{file_count}个文件, '
-                f'清理了{dir_clear_count}个目录，共{dir_count}个目录'
-            )
-            return JsonResponse(
-                {
-                    'status': True,
-                    'message': f'共清理{file_clear_count}个文件，共{file_count}个文件, '
-                               f'共清理{dir_clear_count}个目录，共{dir_count}个目录'
-                }
-            )
+            task__auto_clear_authorization_letter.delay()
+            return JsonResponse({'status': True, 'message': '已提交任务'})
         except Exception as e:
             logger.error(f'清理文件时发生错误: {str(e)}')
             return JsonResponse({'status': False, 'message': f'清理文件时发生错误: {str(e)}'})
@@ -182,7 +114,8 @@ class NoticeSerializer(CustomModelSerializer):
         model = Notice
         fields = '__all__'
 
-    def get_game_names(self, obj):
+    @staticmethod
+    def get_game_names(obj):
         return [game.name for game in obj.games.all()]
 
     def update(self, instance, validated_data):
@@ -197,6 +130,21 @@ class NoticeSerializer(CustomModelSerializer):
 class NoticeViewSet(CustomModelViewSet):
     queryset = Notice.objects.all()
     serializer_class = NoticeSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # ?page=1&limit=20&games%5B0%5D=450&games%5B1%5D=449
+        games = []
+        for key in self.request.query_params:
+            if key.startswith('games['):
+                games.append(self.request.query_params[key])
+
+        if games:
+            games = list(map(int, games))
+            for game_id in games:
+                queryset = queryset.filter(games__id=game_id)
+
+        return queryset
 
     def get_object(self) -> Notice:
         filter_kwargs = {'id': self.kwargs['pk']}

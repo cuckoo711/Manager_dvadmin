@@ -6,11 +6,17 @@ Project Name: Manager_dvadmin
 FILE NAME: quickapi.py
 Editor: 30386
 """
+import csv
+import uuid
 from datetime import datetime, timedelta
-from io import BytesIO
-from typing import Dict
+from io import BytesIO, TextIOWrapper
+from typing import Dict, Tuple, List, Any
+from urllib import parse
 from urllib.parse import quote
+from zipfile import ZipFile
 
+import chardet
+import pandas as pd
 from PIL import Image
 from bs4 import BeautifulSoup, Tag
 from ddddocr import DdddOcr
@@ -130,13 +136,16 @@ class QuickLogin:
             print(f"切换游戏失败: {e}")
         return False
 
-    def get_channel_list(self, game_id) -> dict:
+    def get_channel_list(self, game_id, channel_suffixs: list = None) -> dict:
         """
         获取指定游戏的渠道列表。
         :param game_id: 游戏 ID
+        :param channel_suffixs: 渠道列表的后缀
         :return: 渠道列表的字典
         """
         channel_dict = {}
+        if not channel_suffixs:
+            channel_suffixs = ['全部']
 
         try:
             response = self.session.get(url=f"https://www.quicksdk.com/gameSet/editStopUser/gid/{game_id}?isFrame=1",
@@ -151,12 +160,24 @@ class QuickLogin:
             channel_data = [self.parse_channel_data(section) for section in channel_sections]
             if all(len(data) == len(channel_data[0]) for data in channel_data):
                 for channel_id in channel_data[0]:
-                    channel_dict[channel_id] = {
-                        'channel_name': channel_data[0][channel_id]['channel_name'],
-                        'no_login': channel_data[0][channel_id]['channel_status'],
-                        'no_pay': channel_data[1][channel_id]['channel_status'],
-                        'no_register': channel_data[2][channel_id]['channel_status']
-                    }
+                    add = False
+                    channel_name = channel_data[0][channel_id]['channel_name']
+                    if '全部' not in channel_suffixs:
+                        if '无后缀' in channel_suffixs:
+                            if not any(suffix in channel_name for suffix in channel_suffixs if suffix != '无后缀'):
+                                add = True
+                        else:
+                            if any(suffix in channel_name for suffix in channel_suffixs):
+                                add = True
+                    else:
+                        add = True
+                    if add:
+                        channel_dict[channel_id] = {
+                            'channel_name': channel_name,
+                            'no_login': channel_data[0][channel_id]['channel_status'],
+                            'no_pay': channel_data[1][channel_id]['channel_status'],
+                            'no_register': channel_data[2][channel_id]['channel_status']
+                        }
         except Exception as e:
             print(f"获取渠道列表失败: {e}")
         return channel_dict
@@ -252,10 +273,109 @@ class QuickLogin:
 
         return data_params
 
+    def get_player_data_by_any(self, view: str, txt: str) -> str | tuple[list[Any], list[Any]]:
+        """
+        获取指定玩家 ID 的玩家数据。
+        :param view: 视图名称
+        :param txt: 搜索文本
+        :return: 玩家数据字典
+        """
+        try:
+            base_url = ("https://www.quicksdk.com/baseData/importOrderList/channelId/0/"
+                        "btime/2020-01-01%2000:00:00/etime/2030-12-31%2023:59:59/"
+                        f"payStatus/4/checkView/{view}/" +
+                        (f"viewtxt/{parse.quote(txt)}/" if txt else '') +
+                        f"platform/0/isAjax/1")
+            data_params = {
+                'fileName': uuid.uuid4().hex,
+                'itemList': '1,2,3,4,5,6,7,8,9,10,11,12,13,14',
+                'pageRows': '1000',
+                'format': 'csv'
+            }
+            data_str = parse.urlencode(data_params)
+            response = self.session.get(url=f"{base_url}?{data_str}", timeout=10)
+            response.encoding = 'utf-8'
+            response.raise_for_status()
+
+            response_json = response.json()
+            if response_json.get('status'):
+                data_url = response_json.get('url')
+                load_data_url = f"https://www.quicksdk.com{data_url}"
+                player_data_full, player_data_mix = [], []
+                for io in self._load_data_url(load_data_url):
+                    _player_data_full, _player_data_mix = self._parse_player_data(io)
+                    player_data_full.extend(_player_data_full)
+                    player_data_mix.extend(_player_data_mix)
+                player_data = player_data_full, player_data_mix
+            else:
+                return f"获取玩家数据失败: {response_json.get('error')}"
+
+        except Exception as e:
+            return f"获取玩家数据失败: {e}"
+
+        return player_data
+
+    def _load_data_url(self, url: str) -> list[BytesIO]:
+        """
+        从指定的 URL 下载数据并返回 BytesIO 对象列表。
+        :param url: 数据的 URL
+        :return: 包含数据的 BytesIO 对象列表
+        """
+        if not url:
+            return []
+
+        response = self.session.get(url=url, timeout=60)
+        response.raise_for_status()
+
+        if url.endswith('csv'):
+            return [BytesIO(response.content)]
+        elif url.endswith('zip'):
+            bytes_io_list = []
+            with ZipFile(BytesIO(response.content)) as zip_file:
+                for file_name in zip_file.namelist():
+                    with zip_file.open(file_name) as file:
+                        bytes_io_list.append(BytesIO(file.read()))
+
+            return bytes_io_list
+        else:
+            return []
+
+    @staticmethod
+    def _parse_player_data(io: BytesIO) -> tuple[list, list]:
+        """
+        从玩家数据的 HTML 标签中解析出玩家数据字典。
+        :param io: 包含玩家数据的 csv 文件
+        :return: 玩家数据字典
+        """
+        io.seek(0)  # 确保 BytesIO 的指针在开头
+        raw_data = io.read()  # 读取所有字节
+        result = chardet.detect(raw_data)
+        encoding = result['encoding']
+
+        player_data = []
+        with TextIOWrapper(BytesIO(raw_data), encoding=encoding) as text_io:
+            csv_reader = csv.reader(text_io)
+            for row in csv_reader:
+                player_data.append([_.strip() for _ in row])
+
+        header = player_data.pop(0)
+        player_data = [dict(zip(header, row)) for row in player_data]
+
+        df = pd.DataFrame(player_data)
+        df['创建'] = pd.to_datetime(df['创建'])
+        df['创建日期'] = df['创建'].dt.date
+        df['金额'] = df['金额'].str.replace(',', '')
+        df['金额'] = df['金额'].str.extract(r'(\d+\.\d+|\d+)')
+        df['金额'] = df['金额'].astype(float)
+
+        result = df.groupby(['渠道', '区服', '用户 UID', '角色', '创建日期'])['金额'].sum().reset_index()
+        result['金额'] = result['金额'].astype(float)
+
+        return player_data, result.to_dict(orient='records')
+
 
 if __name__ == '__main__':
     test = QuickLogin()
-    print(test.load_game_data())
     print(test.get_cookie("jtgameMXY", "jtgame123"))
     # test.load_cookie(
     #     'SESSIONID=ouu99tq4o0j70r2j3evs8a0k62; '
@@ -265,7 +385,5 @@ if __name__ == '__main__':
     #     'authToken=Yl1u%2B37QS7t%2BcVUzUxPNMOVaxDfdToit%2F3jnZx%2FiY7e7AHJCx6K4R8BGLrMtetOlXyA2w3QNcreBZ%2FJMF6w9NnM9W8lRtu50WP0KE9oayZnZIscx8ki3jwp1bbVlCmmFcmNaf2cH6B1Ld9Q%2FJR0O7aVy%2F7R3xIa2zKNTNBtvEIh72s1ZoEkETaXqTH0VJk3g; '
     #     'expires=Fri, 24-Oct-2025 09:52:46 GMT; path=/; domain=.quicksdk.com')
     print(test.load_game_data())
-    print(test.get_channel_list("65539"))
-    print(test.switch_game("62033"))
-    print(test.get_channel_list("65539"))
-    print(test.get_channel_list("62033"))
+    print(test.switch_game("70099"))
+    print(test.get_player_data_by_any("roleName", ""))

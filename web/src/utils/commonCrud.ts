@@ -116,6 +116,7 @@ export const commonCrudConfig = (options = {
         },
         creator_name: {
             title: '创建人',
+            type: 'text',
             search: {
                 show: options.creator_name?.search || false
             },

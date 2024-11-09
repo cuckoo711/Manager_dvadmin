@@ -114,9 +114,6 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 }, game: {
                     title: "游戏名称",
                     type: "dict-select",
-                    search: {
-                        show: true,
-                    },
                     column: {
                         show: false,
                     },
@@ -136,22 +133,20 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     })
                 }, game_name: {
                     title: "游戏名称",
-                    type: "input",
+                    type: "text",
                     column: {
                         align: 'center',
                         show: true,
                         width: 350,
                         showOverflowTooltip: true,
                     },
-                    form: {
-                        show: false
-                    },
-                }, research: {
-                    title: "研发名称",
-                    type: "dict-select",
                     search: {
                         show: true,
                     },
+                    form: {show: false}
+                }, research: {
+                    title: "研发名称",
+                    type: "dict-select",
                     column: {
                         show: false,
                     },
@@ -171,15 +166,16 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     })
                 }, research_name: {
                     title: "研发名称",
-                    type: "input",
+                    type: "text",
                     column: {
                         align: 'center',
                         show: true,
                         width: 150,
                     },
-                    form: {
-                        show: false
+                    search: {
+                        show: true,
                     },
+                    form: {show: false}
                 }, game_release_date: {
                     title: "游戏发行日期",
                     type: "date",

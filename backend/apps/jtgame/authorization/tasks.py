@@ -7,14 +7,15 @@ FILE NAME: tasks.py
 Editor: 30386
 """
 import json
+import os
 from datetime import timedelta
 
 import requests
 
 from application.celery import app
+from apps.jtgame.authorization.models import AuthorizationConfig, AuthorizationInfo, AuthorizationLetter, Notice
 from dvadmin.system.views.message_center import MessageCenterCreateSerializer
 from dvadmin.utils.backends import logger
-from apps.jtgame.authorization.models import AuthorizationConfig, AuthorizationInfo, AuthorizationLetter, Notice
 
 
 @app.task
@@ -162,3 +163,74 @@ def generate_notice(obj_id):
         obj.status = 3
         obj.save()
         raise e
+
+
+def safe_remove(_file_path):
+    try:
+        if os.path.exists(_file_path):
+            os.remove(_file_path)
+            return True
+        return False
+    except Exception as _:
+        logger.error(f'删除文件 {_file_path} 时发生错误: {str(_)}')
+        return False
+
+
+def safe_rmdir(_dir_path):
+    try:
+        if os.path.exists(_dir_path):
+            os.rmdir(_dir_path)
+            return True
+        return False
+    except Exception as _:
+        logger.error(f'删除目录 {_dir_path} 时发生错误: {str(_)}')
+        return False
+
+
+@app.task
+def task__auto_clear_authorization_letter():
+    objs = AuthorizationLetter.objects.filter(authorization_filepath__isnull=False).values_list(
+        'authorization_filepath', flat=True)
+    save_path = set(objs)
+
+    output_dir_config = AuthorizationConfig.objects.filter(key='authorization_output_dir').first()
+    if not output_dir_config:
+        message = '未找到授权书输出路径配置'
+        logger.error(message)
+        return {'error': message}
+    output_dir = output_dir_config.value
+
+    file_count = 0
+    file_clear_count = 0
+
+    # 清理多余文件
+    for root, dirs, files in os.walk(output_dir):
+        for file in files:
+            file_path = os.path.abspath(os.path.join(root, file))
+            if file_path not in save_path:
+                if safe_remove(file_path):
+                    file_clear_count += 1
+            file_count += 1
+
+    dir_count = 0
+    dir_clear_count = 0
+    # 清理空目录
+    for root, dirs, files in os.walk(output_dir, topdown=False):
+        for _dir in dirs:
+            dir_path = os.path.abspath(os.path.join(root, _dir))
+            if not os.path.exists(dir_path):
+                continue
+            if not os.listdir(dir_path):
+                if safe_rmdir(dir_path):
+                    dir_clear_count += 1
+            dir_count += 1
+        if not os.path.exists(root):
+            continue
+        if not os.listdir(root):
+            if safe_rmdir(root):
+                dir_clear_count += 1
+
+    message = (f'清理了{file_clear_count}个文件，共{file_count}个文件, '
+               f'清理了{dir_clear_count}个目录，共{dir_count}个目录')
+    logger.info(message)
+    return {'message': message}

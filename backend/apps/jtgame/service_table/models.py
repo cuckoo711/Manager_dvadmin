@@ -84,8 +84,7 @@ class ServiceTableNormal(CoreModel):
     open_datetime = models.DateTimeField(verbose_name='开服时间')
     open_frequency = models.IntegerField(verbose_name='开服频率', default=1)
     open_count = models.IntegerField(verbose_name='开服数量', default=1)
-
-    copy_content = models.CharField(max_length=255, verbose_name='复制内容', null=True)
+    copy_content = models.CharField(max_length=2048, verbose_name='复制内容', null=True)
     first_service_path = models.CharField(max_length=255, verbose_name='首服文件路径', null=True)
     no_first_service_path = models.CharField(max_length=255, verbose_name='无首服文件路径', null=True)
     generate_status = models.CharField(max_length=1, choices=GENERATE_STATUS, verbose_name='生成状态', default='0')
