@@ -1,0 +1,83 @@
+from django.urls import register_converter
+import warnings
+
+from django.conf import settings
+from django.urls import path
+
+from . import views
+
+
+# 自定义 path converter 类
+class TaskPatternConverter:
+    """Custom path converter for task & group id's.
+    They are slightly different from the built `uuid`
+    """
+
+    regex = r'[\w\d\-\.]+'
+
+    @staticmethod
+    def to_python(value):
+        """Convert url to python value."""
+        return str(value)
+
+    @staticmethod
+    def to_url(value):
+        """Convert python value into url, just a string."""
+        return value
+
+
+# 注册转换器
+register_converter(TaskPatternConverter, 'task_pattern')
+
+urlpatterns = [
+    path(
+        'task/done/<task_pattern:task_id>/',
+        views.is_task_successful,
+        name='celery-is_task_successful'
+    ),
+    path(
+        'task/status/<task_pattern:task_id>/',
+        views.task_status,
+        name='celery-task_status'
+    ),
+    path(
+        'group/done/<task_pattern:group_id>/',
+        views.is_group_successful,
+        name='celery-is_group_successful'
+    ),
+    path(
+        'group/status/<task_pattern:group_id>/',
+        views.group_status,
+        name='celery-group_status'
+    ),
+]
+
+if getattr(settings, 'DJANGO_CELERY_RESULTS_ID_FIRST_URLS', True):
+    warnings.warn(
+        "ID first urls depricated, use noun first urls instead."
+        "Will be removed in 2022.",
+        DeprecationWarning
+    )
+
+    urlpatterns += [
+        path(
+            '<task_pattern:task_id>/done/',
+            views.is_task_successful,
+            name='celery-is_task_successful'
+        ),
+        path(
+            '<task_pattern:task_id>/status/',
+            views.task_status,
+            name='celery-task_status'
+        ),
+        path(
+            '<task_pattern:group_id>/group/done/',
+            views.is_group_successful,
+            name='celery-is_group_successful'
+        ),
+        path(
+            '<task_pattern:group_id>/group/status/',
+            views.group_status,
+            name='celery-group_status'
+        ),
+    ]
