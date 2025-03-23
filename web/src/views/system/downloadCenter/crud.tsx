@@ -1,10 +1,9 @@
-import {CrudOptions, AddReq, DelReq, EditReq, dict, CrudExpose, compute} from '@fast-crud/fast-crud';
+import { CrudOptions, AddReq, DelReq, EditReq, dict, CrudExpose, compute } from '@fast-crud/fast-crud';
 import * as api from './api';
-import {dictionary} from '/@/utils/dictionary';
-import {successMessage} from '../../../utils/message';
-import {auth} from '/@/utils/authFunction'
-import {types} from "sass";
-import Boolean = types.Boolean;
+import { dictionary } from '/@/utils/dictionary';
+import { successMessage } from '../../../utils/message';
+import { auth } from '/@/utils/authFunction';
+import { getBaseURL } from '/@/utils/baseUrl';
 
 interface CreateCrudOptionsTypes {
     output: any;
@@ -12,24 +11,23 @@ interface CreateCrudOptionsTypes {
 }
 
 //此处为crudOptions配置
-export const createCrudOptions = function ({crudExpose}: { crudExpose: CrudExpose; }): CreateCrudOptionsTypes {
+export const createCrudOptions = function ({ crudExpose }: { crudExpose: CrudExpose; }): CreateCrudOptionsTypes {
     const pageRequest = async (query: any) => {
         return await api.GetList(query);
     };
-    const editRequest = async ({form, row}: EditReq) => {
+    const editRequest = async ({ form, row }: EditReq) => {
         form.id = row.id;
         return await api.UpdateObj(form);
     };
-    const delRequest = async ({row}: DelReq) => {
+    const delRequest = async ({ row }: DelReq) => {
         return await api.DelObj(row.id);
     };
-    const addRequest = async ({form}: AddReq) => {
+    const addRequest = async ({ form }: AddReq) => {
         return await api.AddObj(form);
     };
 
     //权限判定
 
-    // @ts-ignore
     // @ts-ignore
     return {
         crudOptions: {
@@ -74,16 +72,12 @@ export const createCrudOptions = function ({crudExpose}: { crudExpose: CrudExpos
                         show: compute(ctx => ctx.row.task_status === 2),
                         text: '下载文件',
                         type: 'warning',
-                        click: (ctx) => {
-                            const baseUrl = import.meta.env.VITE_API_URL; // 读取 .env.development 中的 VITE_API_URL
-                            const fullUrl = `${baseUrl}${ctx.row.url}`;  // 拼接完整的 URL
-                            window.open(fullUrl, '_blank');  // 打开新窗口
-                        }
+                        click: (ctx) => window.open(getBaseURL(ctx.row.url), '_blank')
                     }
                 },
             },
             form: {
-                col: {span: 24},
+                col: { span: 24 },
                 labelWidth: '100px',
                 wrapper: {
                     is: 'el-dialog',
@@ -93,7 +87,7 @@ export const createCrudOptions = function ({crudExpose}: { crudExpose: CrudExpos
             columns: {
                 _index: {
                     title: '序号',
-                    form: {show: false},
+                    form: { show: false },
                     column: {
                         type: 'index',
                         align: 'center',
@@ -135,10 +129,10 @@ export const createCrudOptions = function ({crudExpose}: { crudExpose: CrudExpos
                     type: 'dict-select',
                     dict: dict({
                         data: [
-                            {label: '任务已创建', value: 0},
-                            {label: '任务进行中', value: 1},
-                            {label: '任务完成', value: 2},
-                            {label: '任务失败', value: 3},
+                            { label: '任务已创建', value: 0 },
+                            { label: '任务进行中', value: 1 },
+                            { label: '任务完成', value: 2 },
+                            { label: '任务失败', value: 3 },
                         ]
                     }),
                     column: {
@@ -155,15 +149,9 @@ export const createCrudOptions = function ({crudExpose}: { crudExpose: CrudExpos
                     }
                 },
                 update_datetime: {
-                    title: '更新时间',
+                    title: '创建时间',
                     column: {
                         width: 160
-                    }
-                },
-                description: {
-                    title: '日志',
-                    column: {
-                        show: false
                     }
                 }
             },

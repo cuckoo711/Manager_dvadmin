@@ -11,7 +11,7 @@ django.setup()
 from django.core.management.base import BaseCommand
 
 from application.settings import BASE_DIR
-from dvadmin.system.models import Menu, Users, Dept, Role, ApiWhiteList, Dictionary, SystemConfig
+from dvadmin.system.models import Menu, Users, Dept, Role, ApiWhiteList, Dictionary, SystemConfig, RoleMenuButtonPermission, RoleMenuPermission
 from dvadmin.system.fixtures.initSerializer import UsersInitSerializer, DeptInitSerializer, RoleInitSerializer, \
     MenuInitSerializer, ApiWhiteListInitSerializer, DictionaryInitSerializer, SystemConfigInitSerializer
 
@@ -70,6 +70,12 @@ class Command(BaseCommand):
         self.serializer_data(SystemConfigInitSerializer, SystemConfig.objects.filter(parent_id__isnull=True),
                              output_dir)
 
+    def generate_role_menu(self):
+        self.serializer_data(RoleMenuInitSerializer, RoleMenuPermission.objects.all())
+
+    def generate_role_menu_button(self):
+        self.serializer_data(RoleMenuButtonInitSerializer, RoleMenuButtonPermission.objects.all())
+
     def handle(self, *args, **options):
         verbose = options.get('verbose')
         if verbose:
@@ -85,6 +91,8 @@ class Command(BaseCommand):
             "api_white_list": self.generate_api_white_list,
             "dictionary": self.generate_dictionary,
             "system_config": self.generate_system_config,
+            "role_menu": self.generate_role_menu,
+            "role_menu_button": self.generate_role_menu_button,
         }
         if not generate_name:
             for ele in generate_name_dict.keys():
