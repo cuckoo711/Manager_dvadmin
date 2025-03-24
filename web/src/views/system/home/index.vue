@@ -131,7 +131,9 @@ import {
   Paperclip,
   Plus,
   ToiletPaper,
-  Top
+  Top,
+  Files,
+  LocationInformation
 } from "@element-plus/icons-vue";
 
 export default defineComponent({
@@ -151,7 +153,9 @@ export default defineComponent({
     Paperclip,
     Plus,
     ToiletPaper,
-    CountUp
+    CountUp,
+    Files,
+    LocationInformation
   },
   setup() {
     // ========== 路由实例 ==========
@@ -254,7 +258,18 @@ export default defineComponent({
         value: '/consoles',
         iconColor: '#FF9800', // 再次使用鲜艳的橙色
       },
-
+      {
+        icon: markRaw(Files),
+        label: '运营活动',
+        value: '/tools/activity_manage',
+        iconColor: '#FF5252', // 再次使用鲜亮的红色
+      },
+      {
+        icon: markRaw(LocationInformation),
+        label: '域名转IP',
+        value: '/tools/domain2ips',
+        iconColor: '#E91E63', // 再次使用带有粉调的亮色
+      }
     ];
 
     // 引用 DOM 元素
@@ -899,7 +914,7 @@ $homeNavLengh: 12;
       border-radius: 4px;
       transition: all ease 0.3s;
       padding: 10px;
-      overflow: hidden;
+      overflow: auto;
       background: var(--el-color-white);
       color: var(--el-text-color-primary);
       border: 1px solid var(--next-border-color-light);
@@ -946,7 +961,7 @@ $homeNavLengh: 12;
     .home-card-item {
       height: 350px;
       width: 100%;
-      overflow: hidden;
+      overflow: auto;
 
       .home-monitor {
         height: 100%;

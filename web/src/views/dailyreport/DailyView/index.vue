@@ -139,7 +139,7 @@ const columns = [
               {{
                 default: () => (
                     <div>
-                      <el-input v-model={shouldFilter.value} placeholder="输入筛选条件" onInput={onFilter}/>
+                      <el-input v-model={shouldFilter.value} placeholder="输入筛选条件" onInput={() => onFilter(false)}/>
                       <el-button-group style="margin-top: 10px">
                         <el-button onClick={() => onFilter(true)}>
                           筛选

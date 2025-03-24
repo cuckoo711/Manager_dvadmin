@@ -251,5 +251,6 @@ class QuickRegularTaskViewSet(CustomModelViewSet):
             queryset = queryset.filter(task_date__lte=task_date_before)
         remaining_days = self.request.query_params.get('remaining_days')
         if remaining_days:
-            queryset = queryset.filter(task_date__lte=datetime.datetime.now().date() + datetime.timedelta(days=int(remaining_days)))
+            queryset = queryset.filter(
+                task_date__lte=datetime.datetime.now().date() + datetime.timedelta(days=int(remaining_days)))
         return queryset
