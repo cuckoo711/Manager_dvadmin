@@ -121,6 +121,17 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     },
                     column: {show: false},
                     search: {show: true},
+                }, sql_pwd: {
+                    title: "数据库密码",
+                    type: "text",
+                    view: {show: false},
+                    form: {
+                        show: false,
+                    },
+                    editForm: {
+                        show: true,
+                    },
+                    column: {show: false},
                 }, is_active: {
                     title: "是否启用",
                     search: {

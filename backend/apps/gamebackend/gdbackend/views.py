@@ -54,7 +54,9 @@ class GDServerSerializer(CustomModelSerializer):
     class Meta:
         model = GDServer
         fields = '__all__'
-        read_only_fields = ["id"]
+        extra_kwargs = {
+            "sql_pwd": {"write_only": True},
+        }
 
 
 class GDServerViewSet(CustomModelViewSet):
