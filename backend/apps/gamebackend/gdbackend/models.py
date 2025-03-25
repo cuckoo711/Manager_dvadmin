@@ -34,7 +34,7 @@ class GDServer(CoreModel):
     server_port = models.CharField(max_length=50, verbose_name='服务器端口')
     web_url = models.CharField(max_length=150, verbose_name='网页地址')
     is_active = models.BooleanField(verbose_name='是否激活', default=True)
-    sql_pwd = models.CharField(max_length=50, verbose_name='数据库密码', blank=True)
+    sql_pwd = models.CharField(max_length=50, verbose_name='数据库密码', blank=True, null=True)
 
     class Meta:
         db_table = table_prefix + 'gd_server'
