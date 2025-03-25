@@ -55,9 +55,9 @@
                     >
                       <el-option
                           v-for="game in games"
-                          :key="game.productId"
+                          :key="game.id"
                           :label="game.gameName"
-                          :value="game.productId"
+                          :value="game.id"
                       />
                     </el-select>
                   </template>
@@ -330,7 +330,7 @@ export default {
     },
     getLog() {
       const account = this.accountName;
-      const game = this.games.find(game => game.productId === this.selectedGame).gameName;
+      const game = this.games.find(game => game.id === this.selectedGame).gameName;
       const operation = this.batchSwitchList.reduce((acc, group) => {
         const operation = group.options.find(option => option.value === this.batchSwitchType);
         if (operation) {
@@ -390,8 +390,10 @@ export default {
       }
     },
     async refreshChannelList() {
+      // 根据选择的游戏id，获取对应的productId
       if (!this.selectedGame) return;
-      const response = await SwitchGame(this.selectedGame, this.channelSuffix);
+      const game = this.games.find(game => game.id === this.selectedGame).productId;
+      const response = await SwitchGame(game, this.channelSuffix);
       if (!response.status) {
         ElMessage.error(response.message);
         return;
@@ -501,7 +503,7 @@ export default {
     },
     async handleBatchSwitchConfirm() {
       const response = await UpdateChannelStatus(
-          this.selectedGame,
+          this.games.find(game => game.id === this.selectedGame).productId,
           this.batchSwitchType,
           this.multipleSelection
       );
@@ -515,9 +517,9 @@ export default {
       this.multipleSelection = {};
     },
     async handleRegularBatchSwitchConfirm(scheduledDate) {
-      const gameName = this.games.find(game => game.productId === this.selectedGame).gameName;
+      const gameName = this.games.find(game => game.id === this.selectedGame).gameName;
       const response = await UpdateRegularChannelStatus(
-          this.selectedGame,
+          this.games.find(game => game.id === this.selectedGame).productId,
           gameName,
           this.multipleSelection,
           this.getLog(),

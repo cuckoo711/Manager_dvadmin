@@ -103,7 +103,6 @@ class QuickLogin:
             response.raise_for_status()
             soup = BeautifulSoup(response.text, 'html.parser')
             game_elements = soup.select('.gpad-btm a')
-            # replacements = {"01": "0.1", "005": "0.05"}
             for game in game_elements:
                 game_title = game.get('title')
                 product_id = game.get('productid')
@@ -111,9 +110,6 @@ class QuickLogin:
                     continue
                 game_title = game_title.strip()
                 games_by_id.append({'gameName': game_title, 'productId': product_id})
-                # for old, new in replacements.items():
-                #     if old in game_title:
-                #         games_by_id.append({'gameName': game_title.replace(old, new), 'productId': product_id})
             return games_by_id
         except Exception as e:
             print(f"获取游戏数据失败: {e}")

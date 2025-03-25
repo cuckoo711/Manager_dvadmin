@@ -17,7 +17,6 @@ from dvadmin.utils.backends import logger
 @app.task
 def task__auto_update_quick_cookies():
     for account in QuickUser.objects.all():
-        account: QuickUser
         if account.password:
             account.update_cookie()
 

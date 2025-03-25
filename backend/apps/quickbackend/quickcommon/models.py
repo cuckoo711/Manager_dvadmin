@@ -51,12 +51,13 @@ class QuickUser(CoreModel):
         :return: True: 未过期 False: 已过期
         """
         if not self.expire_time or self.expire_time.replace(tzinfo=None) < datetime.now() + timedelta(hours=1):
-            return False
-        return True
+            return True
+        return False
 
     def update_cookie(self, force=False):
         """
         更新cookie
+        :param force: 强制更新
         :return: True: 更新成功 False: 更新失败 None: 无需更新
         """
         if self.check_cookie() or force:

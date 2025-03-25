@@ -62,27 +62,30 @@ def replace_game_data(game_data: list):
     :param game_data: 游戏数据
     :return: 替换后的数据
     """
-    from apps.jtgame.game_manage.models import Games
+    # from apps.jtgame.game_manage.models import Games
     replace_data = []
-    games = Games.objects.all()
+    # games = Games.objects.all()
     for data in game_data:
         game_quickname = data['gameName']
-        for game in games:
-            if game_quickname == game.quick_name:
-                replace_data.append({"gameName": game.name, "productId": data['productId']})
-                break
-        else:
-            # replace_data.append(data)
-            if '01' in game_quickname:
-                replace_data.append(deepcopy({
-                    "gameName": game_quickname.replace('01', '0.1'),
-                    "productId": data['productId']
-                }))
-            elif '005' in game_quickname:
-                replace_data.append({
-                    "gameName": game_quickname.replace('005', '0.05'),
-                    "productId": data['productId']
-                })
-            else:
-                replace_data.append(data)
+        # for game in games:
+        #     if game_quickname == game.quick_name:
+        #         replace_data.append({"gameName": game.name, "productId": data['productId']})
+        #         break
+        # else:
+        replace_data.append(data)
+        if '01' in game_quickname:
+            replace_data.append(deepcopy({
+                "gameName": game_quickname.replace('01', '0.1'),
+                "productId": data['productId']
+            }))
+        elif '005' in game_quickname:
+            replace_data.append({
+                "gameName": game_quickname.replace('005', '0.05'),
+                "productId": data['productId']
+            })
+
+    count = 0
+    for data in replace_data:
+        data.update({"id": count})
+        count += 1
     return replace_data

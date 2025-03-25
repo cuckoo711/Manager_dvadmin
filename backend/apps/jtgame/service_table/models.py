@@ -106,9 +106,9 @@ class ServiceTableNormal(CoreModel):
 
     # 删除条目时删除文件
     def delete(self, *args, **kwargs):
-        if os.path.exists(self.first_service_path):
+        if self.first_service_path and os.path.exists(self.first_service_path):
             os.remove(self.first_service_path)
-        if os.path.exists(self.no_first_service_path):
+        if self.no_first_service_path and os.path.exists(self.no_first_service_path):
             os.remove(self.no_first_service_path)
         super().delete(*args, **kwargs)
 
