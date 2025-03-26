@@ -200,7 +200,7 @@ export default defineComponent({
       },
       {
         icon: markRaw(Bell),
-        label: '生成公告',
+        label: '下架/关服公告',
         value: '/authorization/Notice',
         iconColor: '#E91E63', // 带有粉调的亮色
       },
@@ -248,8 +248,8 @@ export default defineComponent({
       },
       {
         icon: markRaw(Paperclip),
-        label: 'Quick后台',
-        value: '/Quick/QuickOrderList',
+        label: '登录支付封禁',
+        value: '/Quick/stopUser',
         iconColor: '#03A9F4', // 亮天蓝色
       },
       {

@@ -20,12 +20,16 @@ import other from '/@/utils/other';
 import { Local, Session } from '/@/utils/storage';
 import mittBus from '/@/utils/mitt';
 import setIntroduction from '/@/utils/setIconfont';
+import {request} from '/@/utils/service';
+import * as jwtDecodeModule from 'jwt-decode';
 
 // 引入组件
 const LockScreen = defineAsyncComponent(() => import('/@/layout/lockScreen/index.vue'));
 const Setings = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/setings.vue'));
 const CloseFull = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/closeFull.vue'));
 const Upgrade = defineAsyncComponent(() => import('/@/layout/upgrade/index.vue'));
+const jwtDecode = jwtDecodeModule.jwtDecode || jwtDecodeModule.default || jwtDecodeModule;
+
 import { ElMessageBox, ElNotification, NotificationHandle } from 'element-plus';
 import { useCore } from '/@/utils/cores';
 // 定义变量内容
@@ -151,4 +155,71 @@ onBeforeUnmount(() => {
 	// 关闭连接
 	websocket.close();
 });
+function setTokenRefreshInterval() {
+  const refreshInterval = 60 * 1000; // 每分钟检查一次
+  const bufferTime = 5 * 60 * 1000; // 提前5分钟刷新
+
+  const refreshIntervalId = setInterval(() => {
+    const refreshToken = Session.get('refreshToken');
+    const tokenExpirationTime = Number(Session.get('tokenExpirationTime')) || Date.now();
+    const currentTime = Date.now();
+
+    if (!refreshToken || isNaN(tokenExpirationTime)) {
+      clearInterval(refreshIntervalId);
+      return;
+    }
+
+    if (tokenExpirationTime - currentTime < bufferTime) {
+      refreshAccessToken().catch(() => {
+        console.warn('Token 刷新失败，用户需要重新登录');
+        window.location.href = '/login';
+      });
+    }
+  }, refreshInterval);
+}
+
+async function refreshAccessToken() {
+  const refreshToken = Session.get('refreshToken');
+
+  if (!refreshToken) {
+    console.warn('无有效的刷新令牌');
+    return;
+  }
+
+  try {
+    const response = await request({
+      url: '/token/refresh/',
+      method: 'POST',
+      data: {refresh: refreshToken},
+    });
+
+    if (response.access) {
+      Session.set('token', response.access);
+    }
+    if (response.refresh) {
+      Session.set('refreshToken', response.refresh);
+    }
+    // 解析 JWT 获取过期时间
+    try {
+      const decodedToken: any = jwtDecode(response.access); // 解码 access token
+      if (decodedToken && decodedToken.exp) {
+        const tokenExpirationTime = decodedToken.exp * 1000; // 将秒转换为毫秒
+        Session.set('tokenExpirationTime', String(tokenExpirationTime));
+      } else {
+        console.warn('未从 JWT 中获取到过期时间');
+      }
+    } catch (error) {
+      console.error('JWT 解析失败', error);
+    }
+  } catch (error) {
+    console.error('刷新 Token 请求失败', error);
+    throw error;
+  }
+}
+
+onMounted(() => {
+  console.log('Token 刷新逻辑启动');
+  setTokenRefreshInterval();
+});
+
 </script>
