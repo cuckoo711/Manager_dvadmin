@@ -196,6 +196,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 }, instance_name: {
                     title: "实例名称",
                     type: "text",
+                    search: {show: true},
                     column: {
                         showOverflowTooltip: true,
                     }

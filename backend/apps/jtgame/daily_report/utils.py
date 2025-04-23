@@ -7,23 +7,55 @@ FILE NAME: untils.py
 Editor: 30386
 """
 import datetime
+import json
 import re
 import traceback
 from collections import defaultdict
 from copy import deepcopy
+from time import sleep
 
 import requests
 from django.core.mail import send_mail
 from django.db import connection
+from tencentcloud.common import credential
+from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
+from tencentcloud.common.profile.client_profile import ClientProfile
+from tencentcloud.common.profile.http_profile import HttpProfile
+from tencentcloud.dnspod.v20210323 import dnspod_client, models
 from volcenginesdkcore import Configuration
 from volcenginesdkcore.rest import ApiException
-from volcenginesdkecs import ECSApi, DescribeInstancesRequest, RenewInstanceRequest
+from volcenginesdkecs import ECSApi, DescribeInstancesRequest, RenewInstanceRequest, EipAddressForRunInstancesInput, \
+    NetworkInterfaceForRunInstancesInput, VolumeForRunInstancesInput, RunInstancesRequest, DescribeImagesRequest
 
 from application import settings
 from apps.jtgame.daily_report.models import ConsoleAccount, QuickAccount, Consoles
 from apps.jtgame.game_manage.models import Games
 from dvadmin.utils.backends import logger
 
+
+class WeChatBot:
+    def __init__(self, webhook_key):
+        self.webhook_url = f'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={webhook_key}'
+
+    def send_text(self, content, mentioned_list=None, mentioned_mobile_list=None):
+        data = {
+            "msgtype": "text",
+            "text": {
+                "content": content,
+            }
+        }
+        if mentioned_list:
+            data['text']['mentioned_list'] = mentioned_list
+        if mentioned_mobile_list:
+            data['text']['mentioned_mobile_list'] = mentioned_mobile_list
+        return self._post_request(data)
+
+    def _post_request(self, data):
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(self.webhook_url, headers=headers, data=json.dumps(data))
+        if response.status_code != 200:
+            raise ValueError(f'Failed to send message: {response.text}')
+        return response.json()
 
 class ConsoleData:
     instances = []
@@ -119,6 +151,138 @@ class ConsoleData:
                 '所属账号': account
             })
         return instance_infos
+
+
+class ConsoleRun:
+    def __init__(self):
+        self.console = ConsoleAccount.objects.get(account="jtconsole")
+
+    def set_configuration(self):
+        configuration = Configuration()
+        configuration.ak = self.console.access_key
+        configuration.sk = self.console.secret_key
+        configuration.region = "cn-shanghai"
+        Configuration.set_default(configuration)
+
+    def get_image_list(self):
+        self.set_configuration()
+        api_instance = ECSApi()
+        describe_images_request = DescribeImagesRequest(
+            max_results=20,
+            visibility="private",
+        )
+        try:
+            result = api_instance.describe_images(describe_images_request)
+            return {'status': True, 'result': result}
+        except ApiException as e:
+            logger.error(f"Exception when calling ECSApi: {e}")
+            return {'status': False, 'result': e}
+
+    def run_instances(self, name: str, new_name: str, image_id: str, server_spec: str, dry_run: bool = True):
+        self.set_configuration()
+        api_instance = ECSApi()
+        req_eip_address = EipAddressForRunInstancesInput(
+            bandwidth_package_id="bwp-3qdfvmfgr914w7prml10y70k6",
+            charge_type="PayByTraffic",
+            release_with_instance=True,
+        )
+        req_network_interfaces = NetworkInterfaceForRunInstancesInput(
+            security_group_ids=["sg-5ggjh8d729s073inql0d64yc"],
+            subnet_id="subnet-5ggjhs3i6tj473inql4dnuw0",
+        )
+        req_volumes = VolumeForRunInstancesInput(
+            delete_with_instance="true",
+            size=300,
+        )
+        run_instances_request = RunInstancesRequest(
+            description=name,
+            dry_run=dry_run,
+            eip_address=req_eip_address,
+            hostname=new_name,
+            image_id=image_id,
+            instance_charge_type="PrePaid",
+            instance_name=name,
+            instance_type_id=server_spec,
+            keep_image_credential=True,
+            network_interfaces=[req_network_interfaces],
+            period=1,
+            period_unit="Month",
+            volumes=[req_volumes],
+            zone_id="cn-shanghai-a",
+        )
+
+        try:
+            result = api_instance.run_instances(run_instances_request)
+            return result
+        except Exception as e:
+            logger.error(f"Exception when calling ECSApi: {e}")
+            return None
+
+    def describe_instances(self, instance_id: str):
+        self.set_configuration()
+        api_instance = ECSApi()
+        describe_instances_request = DescribeInstancesRequest(
+            instance_ids=[instance_id],
+        )
+        try:
+            return api_instance.describe_instances(describe_instances_request)
+        except ApiException as e:
+            logger.error(f"Exception when calling ECSApi: {e}")
+            return None
+
+    def get_ipv4_from_instance(self, instance_id: str, retry: int = 60, stime: int = 1):
+        for i in range(retry):
+            instances = self.describe_instances(instance_id)
+            if not instances:
+                logger.error(f"获取实例信息失败: {instances}")
+                sleep(stime)
+                continue
+            instanceids = instances.instances
+            if not instanceids:
+                logger.error(f"获取实例信息失败: {instances}")
+                sleep(stime)
+                continue
+            instance = instanceids[0].to_dict()
+            if not instance.get('eip_address'):
+                logger.error(f"获取实例信息失败: {instance}")
+                sleep(stime)
+                continue
+            eip_address = instance.get('eip_address').get('ip_address')
+            if not eip_address:
+                logger.error(f"获取实例信息失败: {instance}")
+                sleep(stime)
+                continue
+            return {'status': True, 'result': eip_address}
+        return {'status': False, 'result': '获取实例信息失败'}
+
+
+def create_record(value: str, sub_domain: str):
+    try:
+        cred = credential.Credential(
+            "REMOVED_SECRET_ID",
+            "REMOVED_SECRET_KEY"
+        )
+        http_profile = HttpProfile()
+        http_profile.endpoint = "dnspod.tencentcloudapi.com"
+
+        client_profile = ClientProfile()
+        client_profile.httpProfile = http_profile
+        client = dnspod_client.DnspodClient(cred, "", client_profile)
+
+        req = models.CreateRecordRequest()
+        params = {
+            "Domain": "jingtanggame.com",
+            "RecordType": "A",
+            "RecordLine": "默认",
+            "Value": value,
+            "SubDomain": sub_domain
+        }
+        req.from_json_string(json.dumps(params))
+
+        resp = client.CreateRecord(req)
+        return {"status": True, "result": resp.to_json_string()}
+    except TencentCloudSDKException as err:
+        return {"status": False, "result": err}
 
 
 class QuickData:

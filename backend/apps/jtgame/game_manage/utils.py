@@ -10,13 +10,12 @@ import datetime
 import json
 import re
 
-from django.db.models import Model
 from django.db.models.functions import Substr, Length
 
 from apps.jtgame.game_manage.models import Channel, Research, ResearchSplit, Games, RevenueSplit
 
 
-def search_func(model: [Channel | Research], search_term) -> dict:
+def search_func(model, search_term) -> dict:
     """
     查询函数
     :param model:
@@ -29,24 +28,6 @@ def search_func(model: [Channel | Research], search_term) -> dict:
         error = f"{model}不存在: {search_term}"
         return {"status": False, "msg": error, "data": None}
     return {"status": True, "msg": "查询成功", "data": models[0]}
-
-
-def search_channel(search_term):
-    """
-    查询渠道
-    :param search_term:
-    :return:
-    """
-    return search_func(Channel, search_term)
-
-
-def search_research(search_term):
-    """
-    查询研发
-    :param search_term:
-    :return:
-    """
-    return search_func(Research, search_term)
 
 
 def parse_request_data(request):
@@ -68,7 +49,7 @@ def get_discount_from_gamename(game_name: str) -> int:
     return discount
 
 
-def handle_game(sheet, messages, coverList):
+def handle_game(sheet, messages, cover_list):
     table_data = sheet.get('tableData')
     game_name = sheet.get('gameName')
     release_date = sheet.get('releaseDate')
@@ -77,7 +58,7 @@ def handle_game(sheet, messages, coverList):
     messages['info'].append(f'处理游戏: {game_name}')
     if not scheduling:
         release_date = datetime.datetime.strptime(release_date, '%Y-%m-%d').date()
-        if "GameBase" in coverList:
+        if "GameBase" in cover_list:
             game, created = Games.objects.update_or_create(
                 name=game_name,
                 defaults={
@@ -100,7 +81,7 @@ def handle_game(sheet, messages, coverList):
             msg = f'创建游戏: {game_name}'
             messages['info'].append(msg)
         else:
-            if "GameBase" in coverList:
+            if "GameBase" in cover_list:
                 msg = (f'游戏已存在: {game_name}, '
                        f'发行主体为{parent}, '
                        f'发行时间为{release_date}')
@@ -113,7 +94,7 @@ def handle_game(sheet, messages, coverList):
         existing_channels = set(RevenueSplit.objects.filter(game=game).values_list('id', flat=True))
         processed_channels = set()
 
-        revenue_cober = "Revenue" in coverList
+        revenue_cober = "Revenue" in cover_list
         for data in table_data:
             process_channel_data(data, game, messages, processed_channels, revenue_cober)
 
@@ -166,7 +147,7 @@ def process_channel_data(data, game, messages, processed_channels, cover: bool):
             # logger.error(msg)
         return
 
-    result = search_channel(channel_name)
+    result = search_func(Channel, channel_name)
     if not result.get('status'):
         msg = result.get('msg')
         if msg not in messages['error']:
@@ -265,7 +246,7 @@ def handle_scheduling(sheet, messages, coverList):
                         # logger.error(msg)
                     continue
 
-                result = search_research(research_name)
+                result = search_func(Research, research_name)
                 if not result.get('status'):
                     msg = result.get('msg')
                     if msg not in messages['error']:
