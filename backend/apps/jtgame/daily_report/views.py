@@ -231,7 +231,7 @@ class ConsolesViewSet(CustomModelViewSet):
                 new_name=sub_domain,
                 image_id=server_image,
                 server_spec=server_spec,
-                dry_run=True
+                dry_run=False
             )
             if not create_result:
                 return JsonResponse({"message": f"创建失败", "status": False})
