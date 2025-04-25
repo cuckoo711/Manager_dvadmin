@@ -251,7 +251,7 @@ class ConsolesViewSet(CustomModelViewSet):
                 message = (
                     f"实例创建成功\n"
                     f"实例ID: {instanceids[0]}\n"
-                    f"IPv4地址: {ipv4}"
+                    f"IPv4地址: {ipv4}\n"
                     f"域名解析: {sub_domain}.jingtanggame.com"
                 )
                 wechat_bot.send_text(message)
