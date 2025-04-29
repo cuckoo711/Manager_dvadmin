@@ -76,10 +76,19 @@ const serverImageData = [
 ];
 const serverSpecData = [
 	{ label: '2c4g(优先选这个)', value: 'ecs.e-c1m2.large' },
-  { label: '2c4g(第一个售罄就选这个)', value: 'ecs.c3a.large' },
-	{ label: '2c8g', value: 'ecs.e-c1m4.large' },
-	{ label: '4c8g', value: 'ecs.e-c1m2.xlarge' },
-	{ label: '4c16g', value: 'ecs.e-c1m4.xlarge' },
+  { label: '2c4g(上一个售罄就选这个)', value: 'ecs.c3a.large' },
+	{ label: '2c8g(优先选这个)', value: 'ecs.e-c1m4.large' },
+  { label: '2c8g(上一个售罄就选这个)', value: 'ecs.g3a.large' },
+	{ label: '4c8g(优先选这个)', value: 'ecs.e-c1m2.xlarge' },
+  { label: '4c8g(上一个售罄就选这个)', value: 'ecs.c3al.xlarge' },
+	{ label: '4c16g(优先选这个)', value: 'ecs.e-c1m4.xlarge' },
+  { label: '4c16g(上一个售罄就选这个)', value: 'ecs.g3a.xlarge' },
+  { label: '8c16g(优先选这个)', value: 'ecs.e-c1m2.2xlarge' },
+  { label: '8c16g(上一个售罄就选这个)', value: 'ecs.c3a.2xlarge' },
+  { label: '8c32g(优先选这个)', value: 'ecs.e-c1m4.2xlarge' },
+  { label: '8c32g(上一个售罄就选这个)', value: 'ecs.g3al.2xlarge' },
+  { label: '8c64g(优先选这个)', value: 'ecs.r2a.2xlarge' },
+  { label: '8c64g(上一个售罄就选这个)', value: 'ecs.r3al.2xlarge' },
 ];
 const serverSpec = ref<string>('');
 const gameName = ref<string>('');
