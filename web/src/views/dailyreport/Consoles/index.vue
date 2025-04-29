@@ -7,26 +7,34 @@
 					<el-table :data="[{}]" style="width: 100%">
 						<el-table-column label="镜像选择" align="center" header-align="center" min-width="300">
 							<template #default="scope">
-								<el-select v-model="serverImage" placeholder="请选择" style="width: 100%">
-									<el-option v-for="item in serverImageData" :key="item.value" :label="item.label" :value="item.value" />
-								</el-select>
+								<el-tooltip content="选择实例的镜像" placement="bottom">
+									<el-select v-model="serverImage" placeholder="请选择" style="width: 100%">
+										<el-option v-for="item in serverImageData" :key="item.value" :label="item.label" :value="item.value" />
+									</el-select>
+								</el-tooltip>
 							</template>
 						</el-table-column>
 						<el-table-column label="服务器规格" align="center" header-align="center" min-width="300">
 							<template #default="scope">
-								<el-select v-model="serverSpec" placeholder="请选择" style="width: 100%">
-									<el-option v-for="item in serverSpecData" :key="item.value" :label="item.label" :value="item.value" />
-								</el-select>
+								<el-tooltip content="选择实例的规格" placement="bottom">
+									<el-select v-model="serverSpec" placeholder="请选择" style="width: 100%">
+										<el-option v-for="item in serverSpecData" :key="item.value" :label="item.label" :value="item.value" />
+									</el-select>
+								</el-tooltip>
 							</template>
 						</el-table-column>
 						<el-table-column label="实例名称（游戏名）" align="center" header-align="center" min-width="300">
 							<template #default="scope">
+                <el-tooltip content="实例备注名，无实际意义，仅用做备注" placement="bottom">
 								<el-input v-model="gameName" placeholder="请输入" style="width: 100%" @change="validateGameName()" />
+                </el-tooltip>
 							</template>
 						</el-table-column>
 						<el-table-column label="域名网络名" align="center" header-align="center" min-width="300">
 							<template #default="scope">
+                <el-tooltip content="实例的域名网络名，仅需填写英文部分，如：test01test" placement="bottom">
 								<el-input v-model="subDomain" placeholder="请输入" style="width: 100%" @change="validateSubDomain()" />
+                </el-tooltip>
 							</template>
 						</el-table-column>
 						<el-table-column label="操作" align="center" header-align="center" min-width="300">
@@ -195,30 +203,30 @@ async function doAdd() {
 		return;
 	}
 
-  // 三次确认 "您确保您已知晓本次操作将创建一个新的服务器实例吗？该过程可能持续20秒，期间请勿重复操作"
-  try {
-    await ElMessageBox.confirm(
-      `
+	// 三次确认 "您确保您已知晓本次操作将创建一个新的服务器实例吗？该过程可能持续20秒，期间请勿重复操作"
+	try {
+		await ElMessageBox.confirm(
+			`
       <div>
         您确保您已知晓本次操作将创建一个新的服务器实例吗？<br><br>
         该过程可能持续20秒，期间<span style="color: red;">请勿重复操作!!!</span><br>
       </div>
     `,
-      '请确认所选数据',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        dangerouslyUseHTMLString: true,
-      }
-    );
-  } catch (e) {
-    ElMessage({
-      type: 'info',
-      message: '已取消添加',
-    });
-    return;
-  }
+			'请确认所选数据',
+			{
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning',
+				dangerouslyUseHTMLString: true,
+			}
+		);
+	} catch (e) {
+		ElMessage({
+			type: 'info',
+			message: '已取消添加',
+		});
+		return;
+	}
 
 	const params = {
 		serverImage: serverImage.value,
