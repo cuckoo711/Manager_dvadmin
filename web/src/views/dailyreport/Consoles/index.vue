@@ -75,7 +75,8 @@ const serverImageData = [
 	{ label: '大明游戏服环境', value: 'image-ycn57mqkjmklsm2as1lh' },
 ];
 const serverSpecData = [
-	{ label: '2c4g', value: 'ecs.e-c1m2.large' },
+	{ label: '2c4g(优先选这个)', value: 'ecs.e-c1m2.large' },
+  { label: '2c4g(第一个售罄就选这个)', value: 'ecs.c3a.large' },
 	{ label: '2c8g', value: 'ecs.e-c1m4.large' },
 	{ label: '4c8g', value: 'ecs.e-c1m2.xlarge' },
 	{ label: '4c16g', value: 'ecs.e-c1m4.xlarge' },
@@ -94,7 +95,7 @@ function validateGameName() {
 	}
 
 	// 2. 只能包含中文、字母、数字、点“.”、空格、下划线“_”、中划线“-”、等号“=”、英文逗号“,”、中文逗号“，”和中文句号“。”
-	value = value.replace(/[^a-zA-Z0-9\u4e00-\u9fa5.\s_\-=,，。]/g, '');
+	value = value.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
 
 	// 3. 长度限制在255个字符以内
 	if (value.length > 255) {
