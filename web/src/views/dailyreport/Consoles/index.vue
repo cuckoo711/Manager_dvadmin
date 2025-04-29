@@ -5,7 +5,7 @@
 				<el-card shadow="always" style="width: 100%">
 					<template #header>创建服务器实例</template>
 					<el-table :data="[{}]" style="width: 100%">
-						<el-table-column label="镜像选择" align="center" header-align="center" min-width="300">
+						<el-table-column label="镜像选择" align="center" header-align="center">
 							<template #default="scope">
 								<el-tooltip content="选择实例的镜像" placement="bottom">
 									<el-select v-model="serverImage" placeholder="请选择" style="width: 100%">
@@ -14,7 +14,7 @@
 								</el-tooltip>
 							</template>
 						</el-table-column>
-						<el-table-column label="服务器规格" align="center" header-align="center" min-width="300">
+						<el-table-column label="服务器规格" align="center" header-align="center">
 							<template #default="scope">
 								<el-tooltip content="选择实例的规格" placement="bottom">
 									<el-select v-model="serverSpec" placeholder="请选择" style="width: 100%">
@@ -23,21 +23,21 @@
 								</el-tooltip>
 							</template>
 						</el-table-column>
-						<el-table-column label="实例名称（游戏名）" align="center" header-align="center" min-width="300">
+						<el-table-column label="实例名称（游戏名）" align="center" header-align="center">
 							<template #default="scope">
                 <el-tooltip content="实例备注名，无实际意义，仅用做备注" placement="bottom">
 								<el-input v-model="gameName" placeholder="请输入" style="width: 100%" @change="validateGameName()" />
                 </el-tooltip>
 							</template>
 						</el-table-column>
-						<el-table-column label="域名网络名" align="center" header-align="center" min-width="300">
+						<el-table-column label="域名网络名" align="center" header-align="center">
 							<template #default="scope">
                 <el-tooltip content="实例的域名网络名，仅需填写英文部分，如：test01test" placement="bottom">
 								<el-input v-model="subDomain" placeholder="请输入" style="width: 100%" @change="validateSubDomain()" />
                 </el-tooltip>
 							</template>
 						</el-table-column>
-						<el-table-column label="操作" align="center" header-align="center" min-width="300">
+						<el-table-column label="操作" align="center" header-align="center">
 							<template #default="scope">
 								<el-button-group>
 									<el-button type="primary" @click="doAdd">添加</el-button>
