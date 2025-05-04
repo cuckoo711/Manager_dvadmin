@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 
 from apps.jtgame.daily_report.models import ConsoleAccount, QuickAccount, ReportData, Consoles, DayliData
 from apps.jtgame.daily_report.tasks import task__update_consoles, task__renew
-from apps.jtgame.daily_report.utils import rebuide_datas_report
+from apps.jtgame.daily_report.utils import rebuide_datas_report, ConsoleRun, create_record, WeChatBot
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 
@@ -214,6 +214,50 @@ class ConsolesViewSet(CustomModelViewSet):
         if getattr(self, 'values_queryset', None):
             return self.values_queryset
         return super().get_queryset()
+
+    @action(detail=False, methods=['post'], url_path='create_instances')
+    def create_instances(self, request):
+        try:
+            server_image = request.data.get('serverImage')
+            server_spec = request.data.get('serverSpec')
+            game_name = request.data.get('gameName')
+            sub_domain = request.data.get('subDomain')
+
+            if not server_image or not server_spec or not game_name or not sub_domain:
+                return JsonResponse({"message": "缺少必要参数", "status": False})
+            console_run = ConsoleRun()
+            create_result = console_run.run_instances(
+                name=game_name,
+                new_name=sub_domain,
+                image_id=server_image,
+                server_spec=server_spec,
+                dry_run=False
+            )
+            if not create_result:
+                return JsonResponse({"message": f"创建失败", "status": False})
+            instanceids = create_result.instance_ids
+            if not instanceids:
+                return JsonResponse({"message": "创建失败: 未返回实例ID", "status": False})
+            ipv4_result = console_run.get_ipv4_from_instance(instanceids[0])
+            if not ipv4_result.get('status'):
+                return JsonResponse({"message": "创建失败: 未返回IPv4地址", "status": False})
+            ipv4 = ipv4_result.get('result')
+            record_result = create_record(ipv4, sub_domain)
+            if not record_result.get('status'):
+                return JsonResponse({"message": f"dnspod映射失败: {record_result.get('result')}", "status": False})
+            else:
+                webhook_key = "efd58ff8-22ab-44b1-b5fa-f494868ebfc0"
+                wechat_bot = WeChatBot(webhook_key)
+                message = (
+                    f"实例创建成功\n"
+                    f"实例ID: {instanceids[0]}\n"
+                    f"IPv4地址: {ipv4}\n"
+                    f"域名解析: {sub_domain}.jingtanggame.com"
+                )
+                wechat_bot.send_text(message)
+                return JsonResponse({"message": "创建成功", "status": True})
+        except Exception as e:
+            return JsonResponse({"message": f"服务器错误: {e}", "status": False})
 
     @action(detail=False, methods=['get'])
     def manual_refresh(self, request):

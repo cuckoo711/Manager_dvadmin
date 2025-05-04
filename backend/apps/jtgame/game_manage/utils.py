@@ -10,13 +10,12 @@ import datetime
 import json
 import re
 
-from django.db.models import Model
 from django.db.models.functions import Substr, Length
 
 from apps.jtgame.game_manage.models import Channel, Research, ResearchSplit, Games, RevenueSplit
 
 
-def search_func(model: [Channel | Research], search_term) -> dict:
+def search_func(model, search_term) -> dict:
     """
     查询函数
     :param model:
@@ -29,24 +28,6 @@ def search_func(model: [Channel | Research], search_term) -> dict:
         error = f"{model}不存在: {search_term}"
         return {"status": False, "msg": error, "data": None}
     return {"status": True, "msg": "查询成功", "data": models[0]}
-
-
-def search_channel(search_term):
-    """
-    查询渠道
-    :param search_term:
-    :return:
-    """
-    return search_func(Channel, search_term)
-
-
-def search_research(search_term):
-    """
-    查询研发
-    :param search_term:
-    :return:
-    """
-    return search_func(Research, search_term)
 
 
 def parse_request_data(request):
@@ -166,7 +147,7 @@ def process_channel_data(data, game, messages, processed_channels, cover: bool):
             # logger.error(msg)
         return
 
-    result = search_channel(channel_name)
+    result = search_func(Channel, channel_name)
     if not result.get('status'):
         msg = result.get('msg')
         if msg not in messages['error']:
@@ -265,7 +246,7 @@ def handle_scheduling(sheet, messages, cover_list):
                         # logger.error(msg)
                     continue
 
-                result = search_research(research_name)
+                result = search_func(Research, research_name)
                 if not result.get('status'):
                     msg = result.get('msg')
                     if msg not in messages['error']:

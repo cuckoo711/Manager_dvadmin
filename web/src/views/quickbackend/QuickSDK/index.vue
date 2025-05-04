@@ -4,151 +4,148 @@
       <!-- 顶部：当前登录账户、游戏选择下拉框、按钮 -->
       <el-container>
         <el-card shadow="always" style="width: 100%;">
-          <el-collapse v-model="isCollapsed">
-            <el-collapse-item name="1" :disabled="!accountNameValid">
-              <template #title>
-                <div>
-                  当前登录账户：
-                  <el-tag v-if="accountNameValid">
-                    <a href="/#/Quick/account" target="_blank">{{ accountName }}</a>
-                  </el-tag>
-                  <el-tag v-else>{{ accountName }}</el-tag>
-                  <el-button-group style="margin-left: 20px;">
-                    <el-button
-                        type="primary"
-                        :disabled="!accountNameValid"
-                        size="small"
-                        @click="reloadGameList"
-                    >
-                      重载游戏列表
-                    </el-button>
-                    <el-button
-                        type="primary"
-                        :disabled="!accountNameValid"
-                        size="small"
-                        @click="refreshChannelList"
-                    >
-                      刷新渠道状态
-                    </el-button>
-                  </el-button-group>
-                </div>
+          <template #header>
+            <div>
+              当前登录账户：
+              <el-tag v-if="accountNameValid">
+                <a href="/#/Quick/account" target="_blank">{{ accountName }}</a>
+              </el-tag>
+              <el-tag v-else>{{ accountName }}</el-tag>
+              <el-button-group style="margin-left: 20px;">
+                <el-button
+                    type="primary"
+                    :disabled="!accountNameValid"
+                    size="small"
+                    @click="reloadGameList"
+                >
+                  重载游戏列表
+                </el-button>
+                <el-button
+                    type="primary"
+                    :disabled="!accountNameValid"
+                    size="small"
+                    @click="refreshChannelList"
+                >
+                  刷新渠道状态
+                </el-button>
+              </el-button-group>
+            </div>
+          </template>
+          <el-table
+              :data="[{}]"
+              style="width: 100%"
+          >
+            <!-- 游戏选择下拉框 -->
+            <el-table-column
+                label="游戏选择"
+                align="center"
+                header-align="center"
+                min-width="300"
+            >
+              <template #default="scope">
+                <el-select
+                    v-model="selectedGame"
+                    :disabled="!accountNameValid"
+                    filterable
+                    placeholder="请选择游戏"
+                    clearable
+                    @change="refreshChannelList"
+                >
+                  <el-option
+                      v-for="game in games"
+                      :key="game.id"
+                      :label="game.gameName"
+                      :value="game.id"
+                  />
+                </el-select>
               </template>
-              <el-table
-                  :data="[{}]"
-                  style="width: 100%"
-              >
-                <!-- 游戏选择下拉框 -->
-                <el-table-column
-                    label="游戏选择"
-                    align="center"
-                    header-align="center"
-                    min-width="300"
+            </el-table-column>
+            <!-- 渠道后缀筛选下拉框 -->
+            <el-table-column
+                label="渠道后缀筛选"
+                align="center"
+                header-align="center"
+                min-width="200"
+            >
+              <template #default="scope">
+                <el-select
+                    v-model="channelSuffix"
+                    :disabled="!accountNameValid"
+                    filterable
+                    placeholder="请选择渠道后缀"
+                    clearable
+                    @change="refreshChannelList"
                 >
-                  <template #default="scope">
-                    <el-select
-                        v-model="selectedGame"
-                        :disabled="!accountNameValid"
-                        filterable
-                        placeholder="请选择游戏"
-                        clearable
-                        @change="refreshChannelList"
-                    >
-                      <el-option
-                          v-for="game in games"
-                          :key="game.id"
-                          :label="game.gameName"
-                          :value="game.id"
-                      />
-                    </el-select>
-                  </template>
-                </el-table-column>
-                <!-- 渠道后缀筛选下拉框 -->
-                <el-table-column
-                    label="渠道后缀筛选"
-                    align="center"
-                    header-align="center"
-                    min-width="200"
+                  <el-option
+                      v-for="suffix in channelSuffixList"
+                      :key="suffix"
+                      :label="suffix"
+                      :value="suffix"
+                  />
+                </el-select>
+              </template>
+            </el-table-column>
+            <!-- 批量操作下拉框 -->
+            <el-table-column
+                label="批量操作"
+                align="center"
+                header-align="center"
+                min-width="300"
+            >
+              <template #default="scope">
+                <el-select
+                    v-model="batchSwitchType"
+                    :disabled="!accountNameValid"
+                    filterable
+                    placeholder="请选择批量操作"
                 >
-                  <template #default="scope">
-                    <el-select
-                        v-model="channelSuffix"
-                        :disabled="!accountNameValid"
-                        filterable
-                        placeholder="请选择渠道后缀"
-                        clearable
-                        @change="refreshChannelList"
-                    >
-                      <el-option
-                          v-for="suffix in channelSuffixList"
-                          :key="suffix"
-                          :label="suffix"
-                          :value="suffix"
-                      />
-                    </el-select>
-                  </template>
-                </el-table-column>
-                <!-- 批量操作下拉框 -->
-                <el-table-column
-                    label="批量操作"
-                    align="center"
-                    header-align="center"
-                    min-width="300"
-                >
-                  <template #default="scope">
-                    <el-select
-                        v-model="batchSwitchType"
-                        :disabled="!accountNameValid"
-                        filterable
-                        placeholder="请选择批量操作"
-                    >
-                      <el-option-group
-                          v-for="group in batchSwitchList"
-                          :key="group.label"
-                          :label="group.label"
-                      >
-                        <el-option
-                            v-for="item in group.options"
-                            :key="item.value"
-                            :label="item.type"
-                            :value="item.value"
-                        />
-                      </el-option-group>
-                    </el-select>
-                  </template>
-                </el-table-column>
-                <!-- 操作按钮 -->
-                <el-table-column
-                    label="操作"
-                    align="center"
-                    header-align="center"
-                    min-width="220"
-                >
-                  <template #default="scope">
-                    <el-button-group>
-                      <el-button
-                          type="primary"
-                          :disabled="!accountNameValid"
-                          @click="handleBatchSwitch"
-                      >
-                        立即执行
-                      </el-button>
-                      <el-button
-                          type="primary"
-                          :disabled="!accountNameValid"
-                          @click="handleRegularBatchSwitch"
-                      >
-                        定时执行
-                      </el-button>
-                    </el-button-group>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-collapse-item>
-          </el-collapse>
+                  <el-option-group
+                      v-for="group in batchSwitchList"
+                      :key="group.label"
+                      :label="group.label"
+                  >
+                    <el-option
+                        v-for="item in group.options"
+                        :key="item.value"
+                        :label="item.type"
+                        :value="item.value"
+                    />
+                  </el-option-group>
+                </el-select>
+              </template>
+            </el-table-column>
+            <!-- 操作按钮 -->
+            <el-table-column
+                label="操作"
+                align="center"
+                header-align="center"
+                min-width="220"
+            >
+              <template #default="scope">
+                <el-button-group>
+                  <el-button
+                      type="primary"
+                      :disabled="!accountNameValid"
+                      @click="handleBatchSwitch"
+                  >
+                    立即执行
+                  </el-button>
+                  <el-button
+                      type="primary"
+                      :disabled="!accountNameValid"
+                      @click="handleRegularBatchSwitch"
+                  >
+                    定时执行
+                  </el-button>
+                </el-button-group>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-card>
       </el-container>
+
     </div>
-    <div :style="{height: 'calc(100% - 95px)'}">
+    <div :style="{height: 'calc(100% - 200px)'}">
       <el-table
           ref="channelTable"
           :data="channelList"
@@ -235,7 +232,6 @@ export default {
     return {
       dialogVisible: false, // 控制弹窗的显示
       scheduledDate: '', // 存储选择的定时日期
-      isCollapsed: [],
       accountName: '',
       selectedGame: ref(''),
       channelSuffix: ref('全部'),

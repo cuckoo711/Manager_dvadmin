@@ -76,7 +76,7 @@ class ApiUploadActivity(GDDefault):
         else:
             raise Exception("服务器列表格式错误")
         result['log']['base'] = [
-            f"共有区服: {self.__servers_len}",
+            f"共有区服: {len(all_servers)}",
             f"小跨服区间: {range_start}",
             f"大跨服区间: {range_end}",
             f"上传区服: {','.join(server_list)}"

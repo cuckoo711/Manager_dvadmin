@@ -70,6 +70,15 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     add: {
                         show: auth("Notice:Create")
                     },
+                    // /#/Quick/stopUser
+                    openNewWeb: {
+                        show: true,
+                        text: '登录支付封禁',
+                        type: 'warning',
+                        click: async () => {
+                            window.open('/#/Quick/stopUser', '_blank');
+                        }
+                    },
                     clear: {
                         show: auth("Notice:Clear"),
                         text: '清理文件',
