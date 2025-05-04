@@ -68,7 +68,7 @@ def get_discount_from_gamename(game_name: str) -> int:
     return discount
 
 
-def handle_game(sheet, messages, coverList):
+def handle_game(sheet, messages, cover_list):
     table_data = sheet.get('tableData')
     game_name = sheet.get('gameName')
     release_date = sheet.get('releaseDate')
@@ -77,7 +77,7 @@ def handle_game(sheet, messages, coverList):
     messages['info'].append(f'处理游戏: {game_name}')
     if not scheduling:
         release_date = datetime.datetime.strptime(release_date, '%Y-%m-%d').date()
-        if "GameBase" in coverList:
+        if "GameBase" in cover_list:
             game, created = Games.objects.update_or_create(
                 name=game_name,
                 defaults={
@@ -100,7 +100,7 @@ def handle_game(sheet, messages, coverList):
             msg = f'创建游戏: {game_name}'
             messages['info'].append(msg)
         else:
-            if "GameBase" in coverList:
+            if "GameBase" in cover_list:
                 msg = (f'游戏已存在: {game_name}, '
                        f'发行主体为{parent}, '
                        f'发行时间为{release_date}')
@@ -113,7 +113,7 @@ def handle_game(sheet, messages, coverList):
         existing_channels = set(RevenueSplit.objects.filter(game=game).values_list('id', flat=True))
         processed_channels = set()
 
-        revenue_cober = "Revenue" in coverList
+        revenue_cober = "Revenue" in cover_list
         for data in table_data:
             process_channel_data(data, game, messages, processed_channels, revenue_cober)
 
@@ -218,7 +218,7 @@ def process_channel_data(data, game, messages, processed_channels, cover: bool):
         # logger.info(msg)
 
 
-def handle_scheduling(sheet, messages, coverList):
+def handle_scheduling(sheet, messages, cover_list):
     table_data = sheet.get('tableData')
     scheduling = sheet.get('scheduling')
 
@@ -242,7 +242,7 @@ def handle_scheduling(sheet, messages, coverList):
                     game = Games.objects.filter(name=game_name).first()
                     if not game:
                         raise Games.DoesNotExist
-                    if "GameDetail" in coverList or not game.quick_name:
+                    if "GameDetail" in cover_list or not game.quick_name:
                         if not quick.strip():
                             quick = game_name.replace(".", "")
                         game.quick_name = quick
@@ -274,7 +274,7 @@ def handle_scheduling(sheet, messages, coverList):
                     continue
 
                 research: Research = result.get('data')
-                if "Research" in coverList:
+                if "Research" in cover_list:
                     reserchsplit, update = ResearchSplit.objects.update_or_create(
                         game=game,
                         research=research,
@@ -299,7 +299,7 @@ def handle_scheduling(sheet, messages, coverList):
                     messages['info'].append(msg)
                     # logger.info(msg)
                 else:
-                    if "Research" in coverList:
+                    if "Research" in cover_list:
                         msg = (f'游戏研发分成已存在: {game_name} - {research.name}, 更新研发分成比例, '
                                f'研发分成比例为{research.research_ratio}, '
                                f'通道费比例为{research.slotting_ratio}'

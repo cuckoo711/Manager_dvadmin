@@ -118,8 +118,10 @@ class NoticeSerializer(CustomModelSerializer):
     def get_game_names(obj):
         return [game.name for game in obj.games.all()]
 
-    def update(self, instance, validated_data):
-        if str(instance.status) != '1' and str(instance.status) != '2':
+    def update(self, instance: Notice, validated_data):
+        if str(instance.status) in ['0', '3']:
+            validated_data['status'] = 0
+            validated_data['notice_filepath'] = None
             return super().update(instance, validated_data)
         elif str(instance.status) == '2':
             raise Exception('文件正在生成中，暂不允许修改')
@@ -163,6 +165,16 @@ class NoticeViewSet(CustomModelViewSet):
         obj = self.get_object()
         if obj.status == 2:
             return JsonResponse({'status': False, 'message': '任务已提交，请勿重复提交'})
+        # 查重
+        obj_games = obj.games.all()
+        for game in obj_games:
+            # 检查是否已经有包含该游戏的公告且公告类型与当前一致
+            if Notice.objects.filter(
+                    games__in=[game],
+                    build_type=obj.build_type
+            ).exclude(id=obj.id).exists():
+                return JsonResponse({'status': False, 'message': f'游戏 [{game.name}] 已存在通知文件，请勿重复提交'})
+
         if self.queryset.filter(status=2).exists():
             return JsonResponse({'status': False, 'message': '存在正在生成的通知文件，请稍后再试'})
         obj.status = 2
