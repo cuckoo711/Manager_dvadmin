@@ -11,6 +11,7 @@ import {
 } from '@fast-crud/fast-crud';
 import {auth} from '/@/utils/authFunction'
 import {commonCrudConfig} from "/@/utils/commonCrud";
+import {dictionary} from "/@/utils/dictionary";
 // 注意：以下FastCrud配置应替换为实际的JavaScript/TypeScript代码片段
 export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps): CreateCrudOptionsRet {
     const pageRequest = async (query: UserPageQuery) => {
@@ -105,7 +106,7 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                 },
                 entity: {
                     title: "主体",
-                    type: "input",
+                    type: "dict-select",
                     column: {
                         width: 80, //最小列宽
                         align: 'center',
@@ -123,6 +124,11 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                             placeholder: '请选择',
                         },
                     },
+                    dict: dict({
+                        data: dictionary('authorizationletter_entity'),
+                        value: 'value',
+                        label: 'label',
+                    }),
                     search: {show: true, component: {props: {clearable: true}}},
                 },
                 publisher: {
