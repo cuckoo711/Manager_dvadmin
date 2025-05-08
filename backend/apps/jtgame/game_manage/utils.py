@@ -199,7 +199,7 @@ def process_channel_data(data, game, messages, processed_channels, cover: bool):
         # logger.info(msg)
 
 
-def handle_scheduling(sheet, messages, coverList):
+def handle_scheduling(sheet, messages, cover_list):
     table_data = sheet.get('tableData')
     scheduling = sheet.get('scheduling')
 
@@ -223,7 +223,7 @@ def handle_scheduling(sheet, messages, coverList):
                     game = Games.objects.filter(name=game_name).first()
                     if not game:
                         raise Games.DoesNotExist
-                    if "GameDetail" in coverList or not game.quick_name:
+                    if "GameDetail" in cover_list or not game.quick_name:
                         if not quick.strip():
                             quick = game_name.replace(".", "")
                         game.quick_name = quick
@@ -255,7 +255,7 @@ def handle_scheduling(sheet, messages, coverList):
                     continue
 
                 research: Research = result.get('data')
-                if "Research" in coverList:
+                if "Research" in cover_list:
                     reserchsplit, update = ResearchSplit.objects.update_or_create(
                         game=game,
                         research=research,
@@ -280,7 +280,7 @@ def handle_scheduling(sheet, messages, coverList):
                     messages['info'].append(msg)
                     # logger.info(msg)
                 else:
-                    if "Research" in coverList:
+                    if "Research" in cover_list:
                         msg = (f'游戏研发分成已存在: {game_name} - {research.name}, 更新研发分成比例, '
                                f'研发分成比例为{research.research_ratio}, '
                                f'通道费比例为{research.slotting_ratio}'
