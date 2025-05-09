@@ -225,7 +225,8 @@ class ConsoleRun:
             instance_ids=[instance_id],
         )
         try:
-            return api_instance.describe_instances(describe_instances_request)
+            result = api_instance.describe_instances(describe_instances_request)
+            return result
         except ApiException as e:
             logger.error(f"Exception when calling ECSApi: {e}")
             return None
@@ -249,7 +250,7 @@ class ConsoleRun:
                 continue
             eip_address = instance.get('eip_address').get('ip_address')
             if not eip_address:
-                logger.error(f"获取实例信息失败: {instance}")
+                logger.error(f"获取实例IP信息失败: {instance}")
                 sleep(stime)
                 continue
             return {'status': True, 'result': eip_address}

@@ -256,6 +256,16 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                         align: 'center',
                         showOverflowTooltip: true,
                     }
+                }, server_instance_id:{
+                    title: "服务器实例",
+                    type: "input",
+                    search: {
+                        show: true,
+                    },
+                    column: {
+                        align: 'center',
+                        width: 100,
+                    },
                 },
                 ...commonCrudConfig()
             },

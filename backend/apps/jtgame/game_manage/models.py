@@ -141,6 +141,8 @@ class Games(CoreModel):
     reconciliation_ratio = models.DecimalField(verbose_name='对账比例', default=1, max_digits=5, decimal_places=0)
     # 游戏描述
     desc = models.TextField(verbose_name='游戏描述', null=True, blank=True)
+    # 服务器实例id
+    server_instance_id = models.CharField(max_length=100, verbose_name='服务器实例id', null=True, blank=True)
 
     class Meta:
         db_table = table_prefix + 'game_manage_games'

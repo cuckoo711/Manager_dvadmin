@@ -76,7 +76,7 @@ const serverImageData = [
 ];
 const serverSpecData = [
 	{ label: '2c4g(优先选这个)', value: 'ecs.e-c1m2.large' },
-  { label: '2c4g(上一个售罄就选这个)', value: 'ecs.c3a.large' },
+  { label: '2c4g(上一个售罄就选这个)', value: 'ecs.c3al.large' },
 	{ label: '2c8g(优先选这个)', value: 'ecs.e-c1m4.large' },
   { label: '2c8g(上一个售罄就选这个)', value: 'ecs.g3a.large' },
 	{ label: '4c8g(优先选这个)', value: 'ecs.e-c1m2.xlarge' },
