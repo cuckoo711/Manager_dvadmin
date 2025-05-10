@@ -15,14 +15,14 @@ from dvadmin.utils.backends import logger
 
 
 @app.task
-def task__auto_update_quick_cookies():
+def task__auto_update_quick_cookies(*args, **kwargs):
     for account in QuickUser.objects.all():
         if account.password:
             account.update_cookie()
 
 
 @app.task
-def task__auto_update_channel_status():
+def task__auto_update_channel_status(*args, **kwargs):
     today = datetime.now().date()
     quick_regular_tasks = QuickRegularTask.objects.filter(status='0', task_date=today)
     task_type_map = {

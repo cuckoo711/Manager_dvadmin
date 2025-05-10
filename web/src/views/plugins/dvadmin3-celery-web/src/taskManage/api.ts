@@ -1,83 +1,72 @@
-import {request} from '/@/utils/service';
-import {UserPageQuery, AddReq, DelReq, EditReq, InfoReq} from '@fast-crud/fast-crud';
+import { request } from '/@/utils/service';
+import { AddReq, DelReq, EditReq, InfoReq, PageQuery } from '@fast-crud/fast-crud';
 
-export const apiPrefix = '/api/dvadmin_celery/';
+export const apiPrefix = '/api/dvadmin_celery/task/';
 
-export function getIntervalScheduleList(query: UserPageQuery) {
-    return request({
-        url: apiPrefix + 'intervalschedule/',
-        method: 'get',
-        params: query,
-    });
+export function GetPermission() {
+	return request({
+		url: apiPrefix + 'field_permission/',
+		method: 'get',
+	});
 }
 
-export function getCrontabScheduleList(query: UserPageQuery) {
-    return request({
-        url: apiPrefix + 'crontabschedule/',
-        method: 'get',
-        params: query,
-    });
+export function GetList(query: PageQuery) {
+	return request({
+		url: apiPrefix,
+		method: 'get',
+		params: query,
+	});
 }
 
-export function getBackendTaskList(query: UserPageQuery) {
-    return request({
-        url: apiPrefix + 'task/job_list/',
-        method: 'get',
-        params: query,
-    });
+export function GetObj(id: InfoReq) {
+	return request({
+		url: apiPrefix + id,
+		method: 'get',
+	});
 }
 
-export function getTaskList(query: UserPageQuery) {
-    return request({
-        url: apiPrefix + 'task/?limit=9999',
-        method: 'get',
-        params: query,
-    });
+export function AddObj(obj: AddReq) {
+	if (obj.kwargs){
+		obj.kwargs = JSON.stringify(obj.kwargs)
+	}
+	return request({
+		url: apiPrefix,
+		method: 'post',
+		data: obj,
+	});
 }
 
-export function GetTask(id: InfoReq) {
-    return request({
-        url: apiPrefix + id,
-        method: 'get',
-    });
+export function UpdateObj(obj: EditReq) {
+	if (obj.kwargs){
+		obj.kwargs = JSON.stringify(obj.kwargs)
+	}
+	return request({
+		url: apiPrefix + obj.id + '/',
+		method: 'put',
+		data: obj,
+	});
 }
 
-export function AddTask(obj: AddReq) {
-    return request({
-        url: apiPrefix + 'task/',
-        method: 'post',
-        data: obj,
-    });
-}
-
-export function EditTask(obj: AddReq) {
-    return request({
-        url: apiPrefix + 'task/' + obj.id + '/',
-        method: 'put',
-        data: obj,
-    });
+export function DelObj(id: DelReq) {
+	return request({
+		url: apiPrefix + id + '/',
+		method: 'delete',
+		data: { id },
+	});
 }
 
 export function UpdateTask(obj: EditReq) {
-    return request({
-        url: apiPrefix + 'task/update_status/' + obj.id + '/',
-        method: 'post',
-        data: obj,
-    });
+	return request({
+		url: apiPrefix + obj.id + '/update_status/',
+		method: 'post',
+		data: obj,
+	});
 }
 
 export function RunTask(obj: AddReq) {
-    return request({
-        url: apiPrefix + 'task/run_task/' + obj.id + '/',
-        method: 'post',
-        data: obj,
-    });
-}
-
-export function DelTask(obj: DelReq) {
-    return request({
-        url: apiPrefix + 'task/delete_task/' + obj.id + '/',
-        method: 'delete',
-        data: obj,
-    });
+	return request({
+		url: apiPrefix + obj.id + '/run_task/',
+		method: 'post',
+		data: obj,
+	});
 }

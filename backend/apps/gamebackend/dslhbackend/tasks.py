@@ -14,7 +14,7 @@ from apps.gamebackend.dslhbackend.utils.Merger import ServerMerger
 
 
 @app.task
-def async_merge_task(task_id):
+def async_merge_task(task_id, *args, **kwargs):
     merger_task: DSLHMergeTask = DSLHMergeTask.objects.get(id=task_id)
     merger_task.start()
 

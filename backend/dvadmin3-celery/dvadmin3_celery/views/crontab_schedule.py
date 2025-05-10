@@ -1,20 +1,18 @@
 from django_celery_beat.models import CrontabSchedule
-from rest_framework.serializers import ModelSerializer
-from rest_framework.viewsets import ModelViewSet
 
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 
 
-class CrontabScheduleSerializer(ModelSerializer):
+class CrontabScheduleSerializer(CustomModelSerializer):
     class Meta:
         model = CrontabSchedule
         exclude = ['timezone']
 
 
-class CrontabScheduleModelViewSet(ModelViewSet):
+class CrontabScheduleModelViewSet(CustomModelViewSet):
     """
-    CrontabSchedule crontab调度模型
+    CrontabSchedule crontab调度模型 周期性时间定时器
     minute 分钟
     hour 小时
     day_of_week 每周的周几

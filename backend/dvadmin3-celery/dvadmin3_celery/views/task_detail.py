@@ -1,14 +1,9 @@
-# -*- coding: utf-8 -*-
+import ast
+import json
 
-"""
-@author: 阿辉
-@contact: QQ:2655399832
-@Created on: 2022/9/21 16:30
-@Remark:
-"""
-
-import django_filters
 from django_celery_results.models import TaskResult
+import django_filters
+from rest_framework import serializers
 
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
@@ -16,24 +11,38 @@ from dvadmin.utils.viewset import CustomModelViewSet
 
 class CeleryTaskDetailSerializer(CustomModelSerializer):
     """定时任务详情 序列化器"""
+    name = serializers.SerializerMethodField(read_only=True)
+    task_kwargs = serializers.SerializerMethodField(read_only=True)
+    result = serializers.SerializerMethodField(read_only=True)
+
+    def get_name(self, instance):
+        return instance.task_name
+
+    def get_task_kwargs(self, instance):
+        task_kwargs = instance.task_kwargs
+        if task_kwargs:
+            try:
+                task_kwargs = json.loads(json.loads(task_kwargs).replace("'", '"'))
+            except Exception as e:
+                pass
+        return task_kwargs
+    def get_result(self, instance):
+        result = instance.result
+        if result:
+            try:
+                result = json.loads(result)
+            except Exception as e:
+                pass
+        return result
 
     class Meta:
         model = TaskResult
         fields = '__all__'
 
 
-class CeleryTaskDetailFilterSet(django_filters.FilterSet):
-    date_created = django_filters.BaseRangeFilter(field_name="date_created")
-
-    class Meta:
-        model = TaskResult
-        fields = ['id', 'status', 'date_done', 'date_created', 'result', 'task_name']
-
-
 class CeleryTaskDetailViewSet(CustomModelViewSet):
     """
-    定时任务
+    定时任务详情
     """
-    queryset = TaskResult.objects.all().order_by('-date_created')
+    queryset = TaskResult.objects.all()
     serializer_class = CeleryTaskDetailSerializer
-    filter_class = CeleryTaskDetailFilterSet

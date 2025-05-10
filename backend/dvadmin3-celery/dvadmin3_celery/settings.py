@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from application import settings
 
 # ================================================= #
@@ -38,14 +36,15 @@ settings.CACHES = _DEFAULT_CACHES
 settings.INSTALLED_APPS += [app for app in apps if app not in settings.INSTALLED_APPS]
 settings.TENANT_SHARED_APPS += tenant_shared_apps
 # ********** celery 配置 **********
-if not hasattr(settings, 'BROKER_URL'):
-    settings.BROKER_URL = f'{settings.REDIS_URL}/{getattr(settings, "CELERY_BROKER_DB") or 2}'
-    settings.CELERY_BROKER_URL = settings.BROKER_URL
+if not hasattr(settings, 'CELERY_BROKER_URL'):
+    settings.CELERY_BROKER_URL = f'{settings.REDIS_URL}/{getattr(settings, "CELERY_BROKER_DB") or 2}'
 
 # ********** 执行结果保存位置 **********
 if not hasattr(settings, 'CELERY_RESULT_BACKEND'):
 
     settings.CELERY_RESULT_BACKEND = 'django-db'
+if not hasattr(settings, 'CELERY_RESULT_EXTENDED'):
+    settings.CELERY_RESULT_EXTENDED = True
 
 # ********** Backend数据库 **********
 if not hasattr(settings, 'CELERYBEAT_SCHEDULER'):
@@ -83,6 +82,15 @@ settings.CELERY_broker_connection_retry_on_startup = True
 # ********** 注册路由 **********
 settings.PLUGINS_URL_PATTERNS += plugins_url_patterns
 
+# ********** Backend数据库 **********
+if not hasattr(settings, 'CELERYBEAT_SCHEDULER'):
+    settings.CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
 # 避免时区的问题
-CELERY_ENABLE_UTC = True
-DJANGO_CELERY_BEAT_TZ_AWARE = True
+CELERY_ENABLE_UTC = False
+DJANGO_CELERY_BEAT_TZ_AWARE = False
+# 避免celery启动时，连接redis失败
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+# celery4版本的 默认使用 JSON 作为 serializer ，而 celery3 版本的默认使用 pickle。
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']

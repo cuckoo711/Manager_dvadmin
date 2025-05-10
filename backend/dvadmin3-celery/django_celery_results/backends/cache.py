@@ -13,7 +13,7 @@ class CacheBackend(KeyValueStoreBackend):
         super().__init__(*args, **kwargs)
 
         # Must make sure backend doesn't convert exceptions to dict.
-        self.serializer = 'pickle'
+        self.serializer = 'json'
 
     def get(self, key):
         key = bytes_to_str(key)

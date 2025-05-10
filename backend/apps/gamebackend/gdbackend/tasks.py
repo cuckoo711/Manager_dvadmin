@@ -29,7 +29,7 @@ from dvadmin.utils.backends import logger
 
 @app.task
 def async_export_data(func_cls_name: str, token_id: int, run_kwargs: dict,
-                      filename: str, dcid: int, export_field_label: dict):
+                      filename: str, dcid: int, export_field_label: dict, *args, **kwargs):
     instance = DownloadCenter.objects.get(pk=dcid)
     instance.task_status = 1
     instance.save()
@@ -158,7 +158,7 @@ def check_server(game_server: GDServer):
 
 
 @app.task
-def task__auto_upload_activity():
+def task__auto_upload_activity(*args, **kwargs):
     user: Users
     token: GDToken
     game_server: GDServer

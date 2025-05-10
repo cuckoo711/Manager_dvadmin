@@ -20,7 +20,7 @@ from dvadmin.utils.backends import logger
 
 
 @app.task
-def task__make_daily_data(shifting_days=0):
+def task__make_daily_data(shifting_days=0, *args, **kwargs):
     income_datas = QuickData(shifting_days).make_daily_data()
     today = datetime.date.today() - datetime.timedelta(days=shifting_days + 1)
     today_str = today.strftime('%Y-%m-%d')
@@ -60,7 +60,7 @@ def task__make_daily_data(shifting_days=0):
 
 
 @app.task
-def task__make_daily_report(shifting_days=0):
+def task__make_daily_report(shifting_days=0, *args, **kwargs):
     console_data = ConsoleData()
     console_data.make_daily_report()
     instances = console_data.instances
@@ -99,7 +99,7 @@ def task__make_daily_report(shifting_days=0):
 
 
 @app.task
-def task__renew(instance_id, account):
+def task__renew(instance_id, account, *args, **kwargs):
     instance = Consoles.objects.filter(instance_id=instance_id).first()
     if not instance:
         raise Exception('未找到对应的服务器')
@@ -115,7 +115,7 @@ def task__renew(instance_id, account):
 
 
 @app.task
-def task__update_consoles():
+def task__update_consoles(*args, **kwargs):
     try:
         result = ConsoleData().make_daily_report(update=True)
         return {"success": True, "status": "update", "error": "", "data": json.dumps(result, ensure_ascii=False)}
@@ -124,7 +124,7 @@ def task__update_consoles():
 
 
 @app.task
-def task__auto_renew():
+def task__auto_renew(*args, **kwargs):
     instances = Consoles.objects.filter(renewal_status=False).all()
     result = []
 

@@ -1,49 +1,45 @@
-# -*- coding: utf-8 -*-
-
-"""
-@author: 阿辉
-@contact: QQ:2655399832
-@Created on: 2022/9/21 16:30
-@Remark:
-"""
 import json
+import importlib
 
 from celery import current_app
-from django.core.exceptions import ValidationError
-from django_celery_beat.models import PeriodicTask, CrontabSchedule, cronexp, IntervalSchedule
+from django_celery_beat.models import PeriodicTask, CrontabSchedule, cronexp
+from django_celery_results.models import TaskResult
 from rest_framework import serializers
 from rest_framework.decorators import action
 
-from dvadmin.utils.json_response import SuccessResponse, ErrorResponse
-
-CrontabSchedule.__str__ = lambda self: '{0} {1} {2} {3} {4} {5}'.format(
-    cronexp(self.minute), cronexp(self.hour),
-    cronexp(self.day_of_month), cronexp(self.month_of_year),
-    cronexp(self.day_of_week), str(self.timezone)
-)
+from dvadmin.utils.json_response import SuccessResponse
 
 from dvadmin.utils.serializers import CustomModelSerializer
 
 from dvadmin.utils.viewset import CustomModelViewSet
+from django.conf import settings
 
-
+if "django_tenants" in settings.INSTALLED_APPS:
+    from tenant_schemas_celery.app import CeleryApp
+else:
+    from celery import Celery as CeleryApp
 def get_job_list():
     from application import settings
     task_list = []
     task_dict_list = []
     for app in settings.INSTALLED_APPS:
         try:
-            exec(f"""
-from {app} import tasks
-for ele in [i for i in dir(tasks) if i.startswith('task__')]:
-    task_dict = dict()
-    task_dict['label'] = '{app}.tasks.' + ele
-    task_dict['value'] = '{app}.tasks.' + ele
-    task_list.append('{app}.tasks.' + ele)
-    task_dict_list.append(task_dict)
-                """)
-        except ImportError:
-            pass
+            module = importlib.import_module(f'{app}.tasks')
+        except ImportError as e:
+            continue
+        for name, obj in vars(module).items():
+            if name.startswith('__'):
+                continue
+            # 检查绑定任务装饰器的函数
+            if callable(obj):
+                _app = getattr(obj, 'app', None)
+                if _app and hasattr(obj, '__wrapped__'):
+                    if isinstance(_app, CeleryApp):
+                        task_list.append(f'{app}.tasks.{name}')
+                        task_dict_list.append({
+                            "label": f'{app}.tasks.{name}',
+                            "value": f'{app}.tasks.{name}'
+                        })
     return {'task_list': task_list, 'task_dict_list': task_dict_list}
 
 
@@ -54,7 +50,23 @@ class CeleryCrontabScheduleSerializer(CustomModelSerializer):
 
 
 class PeriodicTasksSerializer(CustomModelSerializer):
-    crontab = serializers.StringRelatedField(read_only=True)
+    kwargs = serializers.SerializerMethodField(read_only=True)
+    cron = serializers.SerializerMethodField(read_only=True)
+
+    def get_kwargs(self, instance):
+        if not instance.kwargs:
+            return {}
+        return json.loads(instance.kwargs)
+
+    def get_cron(self, instance: PeriodicTask):
+        if not instance.crontab:
+            return ""
+        crontab = instance.crontab
+        return '{} {} {} {} {}'.format(
+            cronexp(crontab.minute), cronexp(crontab.hour),
+            cronexp(crontab.day_of_month), cronexp(crontab.month_of_year),
+            cronexp(crontab.day_of_week)
+        )
 
     class Meta:
         model = PeriodicTask
@@ -62,6 +74,30 @@ class PeriodicTasksSerializer(CustomModelSerializer):
 
 
 class PeriodicTasksCreateSerializer(CustomModelSerializer):
+
+    def save(self, **kwargs):
+        cron = self.initial_data.get('cron', None)
+        description = self.initial_data.get('description', None)
+        cron_list = cron.split(' ')
+        if description:
+            crontab_schedule_obj = CrontabSchedule.objects.filter(id=description).first()
+        else:
+            crontab_schedule_obj = CrontabSchedule()
+        crontab_schedule_obj.minute = cron_list[0]
+        crontab_schedule_obj.hour = cron_list[1]
+        crontab_schedule_obj.day_of_month = cron_list[2]
+        crontab_schedule_obj.month_of_year = cron_list[3]
+        crontab_schedule_obj.day_of_week = cron_list[4]
+        crontab_schedule_obj.timezone = 'Asia/Shanghai'
+        crontab_schedule_obj.save()
+        try:
+            self.validated_data["kwargs"] = json.loads(self.request.data.get('kwargs', {}))
+        except:
+            pass
+        self.validated_data["crontab"] = crontab_schedule_obj
+        self.validated_data["description"] = crontab_schedule_obj.id
+        return super().save(**kwargs)
+
     class Meta:
         model = PeriodicTask
         fields = '__all__'
@@ -72,19 +108,12 @@ class CeleryTaskModelViewSet(CustomModelViewSet):
     CeleryTask 添加任务调度
     """
 
-    queryset = PeriodicTask.objects.exclude(name="celery.backend_cleanup")
+    queryset = PeriodicTask.objects.exclude(name="celery.backend_cleanup").order_by('-id')
     serializer_class = PeriodicTasksSerializer
     create_serializer_class = PeriodicTasksCreateSerializer
+    update_serializer_class = PeriodicTasksCreateSerializer
     filter_fields = ['name', 'task', 'enabled']
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-        serializer = self.get_serializer(queryset, many=True)
-        return SuccessResponse(data=serializer.data, msg="获取成功")
+    extra_filter_class = []
 
     def job_list(self, request, *args, **kwargs):
         """获取所有任务"""
@@ -92,45 +121,13 @@ class CeleryTaskModelViewSet(CustomModelViewSet):
         task_list = result.get('task_dict_list')
         return SuccessResponse(msg='获取成功', data=task_list, total=len(task_list))
 
-    def create(self, request, *args, **kwargs):
-        body_data = request.data.copy()
-        schedule_type = body_data.get('scheduleType')
-        schedule = body_data.get('schedule')
-        task = body_data.get('task')
-        task_list = get_job_list().get('task_list')
-        data_dict = {'task': task, 'name': body_data.get('name')}
-
-        if task not in task_list:
-            return ErrorResponse(msg="添加失败, 没有该任务", data=None)
-
-        if schedule_type == 0:
-            # 处理间隔调度
-            interval_schedule = IntervalSchedule.objects.filter(id=schedule).first()
-            if not interval_schedule:
-                return ErrorResponse(msg="无效的间隔调度ID", data=None)
-            data_dict['interval'] = interval_schedule
-            data_dict.pop('crontab', None)
-        else:
-            # 处理定时调度
-            cron_schedule = CrontabSchedule.objects.filter(id=schedule).first()
-            if not cron_schedule:
-                return ErrorResponse(msg="无效的定时调度ID", data=None)
-            data_dict['crontab'] = cron_schedule
-            data_dict.pop('interval', None)
-
-        data_dict['enabled'] = False
-
-        try:
-            periodic_task = PeriodicTask.objects.create(**data_dict)
-        except ValidationError as e:
-            return ErrorResponse(msg=f"添加失败: {e.messages}", data=None)
-
-        serializer = PeriodicTasksCreateSerializer(periodic_task)
-        return SuccessResponse(msg="添加成功", data=serializer.data)
-
     def destroy(self, request, *args, **kwargs):
         """删除定时任务"""
         instance = self.get_object()
+        TaskResult.objects.filter(periodic_task_name=instance.name).delete()
+        # 删除任务 Crontab
+        if instance.description:
+            CrontabSchedule.objects.filter(id=instance.description).delete()
         self.perform_destroy(instance)
         return SuccessResponse(data=[], msg="删除成功")
 
@@ -145,21 +142,8 @@ class CeleryTaskModelViewSet(CustomModelViewSet):
 
     @action(detail=True, methods=['post'])
     def run_task(self, request, *args, **kwargs):
-        """运行任务"""
+        """执行任务"""
         instance = self.get_object()
-        task_name = instance.task
-        task_args = instance.args
-        task_kwargs = instance.kwargs
-
-        celery_task = current_app.tasks.get(task_name)
-        if not celery_task:
-            return ErrorResponse(msg="任务不存在", data=None)
-
-        try:
-            args = json.loads(task_args) if task_args else []
-            kwargs = json.loads(task_kwargs) if task_kwargs else {}
-        except ValueError as e:
-            return ErrorResponse(msg=f"参数解析错误: {str(e)}", data=None)
-
-        celery_task.apply_async(args=args, kwargs=kwargs)
-        return SuccessResponse(msg="任务已执行", data=None)
+        task_kwargs = json.loads(instance.kwargs)
+        task_kwargs["periodic_task_name"] = instance.name
+        return SuccessResponse(msg="运行成功", data=None)

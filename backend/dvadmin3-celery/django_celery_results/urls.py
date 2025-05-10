@@ -1,15 +1,21 @@
-from django.urls import register_converter
+"""URLs defined for celery.
+
+* ``/$task_id/done/``
+    URL to :func:`~celery.views.is_successful`.
+* ``/$task_id/status/``
+    URL  to :func:`~celery.views.task_status`.
+"""
 import warnings
 
 from django.conf import settings
-from django.urls import path
+from django.urls import path, register_converter
 
 from . import views
 
 
-# 自定义 path converter 类
 class TaskPatternConverter:
     """Custom path converter for task & group id's.
+
     They are slightly different from the built `uuid`
     """
 
@@ -26,7 +32,6 @@ class TaskPatternConverter:
         return value
 
 
-# 注册转换器
 register_converter(TaskPatternConverter, 'task_pattern')
 
 urlpatterns = [

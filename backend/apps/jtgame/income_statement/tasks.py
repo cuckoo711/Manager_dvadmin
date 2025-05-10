@@ -15,7 +15,7 @@ from apps.jtgame.income_statement.utils import QuickDetail
 
 
 @app.task
-def task__make_daily_detail_report(shifting_days=0):
+def task__make_daily_detail_report(shifting_days=0, *args, **kwargs):
     today = datetime.date.today() - datetime.timedelta(days=shifting_days)
     today_str = today.strftime('%Y-%m-%d')
     report = IncomeData.objects.filter(date=today).first()
@@ -43,7 +43,7 @@ def task__make_daily_detail_report(shifting_days=0):
 
 
 @app.task
-def task__clear_income_data():
+def task__clear_income_data(*args, **kwargs):
     today = datetime.date.today()
     IncomeData.objects.filter(date__lt=today - datetime.timedelta(days=30)).delete()
     return json.dumps({"success": True, "status": "delete"}, ensure_ascii=False)

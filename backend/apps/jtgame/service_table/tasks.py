@@ -24,7 +24,7 @@ from apps.jtgame.service_table.utils.changer import Changer
 
 
 @app.task
-def async_updload_map(header, datas):
+def async_updload_map(header, datas, *args, **kwargs):
     new_datas = []
     channel_temp = {}
     for channel_column in header:
@@ -56,7 +56,7 @@ def async_updload_map(header, datas):
 
 
 @app.task
-def task__generate_service_table(normal_service_table_ids: list):
+def task__generate_service_table(normal_service_table_ids: list, *args, **kwargs):
     for normal_service_table_id in normal_service_table_ids:
         normal = ServiceTableNormal.objects.get(id=normal_service_table_id)
 
@@ -103,7 +103,7 @@ def task__generate_service_table(normal_service_table_ids: list):
 
 
 @app.task
-def task__generate_service_split_table(split_service_table_id: int):
+def task__generate_service_split_table(split_service_table_id: int, *args, **kwargs):
     split: ServiceTableSplit = ServiceTableSplit.objects.get(id=split_service_table_id)
     output_path = split.output_dir
     service_table_normals = split.service_table_normals.all()

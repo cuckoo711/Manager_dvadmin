@@ -19,7 +19,7 @@ from dvadmin.utils.backends import logger
 
 
 @app.task
-def generate_authorization_letter(obj_id):
+def generate_authorization_letter(obj_id, *args, **kwargs):
     obj = AuthorizationLetter.objects.get(pk=obj_id)
     obj: AuthorizationLetter
 
@@ -117,7 +117,7 @@ def generate_authorization_letter(obj_id):
 
 
 @app.task
-def generate_notice(obj_id):
+def generate_notice(obj_id, *args, **kwargs):
     obj = Notice.objects.get(pk=obj_id)
     obj: Notice
 
@@ -188,7 +188,7 @@ def safe_rmdir(_dir_path):
 
 
 @app.task
-def task__auto_clear_authorization_letter():
+def task__auto_clear_authorization_letter(*args, **kwargs):
     objs = AuthorizationLetter.objects.filter(authorization_filepath__isnull=False).values_list(
         'authorization_filepath', flat=True)
     save_path = set(objs)

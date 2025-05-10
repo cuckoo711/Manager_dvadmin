@@ -19,6 +19,7 @@ EXCEPTIONS_TO_CATCH = (InterfaceError,)
 
 try:
     from psycopg2 import InterfaceError as Psycopg2InterfaceError
+
     EXCEPTIONS_TO_CATCH += (Psycopg2InterfaceError,)
 except ImportError:
     pass
