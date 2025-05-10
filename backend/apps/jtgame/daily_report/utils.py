@@ -30,6 +30,7 @@ from volcenginesdkecs import ECSApi, DescribeInstancesRequest, RenewInstanceRequ
 from application import settings
 from apps.jtgame.daily_report.models import ConsoleAccount, QuickAccount, Consoles
 from apps.jtgame.game_manage.models import Games
+from conf.env import SECRET_ID, SECRET_KEY
 from dvadmin.utils.backends import logger
 
 
@@ -260,8 +261,8 @@ class ConsoleRun:
 def create_record(value: str, sub_domain: str):
     try:
         cred = credential.Credential(
-            "REMOVED_SECRET_ID",
-            "REMOVED_SECRET_KEY"
+            secret_id=SECRET_ID,
+            secret_key=SECRET_KEY
         )
         http_profile = HttpProfile()
         http_profile.endpoint = "dnspod.tencentcloudapi.com"
