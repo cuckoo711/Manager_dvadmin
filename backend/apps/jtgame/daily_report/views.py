@@ -202,6 +202,10 @@ class ConsolesViewSet(CustomModelViewSet):
         "instance_name": "实例名称",
         "cpus": "CPU",
         "memory_size": "内存",
+        "instance_charge_type": "实例计费类型",
+        "expired_at": "到期时间",
+        "created_at": "创建时间",
+        "updated_at": "更新时间",
     }
     export_serializer_class = ConsolesExportSerializer
 

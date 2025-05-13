@@ -117,7 +117,9 @@ class Consoles(CoreModel):
     eip_address = models.CharField(max_length=50, verbose_name='主IPv4地址')
     primary_ip_address = models.CharField(max_length=50, verbose_name='次IPv4地址')
     instance_charge_type = models.CharField(max_length=50, verbose_name='实例计费类型')
-    expired_at = models.DateTimeField(verbose_name='到期时间')
+    expired_at = models.DateTimeField(verbose_name='到期时间', null=True, blank=True)
+    created_at = models.DateTimeField(verbose_name='创建时间', null=True, blank=True)
+    updated_at = models.DateTimeField(verbose_name='更新时间', null=True, blank=True)
     renewal_status = models.BooleanField(default=False, verbose_name='续费状态')
 
     def __str__(self):

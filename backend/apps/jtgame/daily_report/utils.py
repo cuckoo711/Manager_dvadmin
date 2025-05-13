@@ -93,7 +93,9 @@ class ConsoleData:
                     eip_address=instance['主IPv4地址'],
                     primary_ip_address=instance['次IPv4地址'],
                     instance_charge_type=instance['实例计费类型'],
-                    expired_at=instance['到期时间']
+                    expired_at=instance['到期时间'],
+                    created_at=instance['创建时间'],
+                    updated_at=instance['更新时间'],
                 )
                 # logs.append(f"创建实例: {instance['实例名称']}")
             logs.append(f"更新实例信息: {Consoles.objects.count()} 条")
@@ -149,6 +151,12 @@ class ConsoleData:
                 '到期时间': datetime.datetime.strptime(
                     instance_dict['expired_at'], "%Y-%m-%dT%H:%M:%S+08:00"
                 ).strftime("%Y-%m-%d %H:%M:%S") if instance_dict.get('expired_at') else '/',
+                '创建时间': datetime.datetime.strptime(
+                    instance_dict['created_at'], "%Y-%m-%dT%H:%M:%S+08:00"
+                ).strftime("%Y-%m-%d %H:%M:%S") if instance_dict.get('created_at') else '/',
+                '更新时间': datetime.datetime.strptime(
+                    instance_dict['updated_at'], "%Y-%m-%dT%H:%M:%S+08:00"
+                ).strftime("%Y-%m-%d %H:%M:%S") if instance_dict.get('updated_at') else '/',
                 '所属账号': account
             })
         return instance_infos

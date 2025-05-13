@@ -11,9 +11,12 @@ import os
 from datetime import timedelta
 
 import requests
+from django.utils import timezone
 
 from application.celery import app
 from apps.jtgame.authorization.models import AuthorizationConfig, AuthorizationInfo, AuthorizationLetter, Notice
+from apps.jtgame.authorization.utils import WeChatBot
+from apps.jtgame.game_manage.models import ResearchSplit
 from dvadmin.system.views.message_center import MessageCenterCreateSerializer
 from dvadmin.utils.backends import logger
 
@@ -233,4 +236,60 @@ def task__auto_clear_authorization_letter(*args, **kwargs):
     message = (f'清理了{file_clear_count}个文件，共{file_count}个文件, '
                f'清理了{dir_clear_count}个目录，共{dir_count}个目录')
     logger.info(message)
+    return {'message': message}
+
+
+@app.task
+def task__check_already_notice(*args, **kwargs):
+    message = '***以下游戏关服提醒***\n'
+
+    config_objs = AuthorizationConfig.objects.all()
+    webhook_key = config_objs.filter(key='notice_webhook_key').first()
+    if not webhook_key:
+        raise Exception('未找到发送通知的webhook_key配置')
+    webhook_key = webhook_key.value
+
+    now_date = timezone.now().date()
+
+    objs = Notice.objects.filter(
+        build_type=1,
+        status=1,
+        # 公告日期距离今天58天或63天
+        build_date__in=[now_date + timedelta(days=58), now_date + timedelta(days=63)],
+    )
+
+    if not objs:
+        message = f'今天没有正式关服的游戏 - {timezone.now().strftime("%Y-%m-%d")}'
+        WeChatBot(webhook_key=webhook_key).send_text(message)
+        return {'message': '没有需要通知的公告'}
+
+    notices_58 = objs.filter(build_date=now_date + timedelta(days=58))
+    notices_63 = objs.filter(build_date=now_date + timedelta(days=63))
+
+    if notices_58:
+        message += f'以下游戏距离正式关服仅剩3天:\n'
+        for notice in notices_58:
+            for game in notice.games.all():
+                research_split = ResearchSplit.objects.filter(game=game).first()
+                message += (
+                    f'游戏名称: {game.name}, '
+                    f'关服日期: {(notice.build_date + timedelta(days=63)).strftime("%Y-%m-%d")}, '
+                    f'研发: {research_split.research.name if research_split else "未知"}\n'
+                )
+
+    if notices_63:
+        message += f'以下游戏今天正式关服，请留意回收服务器:\n'
+        for notice in notices_63:
+            for game in notice.games.all():
+                research_split = ResearchSplit.objects.filter(game=game).first()
+                message += (
+                    f'游戏名称: {game.name}, '
+                    f'关服日期: {(notice.build_date + timedelta(days=63)).strftime("%Y-%m-%d")}, '
+                    f'研发: {research_split.research.name if research_split else "未知"}\n'
+                )
+
+    # 发送通知
+    if not message:
+        message = f'今天没有正式关服的游戏 - {timezone.now().strftime("%Y-%m-%d")}'
+    WeChatBot(webhook_key=webhook_key).send_text(message)
     return {'message': message}

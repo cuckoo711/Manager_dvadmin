@@ -46,17 +46,17 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
             actionbar: {
                 buttons: {
                     add: {show: false},
-                    export:{ //这个export便是导出的按钮
-						text:"导出",//按钮文字
-						title:"导出",//鼠标停留显示的信息
-						click(){
+                    export: { //这个export便是导出的按钮
+                        text: "导出",//按钮文字
+                        title: "导出",//鼠标停留显示的信息
+                        click() {
                             ElMessage({
                                 message: '开始导出所有数据，耗时较长请耐心等待，请勿重复点击...',
                                 type: 'success'
                             })
                             return exportRequest(crudExpose!.getSearchFormData())
-						},
-					},
+                        },
+                    },
                     refresh: {
                         show: true,
                         text: '手动刷新',
@@ -183,14 +183,14 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     title: "账号",
                     type: "text",
                     column: {
-                        width: 100,
+                        show: false
                     }
 
                 }, instance_id: {
                     title: "实例Id",
                     type: "text",
                     column: {
-                        showOverflowTooltip: true,
+                        maxWidth: 250,
                     }
 
                 }, instance_name: {
@@ -198,35 +198,37 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     type: "text",
                     search: {show: true},
                     column: {
-                        showOverflowTooltip: true,
+                        maxWidth: 250,
                     }
 
                 }, status: {
                     title: "状态",
                     type: "text",
                     column: {
-                        width: 100,
+                        show: false
                     }
 
                 }, instance_type_id: {
                     title: "规格",
                     type: "text",
                     column: {
-                        width: 150,
+                        show: false
                     }
 
                 }, cpus: {
                     title: "Cpu",
                     type: "text",
+                    search: {show: true},
                     column: {
-                        width: 100,
+                        width: 120,
                     }
 
                 }, memory_size: {
                     title: "内存",
                     type: "text",
+                    search: {show: true},
                     column: {
-                        width: 100,
+                        width: 120,
                     }
 
                 }, eip_address: {
@@ -234,25 +236,44 @@ export const createCrudOptions = function ({crudExpose}: CreateCrudOptionsProps)
                     type: "text",
                     search: {show: true},
                     column: {
-                        width: 150,
+                        width: 180,
                     }
 
                 }, instance_charge_type: {
                     title: "实例计费类型",
                     type: "text",
                     column: {
-                        width: 120,
+                        show: false
                     }
 
                 }, expired_at: {
                     title: "到期时间",
                     type: "datetime",
                     column: {
-                        width: 160,
+                        sortable: true,
+                        minWidth: 180,
                         align: 'center',
                     }
 
-                },
+                }, created_at: {
+                    title: "创建时间",
+                    type: "datetime",
+                    column: {
+                        sortable: true,
+                        minWidth: 180,
+                        align: 'center',
+                    }
+
+                }, updated_at: {
+                    title: "更新时间",
+                    type: "datetime",
+                    column: {
+                        sortable: true,
+                        minWidth: 180,
+                        align: 'center',
+                    }
+
+                }
             },
         },
     };

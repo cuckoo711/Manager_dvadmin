@@ -6,10 +6,16 @@ Project Name: Manager_dvadmin_my
 File Name: utils.py
 Editor: cuckoo
 """
+import base64
+import hashlib
+import json
 import os
+import shutil
 import sqlite3
 import time
 from typing import Dict, Any
+
+import requests
 
 from apps.jtgame.authorization.models import AuthorizationConfig
 
@@ -155,3 +161,111 @@ class zfile_func:
                 'username': new_username,
                 'nickname': new_username,
             }, f"username = '{old_username}'")
+
+
+class WeChatBot:
+    def __init__(self, webhook_key):
+        self.webhook_url = f'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={webhook_key}'
+        self.upload_url = f'https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key={webhook_key}&type=file'
+        self.max_file_size = 20 * 1024 * 1024  # 20 MB
+        self.zip_file = None
+
+    def send_text(self, content, mentioned_list=None, mentioned_mobile_list=None):
+        data = {
+            "msgtype": "text",
+            "text": {
+                "content": content,
+            }
+        }
+        if mentioned_list:
+            data['text']['mentioned_list'] = mentioned_list
+        if mentioned_mobile_list:
+            data['text']['mentioned_mobile_list'] = mentioned_mobile_list
+        self._post_request(data)
+
+    def send_markdown(self, content):
+        data = {
+            "msgtype": "markdown",
+            "markdown": {
+                "content": content
+            }
+        }
+        self._post_request(data)
+
+    def send_image(self, image_path):
+        with open(image_path, 'rb') as f:
+            image_data = f.read()
+        base64_data = base64.b64encode(image_data).decode('utf-8')
+        md5_hash = hashlib.md5(image_data).hexdigest()
+        data = {
+            "msgtype": "image",
+            "image": {
+                "base64": base64_data,
+                "md5": md5_hash
+            }
+        }
+        self._post_request(data)
+
+    def send_file(self, file_path):
+        if not os.path.isdir(file_path) and file_path.endswith('.zip'):
+            self.zip_file = file_path
+        else:
+            self.zip_file = self._handle_directory(file_path)
+        if os.path.isdir(file_path):
+            if os.path.getsize(self.zip_file) > self.max_file_size:
+                file_paths = self._split_and_zip(file_path)
+                for file in file_paths:
+                    self._upload_file(file)
+            else:
+                self._upload_file(self.zip_file)
+        elif os.path.getsize(file_path) > self.max_file_size:
+            raise ValueError(f'File size exceeds the limit of {self.max_file_size} bytes.')
+        else:
+            self._upload_file(file_path)
+
+    @staticmethod
+    def _handle_directory(dir_path):
+        return shutil.make_archive(dir_path, 'zip', dir_path)
+
+    @staticmethod
+    def _split_and_zip(dir_path) -> list[str]:
+        files = os.listdir(dir_path)
+        dir_name = os.path.basename(dir_path)
+
+        mid_point = len(files) // 2
+        sub_dirs = [files[:mid_point], files[mid_point:]]
+        zip_paths = []
+        for idx, sub_files in enumerate(sub_dirs):
+            sub_dir = os.path.join(dir_path, f'{dir_name}_{idx}')
+            os.makedirs(sub_dir, exist_ok=True)
+            for file in sub_files:
+                shutil.move(os.path.join(dir_path, file), sub_dir)
+            zip_path = shutil.make_archive(sub_dir, 'zip', sub_dir)
+            zip_paths.append(zip_path)
+            shutil.rmtree(sub_dir)
+        return zip_paths
+
+    def _upload_file(self, file_path):
+        with open(file_path, 'rb') as f:
+            files = {'media': f}
+            response = requests.post(self.upload_url, files=files)
+        if response.status_code == 200 and response.json().get('errcode') == 0:
+            media_id = response.json().get('media_id')
+            self._send_file_message(media_id)
+        else:
+            raise ValueError(f'File upload failed: {response.text}')
+
+    def _send_file_message(self, media_id):
+        data = {
+            "msgtype": "file",
+            "file": {
+                "media_id": media_id
+            }
+        }
+        self._post_request(data)
+
+    def _post_request(self, data):
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(self.webhook_url, headers=headers, data=json.dumps(data))
+        if response.status_code != 200:
+            raise ValueError(f'Failed to send message: {response.text}')
