@@ -75,3 +75,11 @@ export function exportData(params: any) {
 		method: 'get',
 	});
 }
+
+export function ModifyInstanceSpec(obj: EditReq, params: any) {
+	return request({
+		url: apiPrefix + obj.id + '/modify_instance_spec/',
+		method: 'post',
+		data: params,
+	});
+}

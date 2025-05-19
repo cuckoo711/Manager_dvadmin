@@ -24,8 +24,10 @@ from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.dnspod.v20210323 import dnspod_client, models
 from volcenginesdkcore import Configuration
 from volcenginesdkcore.rest import ApiException
-from volcenginesdkecs import ECSApi, DescribeInstancesRequest, RenewInstanceRequest, EipAddressForRunInstancesInput, \
-    NetworkInterfaceForRunInstancesInput, VolumeForRunInstancesInput, RunInstancesRequest, DescribeImagesRequest
+from volcenginesdkecs import ECSApi, DescribeInstancesRequest, ModifyInstanceSpecRequest, RenewInstanceRequest, \
+    EipAddressForRunInstancesInput, \
+    NetworkInterfaceForRunInstancesInput, StopInstanceRequest, VolumeForRunInstancesInput, RunInstancesRequest, \
+    DescribeImagesRequest
 
 from application import settings
 from apps.jtgame.daily_report.models import ConsoleAccount, QuickAccount, Consoles
@@ -160,6 +162,95 @@ class ConsoleData:
                 '所属账号': account
             })
         return instance_infos
+
+
+class ModifyInstanceSpec:
+    def __init__(self, account: str):
+        self.account = account
+        self.console = ConsoleAccount.objects.get(account=account)
+
+    def set_configuration(self):
+        configuration = Configuration()
+        configuration.ak = self.console.access_key
+        configuration.sk = self.console.secret_key
+        configuration.region = "cn-shanghai"
+        Configuration.set_default(configuration)
+
+    def check_instance_status(self, instance_id: str):
+        self.set_configuration()
+        api_instance = ECSApi()
+        describe_instances_request = DescribeInstancesRequest(
+            instance_ids=[instance_id],
+        )
+        try:
+            result = api_instance.describe_instances(describe_instances_request)
+            instanceids = result.instances
+            if not instanceids:
+                logger.error(f"获取实例信息失败: {result}")
+                return {'status': None, 'result': result}
+            instance = instanceids[0].to_dict()
+            if instance.get('status', '').lower() != 'running':
+                logger.error(f"实例未运行: {instance}")
+                return {'status': False, 'result': '实例未运行'}
+            return {'status': True, 'result': instance}
+        except ApiException as e:
+            logger.error(f"Exception when calling ECSApi: {e}")
+            return {'status': None, 'result': e}
+
+    def modify_instance_spec(self, instance_id: str, server_spec: str):
+        self.set_configuration()
+        api_instance = ECSApi()
+
+        check_result = self.check_instance_status(instance_id)
+        if  check_result['status'] is None:
+            return {'status': False, 'result': check_result['result']}
+        elif not check_result['status']:
+            logger.info(f"实例未运行: {check_result['result']}, 无需关机")
+        else:
+            logger.info(f"实例运行中: {check_result['result']}")
+            stop_instance_request = StopInstanceRequest(
+                force_stop=True,
+                instance_id=instance_id,
+            )
+            try:
+                api_instance.stop_instance(stop_instance_request)
+            except ApiException as e:
+                logger.error(f"Exception when calling ECSApi: {e}")
+                return {'status': False, 'result': e}
+
+            for i in range(10):
+                describe_instances_request = DescribeInstancesRequest(
+                    instance_ids=[instance_id],
+                )
+                try:
+                    result = api_instance.describe_instances(describe_instances_request)
+                    instanceids = result.instances
+                    if not instanceids:
+                        logger.error(f"获取实例信息失败: {result}")
+                        sleep(1)
+                        continue
+                    instance = instanceids[0].to_dict()
+                    if instance.get('status', '').lower() != 'stopped':
+                        logger.error(f"实例未停止: {instance}")
+                        sleep(1)
+                    break
+                except ApiException as e:
+                    logger.error(f"Exception when calling ECSApi: {e}")
+                    return {'status': False, 'result': e}
+            else:
+                logger.error(f"实例未停止: {instance_id}")
+                return {'status': False, 'result': '实例未停止'}
+
+        modify_instance_spec_request = ModifyInstanceSpecRequest(
+            instance_id=instance_id,
+            instance_type_id=server_spec,
+        )
+        try:
+            result = api_instance.modify_instance_spec(modify_instance_spec_request)
+            return {'status': True, 'result': result}
+        except ApiException as e:
+            logger.error(f"Exception when calling ECSApi: {e}")
+            return {'status': False, 'result': e}
 
 
 class ConsoleRun:

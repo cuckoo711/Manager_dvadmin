@@ -8,7 +8,9 @@ from rest_framework.decorators import action
 
 from apps.jtgame.daily_report.models import ConsoleAccount, QuickAccount, ReportData, Consoles, DayliData
 from apps.jtgame.daily_report.tasks import task__update_consoles, task__renew
-from apps.jtgame.daily_report.utils import rebuide_datas_report, ConsoleRun, create_record, WeChatBot
+from apps.jtgame.daily_report.utils import ModifyInstanceSpec, rebuide_datas_report, ConsoleRun, create_record, \
+    WeChatBot
+from dvadmin.utils.backends import logger
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 
@@ -218,6 +220,29 @@ class ConsolesViewSet(CustomModelViewSet):
         if getattr(self, 'values_queryset', None):
             return self.values_queryset
         return super().get_queryset()
+
+    @action(detail=True, methods=['post'], url_path='modify_instance_spec')
+    def modify_instance_spec(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            if not instance:
+                return JsonResponse({'status': False, 'message': '实例不存在'})
+            server_spec = request.data.get('serverSpec')
+            if not server_spec:
+                return JsonResponse({'status': False, 'message': '缺少必要参数'})
+            logger.info(f"修改实例规格: {instance.instance_id}, 规格: {server_spec}")
+            modify= ModifyInstanceSpec(instance.account)
+            modify_result = modify.modify_instance_spec(
+                instance_id=instance.instance_id,
+                server_spec=server_spec,
+            )
+            if not modify_result.get('status'):
+                return JsonResponse({"message": "修改失败", "status": False})
+            sleep(2)
+            task__update_consoles.apply_async().get()
+            return JsonResponse({"message": "修改成功", "status": True})
+        except Exception as e:
+            return JsonResponse({"message": f"服务器错误: {e}", "status": False})
 
     @action(detail=False, methods=['post'], url_path='create_instances')
     def create_instances(self, request):

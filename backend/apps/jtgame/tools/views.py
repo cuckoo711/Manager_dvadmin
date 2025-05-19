@@ -22,7 +22,7 @@ class ToolsSet(viewsets.ModelViewSet):
     def get_domain_ips(self, request):
         domains = request.data.get("domains", "")
         # 去除前后空格并按换行分割
-        urls = domains.strip().splitlines()
+        urls = domains.strip().split('\n')
 
         # 正则表达式匹配域名
         url_pattern = re.compile(r'https?://([a-zA-Z0-9.-]+)')
@@ -33,6 +33,7 @@ class ToolsSet(viewsets.ModelViewSet):
         for url in urls:
             if not url.strip():
                 result.append("")
+                continue
             # 匹配域名
             match = url_pattern.search(url.strip())
 

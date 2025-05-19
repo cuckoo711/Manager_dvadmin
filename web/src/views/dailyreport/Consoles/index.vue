@@ -25,16 +25,16 @@
 						</el-table-column>
 						<el-table-column label="实例名称（游戏名）" align="center" header-align="center">
 							<template #default="scope">
-                <el-tooltip content="实例备注名，无实际意义，仅用做备注" placement="bottom">
-								<el-input v-model="gameName" placeholder="请输入" style="width: 100%" @change="validateGameName()" />
-                </el-tooltip>
+								<el-tooltip content="实例备注名，无实际意义，仅用做备注" placement="bottom">
+									<el-input v-model="gameName" placeholder="请输入" style="width: 100%" @change="validateGameName()" />
+								</el-tooltip>
 							</template>
 						</el-table-column>
 						<el-table-column label="域名网络名" align="center" header-align="center">
 							<template #default="scope">
-                <el-tooltip content="实例的域名网络名，仅需填写英文部分，如：test01test" placement="bottom">
-								<el-input v-model="subDomain" placeholder="请输入" style="width: 100%" @change="validateSubDomain()" />
-                </el-tooltip>
+								<el-tooltip content="实例的域名网络名，仅需填写英文部分，如：test01test" placement="bottom">
+									<el-input v-model="subDomain" placeholder="请输入" style="width: 100%" @change="validateSubDomain()" />
+								</el-tooltip>
 							</template>
 						</el-table-column>
 						<el-table-column label="操作" align="center" header-align="center">
@@ -52,6 +52,17 @@
 		<div :style="{ height: 'calc(100% - 200px)' }">
 			<fs-crud ref="crudRef" v-bind="crudBinding"></fs-crud>
 		</div>
+		<el-dialog v-model="dialogVisible" title="修改服务器配置" :show-close="false" width="auto" @close="handleDialogClosed">
+			<div style="text-align: left">
+				<el-select v-model="instance_type_choose" placeholder="请选择" style="width: 300px">
+					<el-option v-for="item in serverSpecData" :key="item.value" :label="item.label" :value="item.value" />
+				</el-select>
+				<div style="font-size: 12px; color: #999">当前选择：{{ instance_type_choose }}</div>
+			</div>
+			<template #footer>
+				<el-button type="primary" @click="handleConfirm">确定</el-button>
+			</template>
+		</el-dialog>
 	</fs-page>
 </template>
 
@@ -60,10 +71,9 @@ import { ref, onMounted } from 'vue';
 import { useFs } from '@fast-crud/fast-crud';
 import { createCrudOptions } from './crud';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { CreateInstances } from '/@/views/dailyreport/Consoles/api';
+import { CreateInstances, ModifyInstanceSpec } from '/@/views/dailyreport/Consoles/api';
 import * as api from '/@/views/dailyreport/Consoles/api';
 
-const { crudBinding, crudRef, crudExpose } = useFs({ createCrudOptions });
 const serverImage = ref<string>('');
 const serverImageData = [
 	{ label: '官斗服务器环境', value: 'image-ycarodfhev7s11pm9fuv' },
@@ -76,23 +86,147 @@ const serverImageData = [
 ];
 const serverSpecData = [
 	{ label: '2c4g(优先选这个)', value: 'ecs.e-c1m2.large' },
-  { label: '2c4g(上一个售罄就选这个)', value: 'ecs.c3al.large' },
+	{ label: '2c4g(上一个售罄就选这个)', value: 'ecs.c3al.large' },
 	{ label: '2c8g(优先选这个)', value: 'ecs.e-c1m4.large' },
-  { label: '2c8g(上一个售罄就选这个)', value: 'ecs.g3a.large' },
+	{ label: '2c8g(上一个售罄就选这个)', value: 'ecs.g3a.large' },
 	{ label: '4c8g(优先选这个)', value: 'ecs.e-c1m2.xlarge' },
-  { label: '4c8g(上一个售罄就选这个)', value: 'ecs.c3al.xlarge' },
+	{ label: '4c8g(上一个售罄就选这个)', value: 'ecs.c3al.xlarge' },
 	{ label: '4c16g(优先选这个)', value: 'ecs.e-c1m4.xlarge' },
-  { label: '4c16g(上一个售罄就选这个)', value: 'ecs.g3a.xlarge' },
-  { label: '8c16g(优先选这个)', value: 'ecs.e-c1m2.2xlarge' },
-  { label: '8c16g(上一个售罄就选这个)', value: 'ecs.c3a.2xlarge' },
-  { label: '8c32g(优先选这个)', value: 'ecs.e-c1m4.2xlarge' },
-  { label: '8c32g(上一个售罄就选这个)', value: 'ecs.g3al.2xlarge' },
-  { label: '8c64g(优先选这个)', value: 'ecs.r2a.2xlarge' },
-  { label: '8c64g(上一个售罄就选这个)', value: 'ecs.r3al.2xlarge' },
+	{ label: '4c16g(上一个售罄就选这个)', value: 'ecs.g3a.xlarge' },
+	{ label: '4c32g(优先选这个)', value: 'ecs.r3a.xlarge' },
+	{ label: '4c32g(上一个售罄就选这个)', value: 'ecs.r3al.xlarge' },
+	{ label: '8c16g(优先选这个)', value: 'ecs.e-c1m2.2xlarge' },
+	{ label: '8c16g(上一个售罄就选这个)', value: 'ecs.c3a.2xlarge' },
+	{ label: '8c32g(优先选这个)', value: 'ecs.e-c1m4.2xlarge' },
+	{ label: '8c32g(上一个售罄就选这个)', value: 'ecs.g3al.2xlarge' },
+	{ label: '8c64g(优先选这个)', value: 'ecs.r2a.2xlarge' },
+	{ label: '8c64g(上一个售罄就选这个)', value: 'ecs.r3al.2xlarge' },
 ];
 const serverSpec = ref<string>('');
 const gameName = ref<string>('');
 const subDomain = ref<string>('');
+const dialogVisible = ref(false);
+const instance = ref<any>(null);
+const instance_type_choose = ref<string>('');
+
+const handleInstanceTypeChange = (value: any) => {
+	instance.value = value;
+	const selectedOption = serverSpecData.find((item) => item.value === instance.value.instance_type_id);
+	if (selectedOption) {
+		instance_type_choose.value = selectedOption.value;
+	} else {
+		instance_type_choose.value = '';
+	}
+	dialogVisible.value = true;
+};
+
+async function handleDialogClosed() {
+	instance.value = null;
+	instance_type_choose.value = '';
+	await crudExpose.doRefresh();
+}
+
+async function handleConfirm() {
+	if (!instance_type_choose.value) {
+		ElMessage.error('请选择实例类型');
+		return;
+	} else if (instance_type_choose.value === instance.value.instance_type_id) {
+		ElMessage.error('请勿重复选择相同的实例类型');
+		return;
+	}
+	//一次确认
+	try {
+		await ElMessageBox.confirm(
+			`<div>
+				当前操作 <span style="color: red;">将修改服务器实例的配置</span>，请确认所选数据：<br><br>
+				实例类型：<span style="color: red;">${instance_type_choose.value}</span><br>
+			</div>`,
+			'请确认所选数据',
+			{
+				dangerouslyUseHTMLString: true,
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning',
+			}
+		);
+	} catch (e) {
+		ElMessage({
+			type: 'info',
+			message: '已取消选择',
+		});
+		await handleDialogClosed();
+		return;
+	}
+	// 二次确认
+	try {
+		await ElMessageBox.confirm(
+			`<div>
+				当前操作 <span style="color: red;">一经提交将不可撤销</span>，请谨慎操作！<br><br>
+				提交后将自动从 <span style="color: red;">信控账户内扣费</span><br>
+			</div>`,
+			'是否确认修改服务器实例配置？',
+			{
+				dangerouslyUseHTMLString: true,
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning',
+			}
+		);
+	} catch (e) {
+		ElMessage({
+			type: 'info',
+			message: '已取消选择',
+		});
+		await handleDialogClosed();
+		return;
+	}
+
+	// 三次确认
+	try {
+		await ElMessageBox.confirm(
+			`<div>
+				您确保您已知晓本次操作将修改服务器实例的配置吗？<br><br>
+				该过程可能持续20秒，期间<span style="color: red;">请勿重复操作!!!</span><br>
+			</div>`,
+			'是否确认修改服务器实例配置？',
+			{
+				dangerouslyUseHTMLString: true,
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning',
+			}
+		);
+	} catch (e) {
+		ElMessage({
+			type: 'info',
+			message: '已取消选择',
+		});
+		await handleDialogClosed();
+		return;
+	}
+	await ModifyInstanceSpec(instance.value, {
+		serverSpec: instance_type_choose.value,
+	})
+		.then((res: any) => {
+			if (res.status) {
+				ElMessage.success('修改成功，请刷新实例列表，实例正在启动中，稍后即可连接~');
+				handleDialogClosed();
+			} else {
+				ElMessage.error(res.message);
+			}
+		})
+		.catch((error: any) => {
+			console.error('Error:', error);
+			ElMessage.error('修改失败');
+		});
+
+	// 关闭对话框
+	dialogVisible.value = false;
+}
+
+const { crudBinding, crudRef, crudExpose } = useFs({
+	createCrudOptions: (props) => createCrudOptions({ ...props, onhanleModify: handleInstanceTypeChange }),
+});
 
 // 验证 gameName 的合规性
 function validateGameName() {
