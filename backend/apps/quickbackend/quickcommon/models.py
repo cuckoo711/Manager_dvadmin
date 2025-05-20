@@ -60,7 +60,7 @@ class QuickUser(CoreModel):
         :param force: 强制更新
         :return: True: 更新成功 False: 更新失败 None: 无需更新
         """
-        if self.check_cookie() or force:
+        if not self.check_cookie() or force:
             cookie, expires_time = QuickLogin().get_cookie(self.username, self.password)
             if cookie and expires_time:
                 self.cookie = cookie
@@ -132,12 +132,12 @@ class QuickRegularTask(CoreModel):
             return
         self.description += f'使用账号：{user.username}\n'
 
-        if not user.check_cookie():
-            if not user.update_cookie():
-                self.description += '账号cookie过期'
-                self.status = '2'
-                self.save()
-                return
+        update_status = user.update_cookie()
+        if not update_status and update_status is not None:
+            self.description += '账号cookie过期'
+            self.status = '2'
+            self.save()
+            return
         self.description += f'账号cookie状态正常\n'
 
         quick_sdk = QuickLogin()

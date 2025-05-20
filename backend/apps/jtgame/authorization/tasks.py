@@ -255,7 +255,7 @@ def task__check_already_notice(*args, **kwargs):
         build_type=1,
         status=1,
         # 公告日期距离今天58天或63天
-        build_date__in=[now_date + timedelta(days=58), now_date + timedelta(days=63)],
+        build_date__in=[now_date - timedelta(days=58), now_date - timedelta(days=63)],
     )
 
     if not objs:
@@ -263,33 +263,37 @@ def task__check_already_notice(*args, **kwargs):
         WeChatBot(webhook_key=webhook_key).send_text(message)
         return {'message': '没有需要通知的公告'}
 
-    notices_58 = objs.filter(build_date=now_date + timedelta(days=58))
-    notices_63 = objs.filter(build_date=now_date + timedelta(days=63))
+    notices_58 = objs.filter(build_date=now_date - timedelta(days=58))
+    notices_63 = objs.filter(build_date=now_date - timedelta(days=63))
 
     if notices_58:
-        message += f'以下游戏距离正式关服仅剩3天:\n'
+        message += f'以下游戏距离正式关服仅剩3天:\n\n'
         for notice in notices_58:
             for game in notice.games.all():
                 research_split = ResearchSplit.objects.filter(game=game).first()
                 message += (
-                    f'游戏名称: {game.name}, '
-                    f'关服日期: {(notice.build_date + timedelta(days=63)).strftime("%Y-%m-%d")}, '
+                    f'游戏名称: {game.name}\n'
+                    f'关服日期: {(notice.build_date + timedelta(days=63)).strftime("%Y-%m-%d")}\n'
                     f'研发: {research_split.research.name if research_split else "未知"}\n'
+                    f'*********\n'
                 )
 
     if notices_63:
-        message += f'以下游戏今天正式关服，请留意回收服务器:\n'
+        message += f'以下游戏今天正式关服，请留意回收服务器:\n\n'
         for notice in notices_63:
             for game in notice.games.all():
                 research_split = ResearchSplit.objects.filter(game=game).first()
                 message += (
-                    f'游戏名称: {game.name}, '
-                    f'关服日期: {(notice.build_date + timedelta(days=63)).strftime("%Y-%m-%d")}, '
+                    f'游戏名称: {game.name}\n'
+                    f'关服日期: {(notice.build_date + timedelta(days=63)).strftime("%Y-%m-%d")}\n'
                     f'研发: {research_split.research.name if research_split else "未知"}\n'
+                    f'*********\n'
                 )
 
     # 发送通知
     if not message:
         message = f'今天没有正式关服的游戏 - {timezone.now().strftime("%Y-%m-%d")}'
-    WeChatBot(webhook_key=webhook_key).send_text(message)
+    # 如果不是早上8点到9点之间，则不发送通知
+    if 9 < timezone.now().hour < 10:
+        WeChatBot(webhook_key=webhook_key).send_text(message.strip().strip('*'))
     return {'message': message}
