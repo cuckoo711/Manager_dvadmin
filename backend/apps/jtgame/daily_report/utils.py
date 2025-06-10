@@ -386,6 +386,32 @@ def create_record(value: str, sub_domain: str):
         return {"status": False, "result": err}
 
 
+def get_record_list():
+    try:
+        cred = credential.Credential(
+            secret_id=SECRET_ID,
+            secret_key=SECRET_KEY
+        )
+        http_profile = HttpProfile()
+        http_profile.endpoint = "dnspod.tencentcloudapi.com"
+
+        client_profile = ClientProfile()
+        client_profile.httpProfile = http_profile
+        client = dnspod_client.DnspodClient(cred, "", client_profile)
+
+        req = models.DescribeRecordListRequest()
+        params = {
+            "Domain": "jingtanggame.com",
+            "Limit": 3000
+        }
+        req.from_json_string(json.dumps(params))
+
+        resp = client.DescribeRecordList(req)
+        return {"status": True, "result": resp.to_json_string()}
+    except TencentCloudSDKException as err:
+        return {"status": False, "result": err}
+
+
 class QuickData:
     def __init__(self, shifting_days=0):
         self.host_url = 'http://127.0.0.1:5010'
