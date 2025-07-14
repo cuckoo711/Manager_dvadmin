@@ -83,6 +83,7 @@ const serverImageData = [
 	{ label: '宝可梦游戏服', value: 'image-ycn84w4qspm05kdrid57' },
 	{ label: '大明系列游戏服镜像', value: 'image-ycn7skopvhdbkt9wtdem' },
 	{ label: '大明游戏服环境', value: 'image-ycn57mqkjmklsm2as1lh' },
+  { label: '苍蓝最最最新镜像', value: 'image-ye005lhm163ildnluqep'}
 ];
 const serverSpecData = [
 	{ label: '2c4g(优先选这个)', value: 'ecs.e-c1m2.large' },
