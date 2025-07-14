@@ -1,15 +1,18 @@
+from multiprocessing import Pool
+
 import numpy as np
 import tensorflow as tf
 from keras.src.utils import pad_sequences
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense, Dropout, BatchNormalization
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
-from multiprocessing import Pool
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.models import Sequential
+
 from apps.jtgame.daily_report.models import DayliData
 
 # 让TensorFlow仅使用CPU
 tf.config.set_visible_devices([], 'GPU')
+
 
 # 设置 TensorFlow 使用的线程数，在导入 TensorFlow 后进行设置
 def process_product_data(product_data):
@@ -20,6 +23,7 @@ def process_product_data(product_data):
     scaler = MinMaxScaler(feature_range=(0, 1))
     return scaler.fit_transform(product_data.reshape(-1, 1)).reshape(-1)
 
+
 def parallel_data_preprocessing(all_products_data):
     """
     使用多进程处理所有商品的数据
@@ -28,6 +32,7 @@ def parallel_data_preprocessing(all_products_data):
     with Pool(processes=8) as pool:
         all_data_scaled = pool.map(process_product_data, all_products_data)
     return np.array(all_data_scaled)
+
 
 def predict_income(all_products_data, e_product_data, window_size=3):
     e_product_data = np.array(e_product_data)

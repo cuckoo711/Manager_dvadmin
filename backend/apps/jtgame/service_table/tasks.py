@@ -9,7 +9,7 @@ Editor: 30386
 import os
 import re
 import zipfile
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 
 import pandas as pd
 import xlrd
@@ -17,8 +17,8 @@ import xlwt
 from django.db import transaction
 
 from application.celery import app
-from apps.jtgame.service_table.models import ServiceTableNormal, ServiceTableSplit, ServiceTableTemplate, \
-    ServiceTableMap, ServiceTableChannel
+from apps.jtgame.service_table.models import ServiceTableChannel, ServiceTableMap, ServiceTableNormal, \
+    ServiceTableSplit, ServiceTableTemplate
 from apps.jtgame.service_table.utils.buildpath import build_server_table_output_path
 from apps.jtgame.service_table.utils.changer import Changer
 

@@ -1,10 +1,8 @@
 from datetime import datetime, timedelta
 from typing import Tuple
 
-import pytz
-
-from dvadmin.utils.backends import logger
 from apps.jtgame.utils import parse_time_string
+from dvadmin.utils.backends import logger
 
 
 def calculate_work_hours(start: datetime, end: datetime,

@@ -18,7 +18,7 @@ import requests
 from django.db.models import QuerySet
 
 from apps.jtgame.daily_report.models import QuickAccount
-from apps.jtgame.game_manage.models import Games, ResearchSplit, RevenueSplit, Channel
+from apps.jtgame.game_manage.models import Channel, Games, ResearchSplit, RevenueSplit
 from apps.jtgame.game_manage.utils import get_last2word_from_channels, search_func
 from dvadmin.utils.backends import logger
 

@@ -13,17 +13,16 @@ from datetime import datetime
 
 import pandas as pd
 from django.db import transaction
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework import serializers
 from rest_framework.decorators import action
 
 from application import settings
-from apps.jtgame.service_table.models import ServiceTableTemplate, ServiceTableNormal, ServiceTableSplit, \
-    ServiceTableChannel, ServiceTableMap
-from apps.jtgame.service_table.tasks import task__generate_service_table, task__generate_service_split_table, \
-    async_updload_map
-from apps.jtgame.service_table.utils.buildpath import build_server_table_output_path, \
-    build_server_split_output_path
+from apps.jtgame.service_table.models import ServiceTableChannel, ServiceTableMap, ServiceTableNormal, \
+    ServiceTableSplit, ServiceTableTemplate
+from apps.jtgame.service_table.tasks import async_updload_map, task__generate_service_split_table, \
+    task__generate_service_table
+from apps.jtgame.service_table.utils.buildpath import build_server_split_output_path, build_server_table_output_path
 from dvadmin.utils.backends import logger
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
@@ -97,7 +96,8 @@ class ServiceTableMapViewSet(CustomModelViewSet):
                     ServiceTableMap.objects.all().delete()
 
                 async_updload_map.delay(deepcopy(header), deepcopy(datas))
-                return JsonResponse({"message": f"任务已提交,旧数据已清除,请稍后刷新页面查看新数据", "status": True}, status=200)
+                return JsonResponse({"message": f"任务已提交,旧数据已清除,请稍后刷新页面查看新数据", "status": True},
+                                    status=200)
             except Exception as e:
                 logger.error(f"上传开服表映射失败,错误信息：{str(e)}")
                 return JsonResponse({"message": "上传失败,请联系管理员", "status": False}, status=200)

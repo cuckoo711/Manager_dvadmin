@@ -24,13 +24,12 @@ from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.dnspod.v20210323 import dnspod_client, models
 from volcenginesdkcore import Configuration
 from volcenginesdkcore.rest import ApiException
-from volcenginesdkecs import ECSApi, DescribeInstancesRequest, ModifyInstanceSpecRequest, RenewInstanceRequest, \
-    EipAddressForRunInstancesInput, \
-    NetworkInterfaceForRunInstancesInput, StopInstanceRequest, VolumeForRunInstancesInput, RunInstancesRequest, \
-    DescribeImagesRequest
+from volcenginesdkecs import DescribeImagesRequest, DescribeInstancesRequest, ECSApi, EipAddressForRunInstancesInput, \
+    ModifyInstanceSpecRequest, NetworkInterfaceForRunInstancesInput, RenewInstanceRequest, RunInstancesRequest, \
+    StopInstanceRequest, VolumeForRunInstancesInput
 
 from application import settings
-from apps.jtgame.daily_report.models import ConsoleAccount, QuickAccount, Consoles
+from apps.jtgame.daily_report.models import ConsoleAccount, Consoles, QuickAccount
 from apps.jtgame.game_manage.models import Games
 from conf.env import SECRET_ID, SECRET_KEY
 from dvadmin.utils.backends import logger
@@ -59,6 +58,7 @@ class WeChatBot:
         if response.status_code != 200:
             raise ValueError(f'Failed to send message: {response.text}')
         return response.json()
+
 
 class ConsoleData:
     instances = []
@@ -202,7 +202,7 @@ class ModifyInstanceSpec:
         api_instance = ECSApi()
 
         check_result = self.check_instance_status(instance_id)
-        if  check_result['status'] is None:
+        if check_result['status'] is None:
             return {'status': False, 'result': check_result['result']}
         elif not check_result['status']:
             logger.info(f"实例未运行: {check_result['result']}, 无需关机")

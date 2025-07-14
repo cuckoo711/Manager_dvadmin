@@ -6,4 +6,3 @@ Project Name: Manager_dvadmin_my
 File Name: admin.py
 Editor: cuckoo
 """
-from django.contrib import admin

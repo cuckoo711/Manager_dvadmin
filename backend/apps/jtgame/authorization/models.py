@@ -1,8 +1,8 @@
 from django.db import models
 
+from apps.jtgame.game_manage.models import Games
 from dvadmin.system.models import Dept
 from dvadmin.utils.models import CoreModel, table_prefix
-from apps.jtgame.game_manage.models import Games
 
 
 # Create your models here.

@@ -10,9 +10,9 @@ import datetime
 import json
 import re
 
-from django.db.models.functions import Substr, Length
+from django.db.models.functions import Length, Substr
 
-from apps.jtgame.game_manage.models import Channel, Research, ResearchSplit, Games, RevenueSplit
+from apps.jtgame.game_manage.models import Channel, Games, Research, ResearchSplit, RevenueSplit
 
 
 def search_func(model, search_term) -> dict:

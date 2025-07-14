@@ -4,12 +4,11 @@ from django.http import JsonResponse
 from rest_framework import serializers
 from rest_framework.decorators import action
 
+from apps.jtgame.game_manage.models import Channel, Games, Research, ResearchSplit, RevenueSplit
+from apps.jtgame.game_manage.utils import handle_game, handle_scheduling, parse_request_data
 from dvadmin.utils.backends import logger
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
-from apps.jtgame.game_manage.models import Games, Channel, Research, RevenueSplit, ResearchSplit
-from apps.jtgame.game_manage.utils import parse_request_data, handle_game, \
-    handle_scheduling
 
 
 # Create your views here.
@@ -38,7 +37,8 @@ class GameSerializer(CustomModelSerializer):
 
 class RevenueSplitSerializer(CustomModelSerializer):
     game_name = serializers.SlugRelatedField(slug_field='name', source='game', read_only=True, label='游戏名称')
-    game_release_date = serializers.SlugRelatedField(slug_field='release_date', source='game', read_only=True, label='发行日期')
+    game_release_date = serializers.SlugRelatedField(slug_field='release_date', source='game', read_only=True,
+                                                     label='发行日期')
     channel_name = serializers.SlugRelatedField(slug_field='name', source='channel', read_only=True, label='渠道名称')
 
     class Meta:
@@ -49,7 +49,8 @@ class RevenueSplitSerializer(CustomModelSerializer):
 
 class RevenueSplitExoprtSerializer(CustomModelSerializer):
     game_name = serializers.SlugRelatedField(slug_field='name', source='game', read_only=True, label='游戏名称')
-    game_release_date = serializers.SlugRelatedField(slug_field='release_date', source='game', read_only=True, label='发行日期')
+    game_release_date = serializers.SlugRelatedField(slug_field='release_date', source='game', read_only=True,
+                                                     label='发行日期')
     channel_name = serializers.SlugRelatedField(slug_field='name', source='channel', read_only=True, label='渠道名称')
 
     class Meta:
@@ -59,7 +60,8 @@ class RevenueSplitExoprtSerializer(CustomModelSerializer):
 
 class ResearchSplitSerializer(CustomModelSerializer):
     game_name = serializers.SlugRelatedField(slug_field='name', source='game', read_only=True, label='游戏名称')
-    game_release_date = serializers.SlugRelatedField(slug_field='release_date', source='game', read_only=True, label='发行日期')
+    game_release_date = serializers.SlugRelatedField(slug_field='release_date', source='game', read_only=True,
+                                                     label='发行日期')
     research_name = serializers.SlugRelatedField(slug_field='name', source='research', read_only=True, label='研发名称')
 
     class Meta:
@@ -70,7 +72,8 @@ class ResearchSplitSerializer(CustomModelSerializer):
 
 class ResearchSplitExoprtSerializer(CustomModelSerializer):
     game_name = serializers.SlugRelatedField(slug_field='name', source='game', read_only=True, label='游戏名称')
-    game_release_date = serializers.SlugRelatedField(slug_field='release_date', source='game', read_only=True, label='发行日期')
+    game_release_date = serializers.SlugRelatedField(slug_field='release_date', source='game', read_only=True,
+                                                     label='发行日期')
     research_name = serializers.SlugRelatedField(slug_field='name', source='research', read_only=True, label='研发名称')
 
     class Meta:
@@ -149,7 +152,8 @@ class RevenueSplitViewSet(CustomModelViewSet):
             game_release_date_after = self.request.query_params.get('game_release_date[0]', None)
             game_release_date_before = self.request.query_params.get('game_release_date[1]', None)
             if game_release_date_after and game_release_date_before:
-                queryset = queryset.filter(game__release_date__range=(game_release_date_after, game_release_date_before))
+                queryset = queryset.filter(
+                    game__release_date__range=(game_release_date_after, game_release_date_before))
             else:
                 logger.info('没有指定时间范围')
 
@@ -192,7 +196,8 @@ class ResearchSplitViewSet(CustomModelViewSet):
             game_release_date_after = self.request.query_params.get('game_release_date[0]', None)
             game_release_date_before = self.request.query_params.get('game_release_date[1]', None)
             if game_release_date_after and game_release_date_before:
-                queryset = queryset.filter(game__release_date__range=(game_release_date_after, game_release_date_before))
+                queryset = queryset.filter(
+                    game__release_date__range=(game_release_date_after, game_release_date_before))
             else:
                 logger.info('没有指定时间范围')
         if getattr(self, 'values_queryset', None):

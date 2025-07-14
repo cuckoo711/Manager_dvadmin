@@ -13,7 +13,7 @@ import os
 import shutil
 import sqlite3
 import time
-from typing import Dict, Any
+from typing import Any, Dict
 
 import requests
 

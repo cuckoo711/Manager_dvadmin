@@ -9,8 +9,8 @@ Editor: cuckoo
 from django.db import models
 from django.utils import timezone
 
-from dvadmin.utils.models import CoreModel, table_prefix
 from apps.jtgame.utils import parse_iso_datetime
+from dvadmin.utils.models import CoreModel, table_prefix
 
 
 # Create your models here.
@@ -55,4 +55,3 @@ class Leave(CoreModel):
                 self.end_time = timezone.make_aware(self.end_time)
 
         super().save(*args, **kwargs)
-

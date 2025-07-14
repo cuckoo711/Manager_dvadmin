@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from rest_framework import serializers, viewsets
 from rest_framework.decorators import action
 
-from apps.jtgame.active_manage.models import ActivityGame, ActivityContent
+from apps.jtgame.active_manage.models import ActivityContent, ActivityGame
 
 
 class ActivityGameSerializer(serializers.ModelSerializer):

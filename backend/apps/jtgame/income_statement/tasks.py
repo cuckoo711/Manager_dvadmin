@@ -6,8 +6,8 @@ Project Name: Manager_dvadmin
 FILE NAME: tasks.py
 Editor: 30386
 """
-import json
 import datetime
+import json
 
 from application.celery import app
 from apps.jtgame.income_statement.models import IncomeData

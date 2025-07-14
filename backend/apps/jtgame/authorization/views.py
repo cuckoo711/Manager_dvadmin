@@ -1,15 +1,16 @@
 # Create your views here.
 import os
 
-from django.http import JsonResponse, FileResponse
+from django.http import FileResponse, JsonResponse
 from rest_framework import serializers
 from rest_framework.decorators import action
 
+from apps.jtgame.authorization.tasks import generate_authorization_letter, generate_notice, \
+    task__auto_clear_authorization_letter
 from dvadmin.utils.backends import logger
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
-from .models import AuthorizationInfo, AuthorizationConfig, AuthorizationLetter, Notice
-from apps.jtgame.authorization.tasks import generate_authorization_letter, generate_notice, task__auto_clear_authorization_letter
+from .models import AuthorizationConfig, AuthorizationInfo, AuthorizationLetter, Notice
 
 
 class AuthorInfoSerializer(CustomModelSerializer):

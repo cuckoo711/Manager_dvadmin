@@ -14,8 +14,8 @@ from celery import chain
 from django.db import transaction
 
 from application.celery import app
-from apps.jtgame.daily_report.models import ReportData, ConsoleAccount, Consoles, DayliData
-from apps.jtgame.daily_report.utils import ConsoleData, QuickTotal, renew_console, send_email, QuickData
+from apps.jtgame.daily_report.models import ConsoleAccount, Consoles, DayliData, ReportData
+from apps.jtgame.daily_report.utils import ConsoleData, QuickData, QuickTotal, renew_console, send_email
 from dvadmin.utils.backends import logger
 
 
