@@ -138,6 +138,19 @@ class MessageCenterTargetUserListSerializer(CustomModelSerializer):
         fields = "__all__"
         read_only_fields = ["id"]
 
+def websocket_push(user_id, message):
+    """
+    主动推送消息
+    """
+    username = "user_" + str(user_id)
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        username,
+        {
+            "type": "push.message",
+            "json": message
+        }
+    )
 
 class MessageCenterCreateSerializer(CustomModelSerializer):
     """
@@ -167,6 +180,10 @@ class MessageCenterCreateSerializer(CustomModelSerializer):
         targetuser_instance = MessageCenterTargetUserSerializer(data=targetuser_data, many=True, request=self.request)
         targetuser_instance.is_valid(raise_exception=True)
         targetuser_instance.save()
+        for user in users:
+            unread_count = MessageCenterTargetUser.objects.filter(users__id=user, is_read=False).count()
+            websocket_push(user, message={"sender": 'system', "contentType": 'SYSTEM',
+                                          "content": '您有一条新消息~', "unread": unread_count})
         return data
 
     class Meta:
@@ -206,6 +223,10 @@ class MessageCenterViewSet(CustomModelViewSet):
             queryset.save()
         instance = self.get_object()
         serializer = self.get_serializer(instance)
+        # 主动推送消息
+        unread_count = MessageCenterTargetUser.objects.filter(users__id=user_id, is_read=False).count()
+        websocket_push(user_id, message={"sender": 'system', "contentType": 'TEXT',
+                                         "content": '您查看了一条消息~', "unread": unread_count})
         return DetailResponse(data=serializer.data, msg="获取成功")
 
     @action(methods=['GET'], detail=False, permission_classes=[IsAuthenticated])
