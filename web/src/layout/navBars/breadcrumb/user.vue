@@ -57,6 +57,26 @@
 				:class="!state.isScreenfull ? 'icon-fullscreen' : 'icon-tuichuquanping'"
 			></i>
 		</div>
+    <div>
+      <span v-if="!isSocketOpen" class="online-status-span">
+        <el-popconfirm
+            width="250"
+            ref="onlinePopoverRef"
+            :confirm-button-text="$t('message.user.retry')"
+            :icon="InfoFilled"
+            trigger="hover"
+            icon-color="#626AEF"
+            :title="$t('message.user.onlinePrompt')"
+            @confirm="onlineConfirmEvent"
+        >
+          <template #reference>
+            <el-badge is-dot class="item" :class="{'online-status': isSocketOpen,'online-down':!isSocketOpen}">
+              <img :src="getBaseURL(userInfos.avatar) || headerImage" class="layout-navbars-breadcrumb-user-link-photo mr5" />
+            </el-badge>
+          </template>
+        </el-popconfirm>
+      </span>
+    </div>
 		<div></div>
 		<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
 			<span class="layout-navbars-breadcrumb-user-link">
@@ -95,6 +115,7 @@ import mittBus from '/@/utils/mitt';
 import { Session, Local } from '/@/utils/storage';
 import headerImage from '/@/assets/img/headerImage.png';
 import { InfoFilled } from '@element-plus/icons-vue';
+import websocket from '/@/utils/websocket';
 // 引入组件
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/userNews.vue'));
 const Search = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/search.vue'));
@@ -122,6 +143,21 @@ const layoutUserFlexNum = computed(() => {
 	else num = '';
 	return num;
 });
+
+// 定义变量内容
+const { isSocketOpen } = storeToRefs(useUserInfo());
+
+// websocket状态
+const onlinePopoverRef = ref()
+const onlineConfirmEvent = () => {
+  if (!isSocketOpen.value) {
+    websocket.is_reonnect = true
+    websocket.reconnect_current = 1
+    websocket.reconnect()
+  }
+  // 手动隐藏弹出
+  unref(onlinePopoverRef).popperRef?.delayHide?.()
+}
 
 // 全屏点击时
 const onScreenfullClick = () => {

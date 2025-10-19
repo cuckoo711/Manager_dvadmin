@@ -23,6 +23,7 @@ export interface UserInfosState {
 }
 export interface UserInfosStates {
 	userInfos: UserInfosState;
+	isSocketOpen: boolean
 }
 
 // 路由缓存列表

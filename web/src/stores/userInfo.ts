@@ -32,6 +32,7 @@ export const useUserInfo = defineStore('userInfo', {
 				},
 			],
 		},
+		isSocketOpen: false
 	}),
 	actions: {
 		async setPwdChangeCount(count: number) {
@@ -70,6 +71,9 @@ export const useUserInfo = defineStore('userInfo', {
 				this.userInfos.is_superuser = userInfos.data.is_superuser;
 				Session.set('userInfo', this.userInfos);
 			}
+		},
+		async setWebSocketState(socketState: boolean) {
+			this.isSocketOpen = socketState;
 		},
 		async getApiUserInfo() {
 			return request({

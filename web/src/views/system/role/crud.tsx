@@ -79,7 +79,7 @@ export const createCrudOptions = function ({ crudExpose, context }: CreateCrudOp
 					permission: {
 						type: 'primary',
 						text: '权限配置',
-						show: auth('role:Permission'),
+						show: auth('role:SetMenu'),
 						click: (clickContext: any): void => {
 							const { row } = clickContext;
 							context.RoleDrawer.handleDrawerOpen(row);
