@@ -66,7 +66,7 @@ export const createCrudOptions = function ({ crudExpose, context }: CreateCrudOp
 					assignment: {
 						type: 'primary',
 						text: '授权用户',
-						show: auth('role:AuthorizedAdd') || auth('role:AuthorizedSearch'),
+						show: auth('role:SetUserRole') || auth('role:AuthorizedSearch'),
 						click: (ctx: any) => {
 							const { row } = ctx;
 							context!.RoleUserDrawer.handleDrawerOpen(row);
