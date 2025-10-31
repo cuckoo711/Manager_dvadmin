@@ -5,8 +5,6 @@
 				<img :src="siteLogo" />
 				<div class="login-left-logo-text">
 					<span>{{ getSystemConfig['login.site_title'] || getThemeConfig.globalViceTitle }}</span>
-					<span class="login-left-logo-text-msg" style="margin-top: 5px;">{{
-						getSystemConfig['login.site_name'] || getThemeConfig.globalViceTitleMsg }}</span>
 				</div>
 			</div>
 		</div>
@@ -16,7 +14,9 @@
 <!--				<span class="login-right-warp-two"></span>-->
 				<div class="login-right-warp-mian">
 					<div class="login-right-warp-main-title">
-            {{userInfos.pwd_change_count===0?'初次登录修改密码':'欢迎登录'}}
+            <span>{{getSystemConfig['login.site_name'] || getThemeConfig.globalViceTitleMsg }}</span>
+            <br>
+            <span>{{userInfos.pwd_change_count===0?'初次登录请修改密码':'欢迎登录'}}</span>
           </div>
 					<div class="login-right-warp-main-form">
 						<div v-if="!state.isScan">
@@ -168,14 +168,11 @@ onMounted(() => {
 
 				span {
 					margin-left: 10px;
-					font-size: 16px;
+					font-size: 24px;
 					color: var(--el-color-primary);
 				}
 
-				.login-left-logo-text-msg {
-					font-size: 12px;
-					color: var(--el-color-primary);
-				}
+
 			}
 		}
 
@@ -280,10 +277,10 @@ onMounted(() => {
 				flex-direction: column;
 				height: 100%;
 
+
 				.login-right-warp-main-title {
 					height: 130px;
-					line-height: 130px;
-					font-size: 32px;
+					font-size: 24px;
           font-weight: 600;
 					text-align: center;
 					letter-spacing: 3px;
@@ -347,7 +344,7 @@ onMounted(() => {
 		text-align: center;
 
 		p {
-			font-size: 14px;
+			font-size: 12px;
 			color: rgba(0, 0, 0, 0.5);
 		}
 

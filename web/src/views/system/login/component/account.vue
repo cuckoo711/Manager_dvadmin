@@ -187,8 +187,8 @@ export default defineComponent({
 			// 初始化登录成功时间问候语
 			let currentTimeInfo = currentTime.value;
 			// 登录成功，跳到转首页
-      const pwd_change_count = userInfos.value.pwd_change_count
-      if(pwd_change_count>0){
+      const pwd_change_count = userInfos.value.pwd_change_count ?? 0
+      if(pwd_change_count > 0){
         // 如果是复制粘贴的路径，非首页/登录页，那么登录成功后重定向到对应的路径中
         if (route.query?.redirect) {
         	router.push({
@@ -234,8 +234,29 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+// 定义error-num动画的关键帧
+@keyframes error-num {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .login-content-form {
 	margin-top: 20px;
+
+	// 为输入框添加圆角和设置字体大小
+	:deep(.el-input__wrapper) {
+		border-radius: 8px !important;
+	}
+	// 设置输入框文字大小
+	:deep(.el-input__inner) {
+		font-size: 12px !important; // Element Plus large尺寸的默认字体大小
+	}
 
 	@for $i from 1 through 4 {
 		.login-animation#{$i} {
@@ -243,7 +264,7 @@ export default defineComponent({
 			animation-name: error-num;
 			animation-duration: 0.5s;
 			animation-fill-mode: forwards;
-			animation-delay: calc($i/10) + s;
+			animation-delay: #{$i/10}s;
 		}
 	}
 
@@ -253,7 +274,7 @@ export default defineComponent({
 		cursor: pointer;
 
 		&:hover {
-			color: #909399;
+			color: #909397;
 		}
 	}
 
@@ -262,6 +283,7 @@ export default defineComponent({
 		padding: 0;
 		font-weight: bold;
 		letter-spacing: 5px;
+    border-radius: 8px !important;
 	}
 
 	.login-content-submit {
@@ -269,6 +291,7 @@ export default defineComponent({
 		letter-spacing: 2px;
 		font-weight: 800;
 		margin-top: 15px;
+    border-radius:8px;
 	}
 }
 </style>

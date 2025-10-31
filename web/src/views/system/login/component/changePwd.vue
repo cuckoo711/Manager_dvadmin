@@ -239,6 +239,15 @@ export default defineComponent({
 .login-content-form {
 	margin-top: 20px;
 
+	// 为输入框添加圆角和设置字体大小
+	:deep(.el-input__wrapper) {
+		border-radius: 8px !important;
+	}
+	// 设置输入框文字大小
+	:deep(.el-input__inner) {
+		font-size: 12px !important; // Element Plus large尺寸的默认字体大小
+	}
+
 	@for $i from 1 through 5 {
 		.login-animation#{$i} {
 			opacity: 0;
@@ -264,6 +273,7 @@ export default defineComponent({
 		padding: 0;
 		font-weight: bold;
 		letter-spacing: 5px;
+    border-radius: 8px !important;
 	}
 
 	.login-content-submit {
@@ -271,6 +281,7 @@ export default defineComponent({
 		letter-spacing: 2px;
 		font-weight: 800;
 		margin-top: 15px;
+    border-radius:8px;
 	}
 }
 </style>
