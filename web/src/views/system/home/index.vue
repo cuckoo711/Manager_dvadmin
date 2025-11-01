@@ -1,54 +1,96 @@
 <template>
-	<div class="home-container">
-		<el-row :gutter="15" class="home-card-one mb15">
-			<el-col
-				:xs="24"
-				:sm="12"
-				:md="12"
-				:lg="6"
-				:xl="6"
-				v-for="(v, k) in homeOne"
-				:key="k"
-				:class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }"
+  <div class="home-container">
+    <div style="margin: 15px; font-size: 16px; font-weight: 700">
+      欢迎回来，{{ userInfo.userInfos.name }}
+      <span style="font-size: 12px; color: grey"> 这里是您的工作台，请愉快的工作吧！</span>
+    </div>
+    <el-row>
+      <el-col :span="16">
+		  <el-row :gutter="15" class="home-card-one mb15">
+        <el-col
+				    :xs="24"
+				    :sm="12"
+				    :md="12"
+				    :lg="8"
+				    :xl="6"
+				    v-for="(v, k) in homeOne"
+				    :key="k"
+				    :class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }"
 			>
-				<div class="home-card-item flex">
+				<div class="home-card-item flex" style="padding: 0;">
 					<div class="flex-margin flex w100" :class="` home-one-animation${k}`">
-						<div class="flex-auto">
-							<span class="font30">{{ v.num1 }}</span>
-							<span class="ml5 font16" :style="{ color: v.color1 }">{{ v.num2 }}%</span>
-							<div class="mt10">{{ v.num3 }}</div>
+						<div class="home-card-item-icon flex" style="margin: 10px;" :style="{ background: `var(${v.color2})` }">
+							<i class="flex-margin font24" :class="v.num4" :style="{ color: `var(${v.color3})` }"></i>
 						</div>
-						<div class="home-card-item-icon flex" :style="{ background: `var(${v.color2})` }">
-							<i class="flex-margin font32" :class="v.num4" :style="{ color: `var(${v.color3})` }"></i>
+            <div class="flex-auto">
+							<span class="font24">{{ v.num1 }}</span>
+							<span class="ml5 font14" :style="{ color: v.color1 }">{{ v.num2 }}%</span>
+							<div class="mt10">{{ v.num3 }}</div>
 						</div>
 					</div>
 				</div>
 			</el-col>
 		</el-row>
-		<el-row :gutter="15" class="home-card-two mb15">
-			<el-col :xs="24" :sm="14" :md="14" :lg="16" :xl="16">
+		  <el-row :gutter="15" class="home-card-two mb15">
+			  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+				  <div class="home-card-item">
+					  <div style="height: 100%" ref="homeLineRef"></div>
+				  </div>
+			  </el-col>
+		</el-row>
+		  <el-row :gutter="15" class="home-card-three">
+			<el-col :span="24" :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="home-media">
 				<div class="home-card-item">
-					<div style="height: 100%" ref="homeLineRef"></div>
-				</div>
-			</el-col>
-			<el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8" class="home-media">
-				<div class="home-card-item">
-					<div style="height: 100%" ref="homePieRef"></div>
+					<div style="height: 100%" ref="homeBarRef"></div>
 				</div>
 			</el-col>
 		</el-row>
-		<el-row :gutter="15" class="home-card-three">
-			<el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8">
-				<div class="home-card-item">
+      </el-col>
+      <el-col :span="8">
+      <div style="margin-left: 15px">
+        <el-row :gutter="100" class="home-card-one mb15">
+        <el-col :span="24">
+				<div class="home-card-item flex" style="padding: 0; width:350px; height:200px">
+						<img :src="HomeBg" style="padding: 0; margin: 0;">
+				</div>
+			</el-col>
+		</el-row>
+        <el-row :gutter="100" class="home-card-one mb15">
+          <el-col :span="24" >
+            <div class="home-card-item" style=" width:350px; height: 100%; max-height: 320px">
+              <div class="home-card-item-title">消息通知
+                <button   type="button" class="el-button" style=" float: right; border-color: transparent; margin-top: -2px;" @click="msgMore">
+                  <span>更多
+              <i class="el-icon fs-icon fs-button-icon-right"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M512 160c320 0 512 352 512 352S832 864 512 864 0 512 0 512s192-352 512-352m0 64c-225.28 0-384.128 208.064-436.8 288 52.608 79.872 211.456 288 436.8 288 225.28 0 384.128-208.064 436.8-288-52.608-79.872-211.456-288-436.8-288m0 64a224 224 0 1 1 0 448 224 224 0 0 1 0-448m0 64a160.19 160.19 0 0 0-160 160c0 88.192 71.744 160 160 160s160-71.808 160-160-71.744-160-160-160"></path></svg></i>
+              </span>
+                </button>
+              </div>
+						<div v-for="(v, k) in newsInfoList" :key="k" class="personal-info-li flex-margin flex w100" >
+              <div class="home-card-item-icon flex" style="margin: 5px;" :style="{ background: `#f8f8f8` }">
+                <i class="flex-margin font24" :class="`fa fa-commenting-o`" :style="{ color: `#5d8b22` }"></i>
+						</div>
+              <div class="flex-auto" style="margin-top: 10px">
+							  <span class="font14">[{{ v.creator_name }}]</span>
+							  <span style=" color: grey; float: right; font-style:italic;">&nbsp;{{ v.create_datetime }}&nbsp;&nbsp;</span>
+							  <div class="text-container"> {{ v.title }}</div>
+						  </div>
+						</div>
+            </div>
+		</el-col>
+		</el-row>
+        <el-row :gutter="100" class="home-card-one mb15">
+      			<el-col :span="24">
+				<div class="home-card-item" style=" width:350px; height: 100%">
 					<div class="home-card-item-title">快捷导航工具</div>
 					<div class="home-monitor">
 						<div class="flex-warp">
 							<div class="flex-warp-item" v-for="(v, k) in homeThree" :key="k">
 								<div class="flex-warp-item-box" :class="`home-animation${k}`">
 									<div class="flex-margin">
-										<i :class="v.icon" :style="{ color: v.iconColor }"></i>
-										<span class="pl5">{{ v.label }}</span>
-										<div class="mt10">{{ v.value }}</div>
+                    <div class="home-card-item-icon flex" style="margin: 20px;" :style="{ background: '#f8f8f8' }">
+                      <i class="flex-margin font24" :class="v.icon" :style="{ color: v.iconColor}"></i>
+						        </div>
+										<span class="pl20" :style="{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }">{{ v.label }}</span>
 									</div>
 								</div>
 							</div>
@@ -56,13 +98,11 @@
 					</div>
 				</div>
 			</el-col>
-			<el-col :xs="24" :sm="14" :md="14" :lg="16" :xl="16" class="home-media">
-				<div class="home-card-item">
-					<div style="height: 100%" ref="homeBarRef"></div>
-				</div>
-			</el-col>
-		</el-row>
-	</div>
+			</el-row>
+      </div>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -71,6 +111,7 @@ import * as echarts from 'echarts';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
+import HomeBg from '/@/assets/home-bg.png';
 
 let global: any = {
 	homeChartOne: null,
@@ -79,9 +120,21 @@ let global: any = {
 	dispose: [null, '', undefined],
 };
 
+import { useUserInfo } from '/@/stores/userInfo';
+import {useRouter} from "vue-router";
+import * as api from "/@/views/system/personal/api";
+
+// 定义消息类型
+interface NewsItem {
+  creator_name: string;
+  create_datetime: string;
+  title: string;
+}
+
 export default defineComponent({
 	name: 'home',
 	setup() {
+    const userInfo = useUserInfo();
 		const homeLineRef = ref();
 		const homePieRef = ref();
 		const homeBarRef = ref();
@@ -89,7 +142,11 @@ export default defineComponent({
 		const storesThemeConfig = useThemeConfig();
 		const { themeConfig } = storeToRefs(storesThemeConfig);
 		const { isTagsViewCurrenFull } = storeToRefs(storesTagsViewRoutes);
+		const router = useRouter(); // 将router移到组件级别
+		const defaultNewsItems: NewsItem[] = [];
+		
 		const state = reactive({
+			newsInfoList: [...defaultNewsItems] as NewsItem[],
 			homeOne: [
 				{
 					num1: '125,12',
@@ -110,15 +167,6 @@ export default defineComponent({
 					color3: '--el-color-success',
 				},
 				{
-					num1: '125,65',
-					num2: '+17.32',
-					num3: '年度计划信息',
-					num4: 'iconfont icon-zaosheng',
-					color1: '#6690F9',
-					color2: '--next-color-warning-lighter',
-					color3: '--el-color-warning',
-				},
-				{
 					num1: '520,43',
 					num2: '-10.01',
 					num3: '访问统计信息',
@@ -131,57 +179,48 @@ export default defineComponent({
 			homeThree: [
 				{
 					icon: 'iconfont icon-yangan',
-					label: '浅粉红',
-					value: '2.1%OBS/M',
-					iconColor: '#F72B3F',
+					label: '用户管理',
+					iconColor: 'gray',
 				},
 				{
 					icon: 'iconfont icon-wendu',
-					label: '深红(猩红)',
-					value: '30℃',
-					iconColor: '#91BFF8',
+					label: '部门管理',
+					iconColor: 'gray',
 				},
 				{
 					icon: 'iconfont icon-shidu',
-					label: '淡紫红',
-					value: '57%RH',
-					iconColor: '#88D565',
+					label: '权限管理',
+					iconColor: 'gray',
 				},
 				{
 					icon: 'iconfont icon-shidu',
-					label: '弱紫罗兰红',
-					value: '107w',
-					iconColor: '#88D565',
+					label: '日志管理',
+					iconColor: 'gray',
 				},
 				{
 					icon: 'iconfont icon-zaosheng',
-					label: '中紫罗兰红',
-					value: '57DB',
-					iconColor: '#FBD4A0',
+					label: '菜单管理',
+					iconColor: 'gray',
 				},
 				{
 					icon: 'iconfont icon-zaosheng',
-					label: '紫罗兰',
-					value: '57PV',
-					iconColor: '#FBD4A0',
+					label: '消息中心',
+					iconColor: 'gray',
 				},
 				{
 					icon: 'iconfont icon-zaosheng',
-					label: '暗紫罗兰',
-					value: '517Cpd',
-					iconColor: '#FBD4A0',
+					label: '接口管理',
+					iconColor: 'gray',
 				},
 				{
 					icon: 'iconfont icon-zaosheng',
-					label: '幽灵白',
-					value: '12kg',
-					iconColor: '#FBD4A0',
+					label: '下载中心',
+					iconColor: 'gray',
 				},
 				{
 					icon: 'iconfont icon-zaosheng',
-					label: '海军蓝',
-					value: '64fm',
-					iconColor: '#FBD4A0',
+					label: '系统管理',
+					iconColor: 'gray',
 				},
 			],
 			myCharts: [],
@@ -506,6 +545,7 @@ export default defineComponent({
 		// 页面加载时
 		onMounted(() => {
 			initEchartsResize();
+			getMsg(); // 确保组件挂载时立即获取消息列表
 		});
 		// 由于页面缓存原因，keep-alive
 		onActivated(() => {
@@ -542,11 +582,47 @@ export default defineComponent({
 				immediate: true,
 			}
 		);
+		// 获取消息列表
+		const getMsg = (): void => {
+			// 先重置为默认数据
+			state.newsInfoList = [...defaultNewsItems];
+			
+			// 尝试从API获取最新数据
+			api.GetSelfReceive({}).then((res: any) => {
+				const { data } = res || {};
+				// 严格检查返回数据的有效性
+				if (data && Array.isArray(data) && data.length > 0) {
+					try {
+						// 安全地进行类型转换并更新状态
+						state.newsInfoList = data.map((item: any): NewsItem => ({
+							creator_name: String(item.creator_name || '未知用户'),
+							create_datetime: String(item.create_datetime || ''),
+							title: String(item.title || '')
+						}));
+					} catch (typeError) {
+						console.error('数据类型转换失败:', typeError);
+						// 类型转换失败时保持默认数据
+					}
+				}
+			}).catch((error: Error) => {
+				console.error('获取消息列表失败，保持默认数据:', error);
+				// 错误时保持已设置的默认数据
+			});
+		};
+
+		// 跳转消息中心
+		const msgMore = (): void => {
+			router.push({ path: '/messageCenter' });
+		};
+
 		return {
-			homeLineRef,
-			homePieRef,
-			homeBarRef,
-			...toRefs(state),
+		homeLineRef,
+		homePieRef,
+		homeBarRef,
+		userInfo,
+		...toRefs(state),
+		HomeBg,
+		msgMore,
 		};
 	},
 });
@@ -554,6 +630,20 @@ export default defineComponent({
 
 <style scoped lang="scss">
 $homeNavLengh: 8;
+.text-container {
+width: 420px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+.text-container:hover {
+animation: scrollText 5s linear infinite;
+}
+@keyframes scrollText {
+0% { transform: translateX(0); }
+100% { transform: translateX(-100%); }
+}
+
 .home-container {
 	overflow: hidden;
 	.home-card-one,
@@ -561,21 +651,21 @@ $homeNavLengh: 8;
 	.home-card-three {
 		.home-card-item {
 			width: 100%;
-			height: 130px;
-			border-radius: 4px;
+			height: 120px;
 			transition: all ease 0.3s;
 			padding: 20px;
 			overflow: hidden;
 			background: var(--el-color-white);
 			color: var(--el-text-color-primary);
 			border: 1px solid var(--next-border-color-light);
+      border-radius: 24px;
 			&:hover {
 				box-shadow: 0 2px 12px var(--next-color-dark-hover);
 				transition: all ease 0.3s;
 			}
 			&-icon {
-				width: 70px;
-				height: 70px;
+				width: 55px;
+				height: 55px;
 				border-radius: 100%;
 				flex-shrink: 1;
 				i {
@@ -583,13 +673,15 @@ $homeNavLengh: 8;
 				}
 			}
 			&-title {
-				font-size: 15px;
+				font-size: 16px;
 				font-weight: bold;
 				height: 30px;
 			}
 		}
 	}
 	.home-card-one {
+    left:15px;
+    right: 15px;
 		@for $i from 0 through 3 {
 			.home-one-animation#{$i} {
 				opacity: 0;
@@ -602,6 +694,9 @@ $homeNavLengh: 8;
 	}
 	.home-card-two,
 	.home-card-three {
+    position: relative;
+    left: 15px;
+    right: 15px;
 		.home-card-item {
 			height: 400px;
 			width: 100%;
@@ -626,7 +721,7 @@ $homeNavLengh: 8;
 							transition: all 0.3s ease;
 						}
 					}
-					@for $i from 0 through $homeNavLengh {
+					@for $i from 0 through 3 {
 						.home-animation#{$i} {
 							opacity: 0;
 							animation-name: error-num;
@@ -641,3 +736,4 @@ $homeNavLengh: 8;
 	}
 }
 </style>
+

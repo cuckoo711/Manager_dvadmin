@@ -2,7 +2,7 @@ import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import { defineConfig, loadEnv, ConfigEnv } from 'vite';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
-import vueJsx from '@vitejs/plugin-vue-jsx'
+// import vueJsx from '@vitejs/plugin-vue-jsx'
 import { generateVersionFile } from "/@/utils/upgrade";
 
 const pathResolve = (dir: string) => {
@@ -22,7 +22,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 	// 当Vite构建时，生成版本文件
 	generateVersionFile()
 	return {
-		plugins: [vue(), vueJsx(), vueSetupExtend()],
+		plugins: [vue(), /* vueJsx(), */ vueSetupExtend()],
 		root: process.cwd(),
 		resolve: { alias },
 		base: mode.command === 'serve' ? './' : env.VITE_PUBLIC_PATH,

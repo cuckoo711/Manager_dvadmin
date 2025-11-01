@@ -29,7 +29,7 @@
 .el-form {
 	// 用于修改弹窗时表单内容间隔太大问题，如系统设置的新增菜单弹窗里的表单内容
 	.el-form-item:last-of-type {
-		margin-bottom: 22px !important;
+		margin-bottom: 24px !important;
 	}
 	// 修复行内表单最后一个 el-form-item 位置下移问题
 	&.el-form--inline {
@@ -38,12 +38,12 @@
 		}
 		.el-form-item--default.el-form-item:last-of-type,
 		.el-form-item--small.el-form-item:last-of-type {
-			margin-bottom: 18px !important;
+			margin-bottom: 6px !important;
 		}
 	}
 	// https://gitee.com/lyt-top/vue-next-admin/issues/I5K1PM
 	.el-form-item .el-form-item__label .el-icon {
-		margin-right: 0px;
+		margin-right: 0;
 	}
 }
 
@@ -76,12 +76,16 @@
 	width: 220px;
 }
 .el-menu-item {
-	height: 56px !important;
-	line-height: 56px !important;
+	height: 46px !important;
+	line-height: 46px !important;
+	    border-radius:12px;
 }
 .el-menu-item,
 .el-sub-menu__title {
+	height: 46px !important;
+	line-height: 46px !important;
 	color: var(--next-bg-menuBarColor);
+	border-radius:12px;
 }
 // 修复点击左侧菜单折叠再展开时，宽度不跟随问题
 .el-menu--collapse {

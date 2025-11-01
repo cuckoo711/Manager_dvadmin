@@ -591,10 +591,13 @@ watch(
 
 <style scoped lang="scss">
 .layout-navbars-tagsview {
-	background-color: var(--el-color-white);
-	border-bottom: 1px solid var(--next-border-color-light);
 	position: relative;
 	z-index: 4;
+  height: 45px;
+  border-radius: 8px;
+  margin-left: 15px;
+  margin-right: 15px;
+
 	:deep(.el-scrollbar__wrap) {
 		overflow-x: auto !important;
 	}
@@ -602,7 +605,7 @@ watch(
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		height: 34px;
+		height: 36px;
 		display: flex;
 		align-items: center;
 		color: var(--el-text-color-regular);
@@ -610,7 +613,7 @@ watch(
 		white-space: nowrap;
 		padding: 0 15px;
 		&-li {
-			height: 26px;
+			height: 30px;
 			line-height: 26px;
 			display: flex;
 			align-items: center;
