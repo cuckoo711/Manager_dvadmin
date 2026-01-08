@@ -1,0 +1,52 @@
+[
+    {
+        "name": "定时任务",
+        "icon": "iconfont icon-caijian",
+        "sort": 6,
+        "is_link": false,
+        "is_catalog": true,
+        "web_path": "/celeryManage",
+        "component": "",
+        "component_name": "",
+        "status": true,
+        "cache": true,
+        "visible": true,
+        "parent": null,
+        "children": [
+            {
+                "name": "任务管理",
+                "icon": "iconfont icon-caijian",
+                "sort": 1,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/taskManage",
+                "component": "plugins/dvadmin3-celery-web/src/taskManage/index",
+                "component_name": "taskManage",
+                "status": true,
+                "cache": true,
+                "visible": true,
+                "children": [],
+                "menu_button": [],
+                "menu_field": []
+            },
+            {
+                "name": "任务日志",
+                "icon": "iconfont icon--chaifenhang",
+                "sort": 2,
+                "is_link": false,
+                "is_catalog": false,
+                "web_path": "/taskLog",
+                "component": "plugins/dvadmin3-celery-web/src/taskManage/component/taskLog/index",
+                "component_name": "taskLog",
+                "status": true,
+                "cache": true,
+                "visible": true,
+                "children": [],
+                "menu_button": [],
+                "menu_field": []
+            }
+        ],
+        "menu_button": [],
+        "menu_field": []
+    }
+]

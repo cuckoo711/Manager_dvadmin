@@ -1,0 +1,13 @@
+[
+    {
+        "name": "靖堂",
+        "sort": 1,
+        "owner": "",
+        "phone": "",
+        "email": "",
+        "status": true,
+        "parent": null,
+        "children": [],
+        "key": "JT"
+    }
+]
