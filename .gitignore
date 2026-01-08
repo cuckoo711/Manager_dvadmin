@@ -1,7 +1,8 @@
-/backend/venv
-/backend/.idea
-backend/chrome
+.venv
 .idea
+backend/chrome
+backend/crudFiles
+backend/media
 
 .history/
 .vscode/
