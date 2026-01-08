@@ -1,0 +1,31 @@
+#!/bin/bash
+
+echo "Executing shs_3/local_merge_1.sh..."
+bash shs_3/local_merge_1.sh
+if [ $? -ne 0 ]; then
+  echo "Error occurred while executing shs_3/local_merge_1.sh"
+  exit 1
+fi
+echo "shs_3/local_merge_1.sh executed successfully!"
+
+echo "Executing shs_3/local_merge_2.sh..."
+bash shs_3/local_merge_2.sh
+if [ $? -ne 0 ]; then
+  echo "Error occurred while executing shs_3/local_merge_2.sh"
+  exit 1
+fi
+echo "shs_3/local_merge_2.sh executed successfully!"
+
+if [ -f "shs_3/local_merge_single_3.sh" ]; then
+  echo "Executing shs_3/local_merge_single_3.sh..."
+  bash shs_3/local_merge_single_3.sh
+  if [ $? -ne 0 ]; then
+    echo "Error occurred while executing shs_3/local_merge_single_3.sh"
+    exit 1
+  fi
+  echo "shs_3/local_merge_single_3.sh executed successfully!"
+else
+  echo "shs_3/local_merge_single_3.sh not found, skipping..."
+fi
+
+echo "All scripts executed successfully!"

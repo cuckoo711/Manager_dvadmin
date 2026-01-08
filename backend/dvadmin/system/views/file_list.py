@@ -18,6 +18,10 @@ from dvadmin.utils.viewset import CustomModelViewSet
 class FileSerializer(CustomModelSerializer):
     url = serializers.SerializerMethodField(read_only=True)
 
+    class Meta:
+        model = FileList
+        fields = '__all__'
+
     def get_url(self, instance):
         # base_url = f"{self.request.scheme}://{self.request.get_host()}/"
         base_url = dispatch.get_system_config_values(
