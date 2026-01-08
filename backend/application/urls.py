@@ -134,6 +134,8 @@ urlpatterns = (
             # 工具模块
             path("api/", include("apps.jtgame.tools.urls")),
 
+            path("api/", include("apps.xiaoqi.canglan.urls")),
+
             # 游戏后台模块
             # gd后台模块
             path("api/", include("apps.gamebackend.gdbackend.urls")),

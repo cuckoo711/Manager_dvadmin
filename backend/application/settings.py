@@ -84,6 +84,8 @@ INSTALLED_APPS = [
     # Quick后台
     "apps.quickbackend.quickcommon",
 
+    "apps.xiaoqi.canglan",
+
     # 其他插件
     "plugins.dvadmin3_fastcrud",
 ]

@@ -143,7 +143,28 @@ router.beforeEach(async (to, from, next) => {
                     next({path: to.path, query: to.query});
                 }
             } else {
-                next();
+                const deptId = userInfos.value?.dept_info?.dept_id;
+                const uid = Number(userInfos.value?.id);
+                if (to.path === '/home' && deptId !== 1 && uid !== 1) {
+                    const pickFirstPath = (routes: any[]): string | null => {
+                        const stack: any[] = Array.isArray(routes) ? [...routes] : [];
+                        while (stack.length) {
+                            const r = stack.shift();
+                            if (r && typeof r.path === 'string' && r.path !== '/' && r.path !== '/home' && !frameOutRoutes.includes(r.path)) {
+                                return r.path;
+                            }
+                            if (r && Array.isArray(r.children) && r.children.length) {
+                                stack.push(...r.children);
+                            }
+                        }
+                        return null;
+                    };
+                    const target = pickFirstPath(routesList.value) || '/401';
+                    next(target);
+                    NProgress.done();
+                } else {
+                    next();
+                }
             }
         }
     }
