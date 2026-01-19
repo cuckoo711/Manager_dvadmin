@@ -76,14 +76,14 @@ import * as api from '/@/views/dailyreport/Consoles/api';
 
 const serverImage = ref<string>('');
 const serverImageData = [
+	{ label: '大圣轮回新正式镜像', value: 'image-yed01fhr55if4qp2q2f5' },
 	{ label: '官斗服务器环境', value: 'image-ycarodfhev7s11pm9fuv' },
-	{ label: '大圣独立码服务器镜像', value: 'image-ycwawlvlmmfwswu7tn5g' },
 	{ label: '真江湖干净服务器', value: 'image-ydhmduviy1hu0r7cywo6' },
 	{ label: '大秦干净服务器', value: 'image-ycod600rqgklsnewqkld' },
 	{ label: '宝可梦游戏服', value: 'image-ycn84w4qspm05kdrid57' },
 	{ label: '大明系列游戏服镜像', value: 'image-ycn7skopvhdbkt9wtdem' },
 	{ label: '大明游戏服环境', value: 'image-ycn57mqkjmklsm2as1lh' },
-  { label: '苍蓝最最最新镜像', value: 'image-ye005lhm163ildnluqep'}
+	{ label: '苍蓝最最最新镜像', value: 'image-ye005lhm163ildnluqep' },
 ];
 const serverSpecData = [
 	{ label: '2c4g(优先选这个)', value: 'ecs.e-c1m2.large' },

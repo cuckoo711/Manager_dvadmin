@@ -81,7 +81,7 @@ export const createCrudOptions = function ({ crudExpose }: CreateCrudOptionsProp
 				request_path: {
 					title: '请求地址',
 					search: {
-						disabled: false,
+						show: true
 					},
 					type: 'input',
 					column:{
@@ -103,7 +103,7 @@ export const createCrudOptions = function ({ crudExpose }: CreateCrudOptionsProp
 					},
 					title: '请求参数',
 					search: {
-						disabled: true,
+						show: true
 					},
 					disabled: true,
 					type: 'textarea',
@@ -124,7 +124,7 @@ export const createCrudOptions = function ({ crudExpose }: CreateCrudOptionsProp
 					title: '请求方法',
 					type: 'input',
 					search: {
-						disabled: false,
+						show: true
 					},
 					column:{
 						minWidth: 100,
@@ -150,7 +150,7 @@ export const createCrudOptions = function ({ crudExpose }: CreateCrudOptionsProp
 				request_ip: {
 					title: 'IP地址',
 					search: {
-						disabled: false,
+						show: true
 					},
 					type: 'input',
 					column:{
@@ -222,6 +222,10 @@ export const createCrudOptions = function ({ crudExpose }: CreateCrudOptionsProp
 				},
 				creator_name: {
 					title: '操作人',
+					type: 'text',
+					search: {
+						show: true
+					},
 					column:{
 						minWidth: 100,
 					},

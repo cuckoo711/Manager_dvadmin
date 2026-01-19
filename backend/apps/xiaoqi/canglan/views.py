@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.viewsets import ViewSet
 
 from apps.xiaoqi.canglan.utils.metro_client import MetroClient
+from dvadmin.utils.backends import logger
 
 
 class MetroViewSet(ViewSet):
@@ -32,6 +33,7 @@ class MetroViewSet(ViewSet):
         if not client.login():
             return JsonResponse({'status': False, 'message': '登录失败', 'data': None})
         text = client.delete_mails(uid=uid, mail_ids=[str(x).strip() for x in mail_ids if str(x).strip()])
+        logger.info(f"delete_mails return: {text}")
         return JsonResponse({'status': True, 'message': 'success', 'data': text})
 
     @action(detail=False, methods=['GET'])
@@ -58,4 +60,5 @@ class MetroViewSet(ViewSet):
         if not client.login():
             return JsonResponse({'status': False, 'message': '登录失败', 'data': None})
         text = client.recover_mail_backups(user_id=user_id, backup_ids=[str(x).strip() for x in backup_ids if str(x).strip()])
+        logger.info(f"recover_mail_backups return: {text}")
         return JsonResponse({'status': True, 'message': 'success', 'data': text})
