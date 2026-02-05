@@ -50,7 +50,7 @@ export async function DelGifts(token_id: string, gift_ids: [string]) {
 
 //send_gifts
 export async function SendGifts(token_id: string, server: string, gifts_name: string,
-                                pname: string, gifts_id: string, des: string) {
+                                pname: string, gifts_id: string, des: string, gifts_label?: string) {
     return request({
         url: '/api/GDToken/' + token_id + '/send_gifts/',
         method: 'post',
@@ -59,7 +59,8 @@ export async function SendGifts(token_id: string, server: string, gifts_name: st
             gifts_name: gifts_name,
             pname: pname,
             gifts_id: gifts_id,
-            des: des
+            des: des,
+            gifts_label: gifts_label
         }
     })
 }

@@ -17,5 +17,6 @@ router.register('GDActiveConfig', GDActiveConfigViewSet)
 router.register('GDToken', GDTokensViewSet)
 router.register('GDLog', GDLogViewSet)
 router.register('GDActiveLog', GDActiveLogViewSet)
+router.register('GDRebateAudit', GDRebateAuditViewSet)
 
 urlpatterns = router.urls

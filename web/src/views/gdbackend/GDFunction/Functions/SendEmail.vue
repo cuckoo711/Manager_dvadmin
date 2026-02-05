@@ -194,6 +194,7 @@ async function send() {
       cancelButtonText: '取消',
       type: 'warning'
     }).then(async () => {
+      const giftLabel = props.GDGameBaseInfo.data.Gifts.find((item: { label: string; value: string }) => item.value === gift.value.giftOption)?.label || '';
       await SendGifts(
           props.GDGameBaseInfo.token,
           player.value.region,
@@ -201,12 +202,13 @@ async function send() {
           player.value.roleId,
           gift.value.giftOption,
           gift.value.mailContent,
+          giftLabel,
       ).then((res) => {
-        if (res.data === false) {
-          ElMessage.error('发放失败');
+        if (res.status !== 2000) {
+          ElMessage.error('提交审核失败');
         } else {
-          ElMessage.success('发放成功');
-          handleLogger(`发放成功: ${player.value.roleName}(${player.value.roleId}) - ${gift.value.mailTitle}[${props.GDGameBaseInfo.data.Gifts.find((item) => item.value === gift.value.giftOption)?.label}(${gift.value.giftOption})]`);
+          ElMessage.success('已提交审核');
+          handleLogger(`已提交审核: ${player.value.roleName}(${player.value.roleId}) - ${gift.value.mailTitle}[${props.GDGameBaseInfo.data.Gifts.find((item) => item.value === gift.value.giftOption)?.label}(${gift.value.giftOption})]`);
         }
       });
     }).catch(() => {

@@ -123,3 +123,31 @@ class GDActiveLog(CoreModel):
         verbose_name = '官斗后台活动日志'
         verbose_name_plural = verbose_name
         ordering = ['-create_datetime']
+
+
+class GDRebateAudit(CoreModel):
+    AUDIT_STATUS = (
+        (0, '待审核'),
+        (1, '允许发放'),
+        (2, '已取消'),
+        (3, '已发放'),
+    )
+    game_server = models.ForeignKey(GDServer, related_name="rebate_audits", on_delete=models.CASCADE,
+                                    db_constraint=False, verbose_name="关联游戏", help_text="关联游戏")
+    serverid = models.CharField(max_length=50, verbose_name='服务器ID')
+    pid = models.CharField(max_length=50, verbose_name='角色ID', blank=True, null=True)
+    pname = models.CharField(max_length=100, verbose_name='角色名称', blank=True, null=True)
+    amount = models.IntegerField(verbose_name='返利金额', blank=True, null=True)
+    reason = models.CharField(max_length=255, verbose_name='返利原因', blank=True, null=True)
+    gifts_name = models.CharField(max_length=100, verbose_name='邮件标题', blank=True, null=True)
+    gifts_id = models.CharField(max_length=100, verbose_name='礼包ID', blank=True, null=True)
+    gifts_label = models.CharField(max_length=100, verbose_name='礼包名称', blank=True, null=True)
+    des = models.CharField(max_length=255, verbose_name='邮件内容', blank=True, null=True)
+    status = models.IntegerField(choices=AUDIT_STATUS, default=0, verbose_name='审核状态')
+    issued_time = models.DateTimeField(verbose_name='发放时间', null=True, blank=True)
+
+    class Meta:
+        db_table = table_prefix + 'gd_rebate_audit'
+        verbose_name = '官斗返利发放审核'
+        verbose_name_plural = verbose_name
+        ordering = ['-create_datetime']

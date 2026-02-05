@@ -86,6 +86,8 @@ class ApiLoggingMiddleware(MiddlewareMixin):
         :return:
         """
         if self.enable:
+            if request.path == "/token/refresh/":
+                return response
             if self.methods == 'ALL' or request.method in self.methods:
                 self.__handle_response(request, response)
         return response

@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from rest_framework import serializers
 from rest_framework.decorators import action
 
-from apps.gamebackend.gdbackend.models import GDUser, GDServer, GDActiveConfig, GDToken, GDLog, GDActiveLog
+from apps.gamebackend.gdbackend.models import GDUser, GDServer, GDActiveConfig, GDToken, GDLog, GDActiveLog, GDRebateAudit
 from apps.gamebackend.gdbackend.tasks import async_export_data
 from apps.gamebackend.gdbackend.utils.addGifts import ApiAddGifts
 from apps.gamebackend.gdbackend.utils.addWifes import ApiAddWifes
@@ -174,14 +174,47 @@ class GDTokensViewSet(CustomModelViewSet):
         des = request.data.get('des')
         if not des:
             raise serializers.ValidationError('请填写des')
-        result = ApiSendGifts(instance.id).run(
-            server=server,
+        # 查询角色名称
+        role_name = None
+        try:
+            pinfo = ApiGDPInfos(instance.id).run(server=str(server), pid=str(pname))
+            role_name = pinfo[0]
+        except Exception:
+            role_name = None
+        # 查询或接收礼包名称
+        gift_label = request.data.get('gifts_label')
+        if not gift_label:
+            try:
+                infos = ApiGDInfos(instance.id).run()
+                gifts_list = infos.get('Gifts', [])
+                for g in gifts_list:
+                    if str(g.get('value')) == str(gifts_id):
+                        gift_label = g.get('label')
+                        break
+            except Exception:
+                gift_label = None
+        audit = GDRebateAudit.objects.create(
+            game_server=instance.game_server,
+            serverid=str(server),
+            pid=str(pname),
+            pname=role_name,
             gifts_name=gifts_name,
-            pname=pname,
-            gifts_id=gifts_id,
-            des=des
+            gifts_id=str(gifts_id),
+            gifts_label=gift_label,
+            des=des,
+            status=0,
+            creator=request.user,
+            dept_belong_id=request.user.dept.id if request.user.dept else None,
+            description=f"""
+            用户【{request.user.username}】提交了返利申请
+            区服：【{server}】{instance.game_server}
+            玩家：【{role_name}】（PID: {pname}）
+            礼包：【{gifts_name}】（ID: {gifts_id}）
+            备注：{des}
+            时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+            """.strip()
         )
-        return JsonResponse({"data": result, "status": 2000})
+        return JsonResponse({"msg": "已提交审核", "audit_id": audit.id, "status": 2000})
 
     @action(methods=['get'], detail=True, url_path='get_giftslogs', url_name='get_giftslogs')
     def get_giftslogs(self, request, *args, **kwargs):
@@ -656,3 +689,154 @@ class GDActiveLogViewSet(CustomModelViewSet):
         if creator_name:
             queryset = queryset.filter(creator__username__contains=creator_name)
         return queryset
+
+
+class GDRebateAuditSerializer(CustomModelSerializer):
+    game_server_name = serializers.SerializerMethodField()
+    role_info = serializers.SerializerMethodField()
+    mail_info = serializers.SerializerMethodField()
+    issued_time_text = serializers.SerializerMethodField()
+    gift_info = serializers.SerializerMethodField()
+
+    class Meta:
+        model = GDRebateAudit
+        fields = '__all__'
+
+    @staticmethod
+    def get_game_server_name(obj):
+        return obj.game_server.gamename
+    @staticmethod
+    def get_role_info(obj):
+        role = obj.pname or ''
+        return f"【{obj.serverid}】{obj.pid or ''}（{role or ''}）"
+    @staticmethod
+    def get_mail_info(obj):
+        return f"【{obj.gifts_name or ''}】{obj.des or ''}"
+    @staticmethod
+    def get_issued_time_text(obj):
+        return obj.issued_time.strftime('%Y-%m-%d %H:%M:%S') if obj.issued_time else '-'
+    @staticmethod
+    def get_gift_info(obj):
+        return f"【{obj.gifts_id or ''}】{obj.gifts_label or ''}"
+
+
+class GDRebateAuditViewSet(CustomModelViewSet):
+    queryset = GDRebateAudit.objects.all()
+    serializer_class = GDRebateAuditSerializer
+
+    filter_fields = ['~pname', '~pid', '~serverid', 'status']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        params = self.request.query_params
+        game_server_name = params.get('game_server_name')
+        if game_server_name:
+            queryset = queryset.filter(game_server__gamename__icontains=game_server_name)
+        serverid = params.get('serverid')
+        if serverid:
+            queryset = queryset.filter(serverid__icontains=serverid)
+        pid = params.get('pid')
+        if pid:
+            queryset = queryset.filter(pid__icontains=pid)
+        pname = params.get('pname')
+        if pname:
+            queryset = queryset.filter(pname__icontains=pname)
+        gifts_name = params.get('gifts_name')
+        if gifts_name:
+            queryset = queryset.filter(gifts_name__icontains=gifts_name)
+        des = params.get('des')
+        if des:
+            queryset = queryset.filter(des__icontains=des)
+        gift_label = params.get('gift_label')
+        if gift_label:
+            queryset = queryset.filter(gifts_label__icontains=gift_label)
+        gifts_id = params.get('gifts_id')
+        if gifts_id:
+            queryset = queryset.filter(gifts_id__icontains=gifts_id)
+        issued = params.get('issued')
+        if issued == '1':
+            queryset = queryset.filter(issued_time__isnull=False)
+        if issued == '0':
+            queryset = queryset.filter(issued_time__isnull=True)
+        return queryset
+
+    @action(methods=['post'], detail=True, url_path='approve', url_name='approve')
+    def approve(self, request, *args, **kwargs):
+        instance: GDRebateAudit = self.get_object()
+        if instance.status in [2, 3]:
+            raise serializers.ValidationError('当前状态不可允许发放')
+        instance.status = 1
+        instance.modifier = request.user.id
+        instance.save()
+        return JsonResponse({"msg": "已允许发放", "status": 2000})
+
+    @action(methods=['post'], detail=True, url_path='cancel', url_name='cancel')
+    def cancel(self, request, *args, **kwargs):
+        instance: GDRebateAudit = self.get_object()
+        if instance.status == 3:
+            raise serializers.ValidationError('已发放不可取消')
+        instance.status = 2
+        instance.modifier = request.user.id
+        instance.save()
+        return JsonResponse({"msg": "已取消发放", "status": 2000})
+
+    @action(methods=['post'], detail=True, url_path='issue', url_name='issue')
+    def issue(self, request, *args, **kwargs):
+        instance: GDRebateAudit = self.get_object()
+        if instance.status != 1:
+            raise serializers.ValidationError('仅在允许发放状态下可进行发放')
+        # 执行实际发放逻辑
+        token = GDToken.objects.filter(user=request.user, game_server=instance.game_server).first()
+        if not token:
+            raise serializers.ValidationError('未找到对应的游戏凭据，无法发放')
+        result = ApiSendGifts(token.id).run(
+            server=instance.serverid,
+            gifts_name=instance.gifts_name or "",
+            pname=instance.pid or "",
+            gifts_id=instance.gifts_id or "",
+            des=instance.des or ""
+        )
+        from django.utils import timezone
+        instance.status = 3
+        instance.issued_time = timezone.now()
+        instance.modifier = request.user.id
+        instance.save()
+        return JsonResponse({"msg": "发放成功", "result": result, "status": 2000})
+
+    @action(methods=['post'], detail=False, url_path='batch_approve', url_name='batch_approve')
+    def batch_approve(self, request, *args, **kwargs):
+        ids = request.data.get('ids', [])
+        if not isinstance(ids, list):
+            raise serializers.ValidationError('ids格式错误')
+        audits = GDRebateAudit.objects.filter(id__in=ids, status__in=[0, 1]).all()
+        for item in audits:
+            item.status = 1
+            item.modifier = request.user.id
+            item.save()
+        return JsonResponse({"msg": f"批量允许发放成功，共处理{audits.count()}条", "status": 2000})
+
+    @action(methods=['post'], detail=False, url_path='batch_cancel', url_name='batch_cancel')
+    def batch_cancel(self, request, *args, **kwargs):
+        ids = request.data.get('ids', [])
+        if not isinstance(ids, list):
+            raise serializers.ValidationError('ids格式错误')
+        audits = GDRebateAudit.objects.filter(id__in=ids).exclude(status=3).all()
+        for item in audits:
+            item.status = 2
+            item.modifier = request.user.id
+            item.save()
+        return JsonResponse({"msg": f"批量取消发放成功，共处理{audits.count()}条", "status": 2000})
+
+    @action(methods=['post'], detail=False, url_path='batch_issue', url_name='batch_issue')
+    def batch_issue(self, request, *args, **kwargs):
+        ids = request.data.get('ids', [])
+        if not isinstance(ids, list):
+            raise serializers.ValidationError('ids格式错误')
+        from django.utils import timezone
+        audits = GDRebateAudit.objects.filter(id__in=ids, status=1).all()
+        for item in audits:
+            item.status = 3
+            item.issued_time = timezone.now()
+            item.modifier = request.user.id
+            item.save()
+        return JsonResponse({"msg": f"批量发放成功，共处理{audits.count()}条", "status": 2000})

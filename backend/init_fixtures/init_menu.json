@@ -1306,6 +1306,35 @@
                         "menu_field": []
                     },
                     {
+                        "name": "返利审核",
+                        "icon": "iconfont icon-shenhe",
+                        "sort": 3,
+                        "is_link": false,
+                        "is_catalog": false,
+                        "web_path": "/gamebackend/gd/rebate_audit",
+                        "component": "gdbackend/GDRebateAudit/index",
+                        "component_name": "GDRebateAudit",
+                        "status": true,
+                        "cache": true,
+                        "visible": true,
+                        "parent": 54,
+                        "children": [],
+                        "menu_button": [
+                            { "name": "查询", "value": "GDRebateAudit:Search", "api": "/api/GDRebateAudit/", "method": 0 },
+                            { "name": "详情", "value": "GDRebateAudit:Retrieve", "api": "/api/GDRebateAudit/{id}/", "method": 0 },
+                            { "name": "新增", "value": "GDRebateAudit:Create", "api": "/api/GDRebateAudit/", "method": 1 },
+                            { "name": "编辑", "value": "GDRebateAudit:Update", "api": "/api/GDRebateAudit/{id}/", "method": 2 },
+                            { "name": "删除", "value": "GDRebateAudit:Delete", "api": "/api/GDRebateAudit/{id}/", "method": 3 },
+                            { "name": "允许发放", "value": "GDRebateAudit:Approve", "api": "/api/GDRebateAudit/{id}/approve/", "method": 1 },
+                            { "name": "取消发放", "value": "GDRebateAudit:Cancel", "api": "/api/GDRebateAudit/{id}/cancel/", "method": 1 },
+                            { "name": "发放", "value": "GDRebateAudit:Issue", "api": "/api/GDRebateAudit/{id}/issue/", "method": 1 },
+                            { "name": "批量允许发放", "value": "GDRebateAudit:BatchApprove", "api": "/api/GDRebateAudit/batch_approve/", "method": 1 },
+                            { "name": "批量取消发放", "value": "GDRebateAudit:BatchCancel", "api": "/api/GDRebateAudit/batch_cancel/", "method": 1 },
+                            { "name": "批量发放", "value": "GDRebateAudit:BatchIssue", "api": "/api/GDRebateAudit/batch_issue/", "method": 1 }
+                        ],
+                        "menu_field": []
+                    },
+                    {
                         "name": "账号管理",
                         "icon": "ele-User",
                         "sort": 2,
