@@ -79,6 +79,7 @@ INSTALLED_APPS = [
 
     # 游戏后台整合
     "apps.gamebackend.gdbackend",  # 官斗
+    "apps.gamebackend.cljjbackend",  # 策令江山
     "apps.gamebackend.dslhbackend",  # 大圣轮回
 
     # Quick后台

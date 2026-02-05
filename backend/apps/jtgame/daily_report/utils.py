@@ -420,13 +420,17 @@ class QuickData:
         self.game_name_temp = {}
 
     def make_daily_data(self):
-        result = {
-            0: [],
-            1: [],
-            2: [],
-            3: [],
-            4: []
+        # 使用字典进行中间聚合，结构为 { type_id: { game_name: data_dict } }
+        aggregated_result = {
+            0: {},
+            1: {},
+            2: {},
+            3: {},
+            4: []  # 修正：初始化时不应该直接定义为列表，这里应该是字典，后面统一转
         }
+        # 重新初始化为字典
+        aggregated_result = {k: {} for k in range(5)}
+
         type_dict = {
             'yesterday_income': 0,
             'last_week_income': 1,
@@ -440,11 +444,30 @@ class QuickData:
                 quick_datas_temp = self.get_income_details(account)
                 for key in ['yesterday_income', 'last_week_income', 'last_month_income', 'current_month_income',
                             'this_month_income']:
-                    result[type_dict[key]].extend(self.wash_data(quick_datas_temp[key]))
+                    type_id = type_dict[key]
+                    cleaned_datas = self.wash_data(quick_datas_temp.get(key, []))
+                    
+                    for data in cleaned_datas:
+                        game_name = data['game_name']
+                        if game_name in aggregated_result[type_id]:
+                            # 如果游戏已存在，进行数据累加
+                            existing_data = aggregated_result[type_id][game_name]
+                            existing_data['recharge'] = round(existing_data['recharge'] + data['recharge'], 2)
+                            existing_data['yesterday_actives'] += data['yesterday_actives']
+                            existing_data['channels'] += data['channels']
+                            existing_data['subscribers'] += data['subscribers']
+                            existing_data['devices'] += data['devices']
+                            existing_data['payments'] += data['payments']
+                        else:
+                            # 如果游戏不存在，直接赋值
+                            aggregated_result[type_id][game_name] = data
 
             except Exception as e:
                 logger.error(f"Error processing account {account}: {e}")
                 logger.error("Detailed traceback: %s", traceback.format_exc())
+        
+        # 将聚合后的字典转换为列表返回
+        result = {k: list(v.values()) for k, v in aggregated_result.items()}
         return result
 
     def get_income_details(self, account) -> dict:
@@ -468,7 +491,10 @@ class QuickData:
         result = []
         for data in quick_datas_temp:
             data_temp = {}
-            game_name = data['游戏名称']
+            game_name = data.get('游戏名称', '')
+            if not game_name:
+                continue
+
             if game_name in self.game_name_temp:
                 data_temp['game_name'] = self.game_name_temp[game_name]['game_name']
                 data_temp['online_days'] = self.game_name_temp[game_name]['online_days']
@@ -492,12 +518,25 @@ class QuickData:
                     'banhao': data_temp['banhao'],
                     'reconciliation_ratio': reconciliation_ratio
                 }
-            data_temp['recharge'] = round(float(data['累计充值（元）']) * reconciliation_ratio, 2)
-            data_temp['yesterday_actives'] = int(data['昨日活跃用户（人）'])
-            data_temp['channels'] = int(data['渠道数量'])
-            data_temp['subscribers'] = int(data['累计用户（人）'])
-            data_temp['devices'] = int(data['累计设备（台）'])
-            data_temp['payments'] = int(data['付费用户（人）'])
+
+            def safe_float(val):
+                try:
+                    return float(val)
+                except (ValueError, TypeError):
+                    return 0.0
+
+            def safe_int(val):
+                try:
+                    return int(val)
+                except (ValueError, TypeError):
+                    return 0
+
+            data_temp['recharge'] = round(safe_float(data.get('累计充值（元）')) * reconciliation_ratio, 2)
+            data_temp['yesterday_actives'] = safe_int(data.get('昨日活跃用户（人）'))
+            data_temp['channels'] = safe_int(data.get('渠道数量'))
+            data_temp['subscribers'] = safe_int(data.get('累计用户（人）'))
+            data_temp['devices'] = safe_int(data.get('累计设备（台）'))
+            data_temp['payments'] = safe_int(data.get('付费用户（人）'))
 
             result.append(data_temp)
         return result

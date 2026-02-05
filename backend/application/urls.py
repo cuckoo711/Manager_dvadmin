@@ -141,6 +141,8 @@ urlpatterns = (
             path("api/", include("apps.gamebackend.gdbackend.urls")),
             # dslh后台模块
             path("api/", include("apps.gamebackend.dslhbackend.urls")),
+            # cljj后台模块
+            path("api/", include("apps.gamebackend.cljjbackend.urls"))
         ]
         + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
         + static(settings.STATIC_URL, document_root=settings.STATIC_URL)
